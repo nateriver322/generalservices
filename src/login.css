@@ -1,62 +1,138 @@
-.login-container {
+body {
+    background-color: #FFD700;
+    margin: 0;
+    overflow: hidden;
+}
+
+.h1 {
+    font-family: 'Inter', sans-serif; 
+    margin-top: 100px;
+}
+
+.h2 {
+    font-family: 'Inter', sans-serif; 
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.buttoncontainer {
+    display: flex;
+    justify-content: center;
+}
+
+.login-button {
+    background-color: #FFD700;
+    color: #000000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 240px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+.button{
+    background-color: #FFD700;
+    color: #000000;
+    padding: 10px 20px;
+    border: none;
+    margin-left: 450px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+
+.button:hover, .login-button:hover {
+    background-color: #FFC300;
+}
+
+.h3 {
+    font-family: 'Inter', sans-serif; 
+    font-weight: bold;
+    text-align: center;
+    color: #FFD700;
+}
+
+header {
+    text-align: center;
+    padding: 10px; 
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    max-width: 130px;
+    margin-right: 20px;
+    margin-top: 80px;
+}
+
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #FFD700; /* Gold background */
 }
 
-.login-form {
-    width: 360px;
+.form-container {
+    width: 600px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #8B0000; /* Dark red background */
+    background-color: #800000;
     text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border: 2px solid #800000;
+    border-radius: 10px;
+    box-sizing: border-box;
+    color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.login-form h2 {
-    color: white;
-}
-
-.input-group {
-    margin-bottom: 15px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #FFD700;
-    color: #8B0000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.links {
-    margin-top: 20px;
-}
-
-.links a {
-    color: white;
-    text-decoration: none;
-    display: block;
-}
-
-.links a:hover {
-text-decoration: underline;
-}
-
-/* Responsive adjustments */
-@media (max-width: 400px) {
 .login-form {
-width: 90%;
+    margin: 0;
 }
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 auto;
 }
+.inputs {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 50%; /* Make the inputs wider */
+}
+
+.inputs .input-field {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    height: 20px;
+}
+.input-container {
+    color: #ffffff; 
+}
+.forgot-password {
+    margin-top: 10px; /* Add some margin-bottom to move it down */
+    margin-right: 370px;
+    
+}
+
+.forgot-password a {
+    color: #ffffff; /* Change the text color to white */
+}
+
+
+
