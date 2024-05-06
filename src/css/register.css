@@ -44,13 +44,20 @@ header {
 }
 
 .form-container {
-    background-color: #800000; /* Maroon background for the form */
-    color: #ffffff; /* White text for contrast */
-    padding: 20px;
+    width: 40%; /* Adjusted from a fixed 600px to a relative width */
+    min-width: 600px; /* Ensures it doesn't get too small on narrower screens */
+    margin: 0 auto;
+    padding: 40px; /* Increased padding for better spacing */
+    background-color: #800000;
+    text-align: center;
+    border: 2px solid #800000;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-    width: auto;
-    max-width: 360px; /* Maximum width */
+    box-sizing: border-box;
+    color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .registration-form {
@@ -60,17 +67,19 @@ header {
 }
 
 .input-container {
-    width: 50%; /* Full width of the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%; /* Makes input fields wider within the form */
+    margin: 0 auto;
 }
 
 .input-field {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
+    padding: 15px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for depth */
-    transition: border-color 0.3s; /* Smooth transition for interaction */
+    border: 1px solid #ccc;
 }
 
 .input-field:focus {
@@ -79,24 +88,24 @@ header {
 
 .buttoncontainer {
     display: flex;
-    justify-content: space-around; /* Space between buttons */
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Add a margin on top for spacing from the input fields */
 }
 
 .signup-button, .login-button {
-    flex-grow: 1; /* Buttons take up equal space */
-    background-color: #FFD700; /* Matching the body background */
-    color: #333;
-    padding: 10px;
+    margin: 0 5px; /* Add some margin for spacing between buttons */
+    background-color: #FFD700;
+    color: #000000;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s; /* Animated feedback */
+    transition: background-color 0.3s;
 }
 
 .signup-button:hover, .login-button:hover {
-    background-color: #FFC300; /* Lighter yellow on hover */
-    transform: scale(1.05); /* Slightly larger on hover */
+    background-color: #FFC300;
 }
 
 .h3 {
