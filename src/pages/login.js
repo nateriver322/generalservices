@@ -1,7 +1,14 @@
 import React from 'react';
-import './login.css'; // Ensure this path is correct
+import '../css/login.css'; // Ensure this path is correct
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleSignUpClick = () => {
+    navigate('/register');
+  };
+
   return (
     <div>
       <header>
@@ -25,7 +32,7 @@ const LoginPage = () => {
               </div>
             </div>
             <p className="forgot-password"><a href="changepass.html">Forgot password? Click here</a></p>
-            <button className="button" id="signup-button">Sign Up</button>
+            <button className="button" id="signup-button" onClick={handleSignUpClick}>Sign Up</button>
           </form>
         </div>
       </div>
