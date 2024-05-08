@@ -1,43 +1,76 @@
-import React from 'react';
-import '../css/login.css'; // Ensure this path is correct
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../css/login.css'; // Assuming similar styling to register.css
 
-const LoginPage = () => {
-  const navigate = useNavigate();
+const Login = () => {
+    const navigate = useNavigate();
+    const [credentials, setCredentials] = useState({
+        email: '',
+        password: ''
+    });
 
-  const handleSignUpClick = () => {
-    navigate('/register');
-  };
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setCredentials({
+            ...credentials,
+            [name]: value
+        });
+    };
 
-  return (
-    <div>
-      <header>
-        <div className="header-content">
-          <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
-          <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-        </div>
-      </header>
-      <h2 className="h2">General Services Portal</h2>
-      <div className="container">
-        <div className="form-container">
-          <form className="login-form">
-            <h3 className="h3">Sign in</h3>
-            <div className="input-container">
-              <div className="inputs">
-                <input type="email" id="email" placeholder="Email" name="user" className="input-field" required />
-                <input type="password" id="password" placeholder="Password" name="pass" className="input-field" required />
-              </div>
-              <div className="buttoncontainer">
-                <input type="submit" id="submit" name="Login" value="Login" className="login-button" />
-              </div>
+    const handleLoginSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: credentials.email,
+                    password: credentials.password
+                })
+            });
+            if (response.ok) {
+                console.log('Login successful');
+                navigate('/dashboard'); // Navigate to dashboard or another appropriate route
+            } else {
+                throw new Error('Login failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleSignUpClick = () => {
+        navigate('/register'); // Navigate back to the registration page
+    };
+
+    return (
+        <div>
+            <header>
+                <div className="header-content">
+                    <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
+                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
+                </div>
+            </header>
+            <h2 className="h2">General Services Portal</h2>
+            <div className="container">
+                <div className="form-container">
+                    <form className="login-form" onSubmit={handleLoginSubmit}>
+                        <h3 className="h3">Login</h3>
+                        <div className="input-container">
+                            <input type="email" placeholder="Email" name="email" className="input-field" required onChange={handleInputChange} />
+                            <input type="password" placeholder="Password" name="password" className="input-field" required onChange={handleInputChange} />
+                        </div>
+                        <div className="buttoncontainer">
+                            <input type="submit" value="Login" className="login-button" />
+                            <button type="button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <p className="forgot-password"><a href="changepass.html">Forgot password? Click here</a></p>
-            <button className="button" id="signup-button" onClick={handleSignUpClick}>Sign Up</button>
-          </form>
         </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
 
-export default LoginPage;
+export default Login;
