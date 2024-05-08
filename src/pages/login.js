@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../css/login.css'; // Assuming similar styling to register.css
 
 const Login = () => {
@@ -34,10 +36,11 @@ const Login = () => {
                 console.log('Login successful');
                 navigate('/dashboard'); // Navigate to dashboard or another appropriate route
             } else {
-                throw new Error('Login failed');
+                toast.error('Email and password do not match.'); // Show error toast
             }
         } catch (error) {
             console.error('Error:', error);
+            toast.error('An error occurred while trying to login.'); // Show error toast for other errors
         }
     };
 
@@ -47,6 +50,7 @@ const Login = () => {
 
     return (
         <div>
+            <ToastContainer />
             <header>
                 <div className="header-content">
                     <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
