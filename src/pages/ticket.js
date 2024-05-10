@@ -7,6 +7,11 @@ function TicketForm() {
 
     const handleHomeButtonClick = () => {
         navigate("/dashboard"); 
+        console.log("Home button clicked");
+    };
+    const handleViewButtonClick = () => {
+        navigate("/myTickets"); 
+        console.log("View button clicked");
     };
 
     return (
@@ -23,7 +28,7 @@ function TicketForm() {
                     <div className="ticket-buttoncontainer">
                         {/* Add onClick event handler to the home button */}
                         <button className="home-button" onClick={handleHomeButtonClick}>Home</button>
-                        <button className="tickets-button" id="ticketsButton">My Tickets</button>
+                        <button className="tickets-button" onClick={handleViewButtonClick}>My Tickets</button>
                     </div>
                     <form action="" className="ticket-form" method="post">
                         <h3 className="h3">Submit a request</h3>

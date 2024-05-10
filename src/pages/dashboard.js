@@ -26,6 +26,7 @@ function Dashboard() {
     const handleViewButtonClick = () => {
         // Logic to handle view button click
         // For example, navigate to the tickets viewing page
+        navigate("/myTickets"); 
         console.log("View Tickets button clicked");
     };
 
