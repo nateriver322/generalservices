@@ -15,8 +15,7 @@ function TicketForm() {
     }, [navigate]);
 
     const handleHomeButtonClick = () => {
-        console.log("Navigating to Dashboard");
-        navigate("/dashboard");
+        navigate("/dashboard"); 
     };
 
     const handleFormSubmit = async (event) => {
@@ -57,7 +56,7 @@ function TicketForm() {
                 <div className="ticket-form-container">
                     <div className="ticket-buttoncontainer">
                         <button className="home-button" onClick={handleHomeButtonClick}>Home</button>
-                        <button className="tickets-button" id="ticketsButton">My Tickets</button>
+                        <button className="tickets-button" onClick={handleViewButtonClick}>My Tickets</button>
                     </div>
                     <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
                         <h3 className="h3">Submit a request</h3>
