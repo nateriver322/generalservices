@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../css/register.css';
 import { useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 
 const Register = () => {
@@ -56,7 +57,7 @@ const Register = () => {
         <div>
             <header>
                 <div className="header-content">
-                    <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
+                <img src={logo} className="logo" alt="CIT-U Logo" />
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>

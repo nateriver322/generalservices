@@ -1,19 +1,54 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import '../css/ticket.css'; 
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../css/ticket.css';
+import logo from '../images/logo.png';
 
 function TicketForm() {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [fileLabel, setFileLabel] = useState('No file chosen'); // State to hold the file name
+
+    useEffect(() => {
+        const username = localStorage.getItem('username');
+        if (!username) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     const handleHomeButtonClick = () => {
-        navigate("/dashboard"); 
+        console.log("Navigating to Dashboard");
+        navigate("/dashboard");
+    };
+
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        formData.append('username', localStorage.getItem('username'));
+
+        try {
+            const response = await fetch('http://localhost:8080/api/tickets', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                navigate('/dashboard');
+            } else {
+                console.error('Submission failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleFileChange = (event) => {
+        const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
+        setFileLabel(fileName); // Update the state with the new file name
     };
 
     return (
         <>
             <header>
                 <div className="header-content">
-                    <img src="images/logo.png" className="logo" alt="Logo" />
+                    <img src={logo} className="logo" alt="Logo" />
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>
@@ -21,21 +56,20 @@ function TicketForm() {
             <div className="container">
                 <div className="ticket-form-container">
                     <div className="ticket-buttoncontainer">
-                        {/* Add onClick event handler to the home button */}
                         <button className="home-button" onClick={handleHomeButtonClick}>Home</button>
                         <button className="tickets-button" id="ticketsButton">My Tickets</button>
                     </div>
-                    <form action="" className="ticket-form" method="post">
+                    <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
                         <h3 className="h3">Submit a request</h3>
                         <div className="ticket-input-container">
                             <div className="select-container">
-                                <select id="Priority" required>
+                                <select id="Priority" name="priority" required>
                                     <option value="" disabled selected hidden>Select Priority</option>
                                     <option value="Emergency">Emergency</option>
                                     <option value="Non-Emergency">Non-Emergency</option>
                                 </select>
 
-                                <select id="WorkType" required>
+                                <select id="WorkType" name="workType" required>
                                     <option value="" disabled selected hidden>Select Work Type</option>
                                     <option value="Plumbing">Plumbing</option>
                                     <option value="Carpentry/Masonry/Steel Works">Carpentry/Masonry/Steel Works</option>
@@ -43,24 +77,24 @@ function TicketForm() {
                                     <option value="Electro-Mech">Electro-Mechanical</option>
                                 </select>
 
-                                <select id="ReqType" required>
-                                    <option value="" disabled selected hidden >Select Type of Request</option>
+                                <select id="ReqType" name="requestType" required>
+                                    <option value="" disabled selected hidden>Select Type of Request</option>
                                     <option value="Repair/Maintenance">Repair/Maintenance</option>
                                     <option value="Installation">Installation</option>
                                 </select>
                                 
                                 <input type="text" placeholder="Location" name="location" id="locInp" required />
                                 <label htmlFor="datetime">Select a Date and Time:</label>
-                                <input type="datetime-local" id="datetime" name="datetime" />
+                                <input type="datetime-local" id="datetime" name="datetime" required />
                                 <textarea placeholder="Details of the Request" name="description" id="DesInp" required></textarea>
 
                                 <div className="file-upload">
-                                    <input type="file" id="imageInput" accept="image/*" style={{ display: 'none' }} />
+                                    <input type="file" name="image" id="imageInput" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
                                     <label htmlFor="imageInput">Choose File</label>
-                                    <span id="fileChosen">No file chosen</span>
+                                    <span id="fileChosen">{fileLabel}</span> {/* Display the file name */}
                                 </div>
 
-                                <button id="Submitbtn">Submit</button>
+                                <button type="submit" id="Submitbtn">Submit</button>
                             </div>
                         </div>
                     </form>

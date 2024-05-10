@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/successregistration.css'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 const Successregistration = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Successregistration = () => {
     <div>
       <header>
         <div className="header-content">
-          <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
+        <img src={logo} className="logo" alt="CIT-U Logo" />
           <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
         </div>
       </header>

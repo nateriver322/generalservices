@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../css/login.css'; // Assuming similar styling to register.css
+import logo from '../images/logo.png';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -32,15 +33,17 @@ const Login = () => {
                     password: credentials.password
                 })
             });
+            const data = await response.json(); // This should work properly now
             if (response.ok) {
-                console.log('Login successful');
-                navigate('/dashboard'); // Navigate to dashboard or another appropriate route
+                console.log(data.message); // "Login successful"
+                localStorage.setItem('username', data.username);
+                navigate('/dashboard', { state: { username: data.username } }); // Navigate with username
             } else {
-                toast.error('Email and password do not match.'); // Show error toast
+                toast.error(data.message || 'Login failed'); // Use the message from the response
             }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('An error occurred while trying to login.'); // Show error toast for other errors
+            toast.error('An error occurred while trying to login.');
         }
     };
 
@@ -53,7 +56,7 @@ const Login = () => {
             <ToastContainer />
             <header>
                 <div className="header-content">
-                    <img src="images/logo.png" className="logo" alt="CIT-U Logo" />
+                <img src={logo} className="logo" alt="CIT-U Logo" />
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>

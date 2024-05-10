@@ -1,25 +1,20 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import '../css/dashboard.css'; 
+import '../css/dashboard.css';
+import logo from '../images/logo.png';
 
 function Dashboard() {
-    /*const [greeting, setGreeting] = useState('');*/
     const navigate = useNavigate();
-
-    /*// Function to get current user's greeting
-    const getGreeting = () => {
-        // Logic to get user's greeting
-        // For example, you can get it from local storage or fetch it from an API
-        return 'Hello, User!'; // Placeholder greeting
-    };*/
+    const username = localStorage.getItem('username'); // Get username from localStorage
 
     useEffect(() => {
-        // Set the greeting when the component mounts
-        //setGreeting(getGreeting());
-    }, []);
+        if (!username) {
+            console.log('No user data found, redirecting to login');
+            navigate('/'); // Adjust this if your login route is different
+        }
+    }, [navigate, username]);
 
     const handleTicketButtonClick = () => {
-        // Logic to navigate to the ticket submission page
         navigate("/ticket"); 
     };
 
@@ -30,22 +25,22 @@ function Dashboard() {
     };
 
     const handleLogoutButtonClick = () => {
-        // Logic to handle logout button click
-        // For example, logout the user and redirect to the login page
         console.log("Logout button clicked");
+        localStorage.removeItem('username'); // Clear user data
+        navigate('/'); // Redirect to login page
     };
 
     return (
         <>
             <header>
                 <div className="header-content">
-                    <img src="C:\Users\ajceq\OneDrive\Desktop\Capstone\joborder\Capstone\images\logo.png" className="logo" alt="Logo" />
+                <img src={logo} className="logo" alt="Logo" />
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>
-            {/*<div className="user-info">
-                <h3 id="greet">{greeting}</h3>
-            </div>*/}
+            <div className="user-info">
+                <h3>Welcome, {username}!</h3>
+            </div>*
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="buttoncontainer">
