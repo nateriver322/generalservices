@@ -18,23 +18,32 @@ function TicketForm() {
         navigate("/dashboard"); 
     };
 
+    const handleViewButtonClick = () => {
+        navigate("/myTickets"); 
+    };
+
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         formData.append('username', localStorage.getItem('username'));
-
+    
         try {
             const response = await fetch('http://localhost:8080/api/tickets', {
                 method: 'POST',
                 body: formData,
             });
             if (response.ok) {
+                alert("Ticket successfully submitted!");
                 navigate('/dashboard');
             } else {
                 console.error('Submission failed');
+                // Extract error message from response if possible
+                const errorMsg = await response.text();
+                alert(`Submission failed: ${errorMsg}`);
             }
         } catch (error) {
             console.error('Error:', error);
+            alert(`Error submitting the ticket: ${error.message}`);
         }
     };
 
@@ -90,7 +99,7 @@ function TicketForm() {
                                 <div className="file-upload">
                                     <input type="file" name="image" id="imageInput" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
                                     <label htmlFor="imageInput">Choose File</label>
-                                    <span id="fileChosen">{fileLabel}</span> {/* Display the file name */}
+                                    <span id="fileChosen">{fileLabel}</span> 
                                 </div>
 
                                 <button type="submit" id="Submitbtn">Submit</button>

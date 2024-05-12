@@ -84,3 +84,50 @@
     height: auto;
     margin-top: 20px; /* Adds some space above the image */
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    text-align: left;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
+
+.ticket-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.emergency-tag {
+    color: red;
+    font-weight: bold;
+}
+
+button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    
+}
