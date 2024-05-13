@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import '../css/login.css'; // Assuming similar styling to register.css
 import logo from '../images/logo.png';
 
@@ -39,11 +37,11 @@ const Login = () => {
                 localStorage.setItem('username', data.username);
                 navigate('/dashboard', { state: { username: data.username } }); // Navigate with username
             } else {
-                toast.error(data.message || 'Login failed'); // Use the message from the response
+                alert(data.message || 'Login failed'); // Use the message from the response
             }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('An error occurred while trying to login.');
+            alert('An error occurred while trying to login.');
         }
     };
 
@@ -53,7 +51,6 @@ const Login = () => {
 
     return (
         <div>
-            <ToastContainer />
             <header>
                 <div className="header-content">
                 <img src={logo} className="logo" alt="CIT-U Logo" />

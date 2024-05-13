@@ -43,6 +43,25 @@ function MyTickets() {
         navigate("/dashboard");
     };
 
+    const handleDeleteTicket = async (id) => {
+    if (window.confirm('Are you sure you want to delete this ticket?')) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/tickets/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Ticket deleted successfully.');
+                setTickets(tickets.filter(ticket => ticket.id !== id));
+            } else {
+                alert('Failed to delete the ticket.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the ticket.');
+        }
+    }
+};
+
     return (
         <>
             <header>
@@ -70,9 +89,10 @@ function MyTickets() {
                                     <td>{ticket.location}</td>
                                     <td>{ticket.description}</td>
                                     <td>
-                                    </td>
-                                    <td>
+                                    <div className="button-group">
                                         <button onClick={() => handleViewTicket(ticket)}>View Details</button>
+                                        <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
+                                    </div>
                                     </td>
                                 </tr>
                             ))}

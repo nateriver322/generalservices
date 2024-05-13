@@ -14,7 +14,11 @@
         border-radius: 10px; /* Add border radius for rounded corners */
         box-sizing: border-box; /* Include padding and border in the width */
         margin-top: -350px;
+        max-height: 70%;
+        max-width: 50%;
         overflow-x: auto;
+        overflow-y: auto;
+
     }
 
     .buttoncontainer {
@@ -130,4 +134,19 @@ button {
     margin-left: 10px;
     cursor: pointer;
     
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.view-button {
+    margin-right: 10px; /* Adds space between the View and Delete buttons */
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
 }
