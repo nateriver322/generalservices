@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/login.css'; // Assuming similar styling to register.css
+import { useAuth } from '../AuthContext';
+import '../css/login.css';
 import logo from '../images/logo.png';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
     });
+    const [error, setError] = useState('');
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -21,27 +24,11 @@ const Login = () => {
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: credentials.email,
-                    password: credentials.password
-                })
-            });
-            const data = await response.json(); // This should work properly now
-            if (response.ok) {
-                console.log(data.message); // "Login successful"
-                localStorage.setItem('username', data.username);
-                navigate('/dashboard', { state: { username: data.username } }); // Navigate with username
-            } else {
-                alert(data.message || 'Login failed'); // Use the message from the response
-            }
+            const userData = await login(credentials.email, credentials.password);
+            navigate('/dashboard', { state: { username: userData.username } }); // Navigate with username
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred while trying to login.');
+            setError(error.message);
         }
     };
 
@@ -62,6 +49,7 @@ const Login = () => {
                 <div className="form-container">
                     <form className="login-form" onSubmit={handleLoginSubmit}>
                         <h3 className="h3">Login</h3>
+                        {error && <p className="error-message">{error}</p>} {/* Display error message */}
                         <div className="input-container">
                             <input type="email" placeholder="Email" name="email" className="input-field" required onChange={handleInputChange} />
                             <input type="password" placeholder="Password" name="password" className="input-field" required onChange={handleInputChange} />

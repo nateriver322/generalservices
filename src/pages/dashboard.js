@@ -26,9 +26,9 @@ function Dashboard() {
     };
 
     const handleLogoutButtonClick = () => {
-        console.log("Logout button clicked");
-        localStorage.removeItem('username'); // Clear user data
-        navigate('/'); // Redirect to login page
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');  // Also clear the role
+        navigate('/');
     };
 
     return (
