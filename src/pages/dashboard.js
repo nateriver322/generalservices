@@ -27,7 +27,6 @@ function Dashboard() {
 
     const handleLogoutButtonClick = () => {
         localStorage.removeItem('username');
-        localStorage.removeItem('role');  // Also clear the role
         navigate('/');
     };
 

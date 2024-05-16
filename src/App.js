@@ -6,6 +6,7 @@ import SuccessRegistration from './pages/successregistration'; // Ensure this pa
 import TicketForm from './pages/ticket';
 import MyTickets from './pages/myTickets';
 import RoleBasedDashboard from './RoleBasedDashboard'; // Import the RoleBasedDashboard
+import AccountManagement from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path="/ticket" element={<TicketForm />} />
       <Route path="/dashboard" element={<RoleBasedDashboard />} /> {/* Use RoleBasedDashboard */}
       <Route path="/myTickets" element={<MyTickets />} />
+      <Route path="/" element={<AccountManagement />} />
     </Routes>
   );
 }
