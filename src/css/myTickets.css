@@ -21,15 +21,28 @@
 
     }
 
-    .buttoncontainer {
+    .button-myTicketcontainer {
         display: flex;
         justify-content: flex-start; /* Align buttons to the left */
-        margin-left: 20px; /* Add margin to move the buttons to the left */
     }
     
-    .home-button{
+    .home-ticket-button {
         width: 120px; /* Adjust width as needed */
         margin-right: 10px; /* Add margin between buttons */
+        margin-left: 20px; /* Align button to the left */
+        padding: 10px 20px;
+        background-color: #800000; /* Change to your desired color */
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    
+
+    .home-ticket-button:hover{
+        background-color: #922B21;
     }
     .ticket-table {
         width: 100%;
@@ -144,9 +157,27 @@ button {
 
 .view-button {
     margin-right: 10px; /* Adds space between the View and Delete buttons */
+    
 }
 
 .delete-button {
+    padding: 10px 20px;
     background-color: red;
-    color: white;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.view-details-button {
+    padding: 10px 20px;
+    background-color: #ffd700;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }

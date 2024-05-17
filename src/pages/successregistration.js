@@ -23,7 +23,7 @@ const Successregistration = () => {
         <div className="form-container">
           <form className="login-form">
             <h3 className="h3">Account Successfully Created!</h3>
-            <button className="button" id="signup-button" onClick={handleLoginClick}>Login</button>
+            <button className="success-button" id="signup-button" onClick={handleLoginClick}>Login</button>
           </form>
         </div>
       </div>

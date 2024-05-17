@@ -48,15 +48,15 @@ const Login = () => {
             <div className="container">
                 <div className="form-container">
                     <form className="login-form" onSubmit={handleLoginSubmit}>
-                        <h3 className="h3">Login</h3>
+                        <h3 className="h3-login">Log in</h3>
                         {error && <p className="error-message">{error}</p>} {/* Display error message */}
                         <div className="input-container">
                             <input type="email" placeholder="Email" name="email" className="input-field" required onChange={handleInputChange} />
                             <input type="password" placeholder="Password" name="password" className="input-field" required onChange={handleInputChange} />
                         </div>
                         <div className="buttoncontainer">
-                            <input type="submit" value="Login" className="login-button" />
-                            <button type="button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
+                            <input type="submit" value="Login" className="log_in-button" />
+                            <button type="log_in-button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
                         </div>
                     </form>
                 </div>

@@ -21,34 +21,23 @@ body {
     justify-content: center;
 }
 
-.login-button {
+.log_in-button {
     background-color: #FFD700;
     color: #000000;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    margin-left: 240px;
     cursor: pointer;
     transition: background-color 0.3s;
     margin-right: 10px;
 }
-.button{
-    background-color: #FFD700;
-    color: #000000;
-    padding: 10px 20px;
-    border: none;
-    margin-left: 450px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 
-}
 
-.button:hover, .login-button:hover {
+.button:hover, .log_in-button:hover {
     background-color: #FFC300;
 }
 
-.h3 {
+.h3-login {
     font-family: 'Inter', sans-serif; 
     font-weight: bold;
     text-align: center;

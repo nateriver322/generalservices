@@ -73,7 +73,9 @@ function MyTickets() {
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-container">
-                <button onClick={handleHomeButtonClick} className="home-button">Home</button>
+                <div className="button-myTicketcontainer">
+                <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
+                </div>
                     <table className="ticket-table">
                         <thead>
                             <tr>
@@ -90,7 +92,7 @@ function MyTickets() {
                                     <td>{ticket.description}</td>
                                     <td>
                                     <div className="button-group">
-                                        <button onClick={() => handleViewTicket(ticket)}>View Details</button>
+                                        <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                         <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
                                     </div>
                                     </td>

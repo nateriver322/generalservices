@@ -22,7 +22,7 @@
     }
     
     
-    button {
+    .home-button, .tickets-button {
         padding: 10px 20px;
         background-color: #FFD700; /* Change to your desired color */
         color: #000000;
@@ -128,5 +128,25 @@
     .file-upload{
         text-align: left;
     }
+    
+    .label-date {
+        color: #FFD700;
+      }
+
+.ticket-submit-button{
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #FFD700; /* Change to your desired color */
+      color: #000000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+      background-color: #FFC300;
+  }
 
 

@@ -46,7 +46,7 @@
     background-color: #922B21;
 }
 
-.h3 {
+.h3_ticket {
     font-family: 'Inter', sans-serif;
     font-weight: bold;
     text-align: center !important;
@@ -81,5 +81,6 @@
 
 .user-info {
     text-align: center;
-    margin-right: 50px;
+    margin-top: 80px;
+    margin-bottom: -70px;
 }

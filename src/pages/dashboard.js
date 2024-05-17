@@ -38,10 +38,10 @@ function Dashboard() {
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>
+            <h2 className="h2">General Services Portal</h2>
             <div className="user-info">
                 <h3>Welcome, {username}!</h3>
-            </div>*
-            <h2 className="h2">General Services Portal</h2>
+            </div>
             <div className="container">
                 <div className="buttoncontainer">
                     <button className="ticket-button" onClick={handleTicketButtonClick}>Submit Ticket</button>

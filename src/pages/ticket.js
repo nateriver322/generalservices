@@ -33,8 +33,7 @@ function TicketForm() {
                 body: formData,
             });
             if (response.ok) {
-                alert("Ticket successfully submitted!");
-                navigate('/dashboard');
+                navigate('/SuccessTicket');
             } else {
                 console.error('Submission failed');
                 // Extract error message from response if possible
@@ -68,7 +67,7 @@ function TicketForm() {
                         <button className="tickets-button" onClick={handleViewButtonClick}>My Tickets</button>
                     </div>
                     <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
-                        <h3 className="h3">Submit a request</h3>
+                        <h3 className="h3_ticket">Submit a request</h3>
                         <div className="ticket-input-container">
                             <div className="select-container">
                                 <select id="Priority" name="priority" required>
@@ -92,7 +91,7 @@ function TicketForm() {
                                 </select>
                                 
                                 <input type="text" placeholder="Location" name="location" id="locInp" required />
-                                <label htmlFor="datetime">Select a Date and Time:</label>
+                                <label htmlFor="datetime" className="label-date">Select a Date and Time:</label>
                                 <input type="datetime-local" id="datetime" name="datetime" required />
                                 <textarea placeholder="Details of the Request" name="description" id="DesInp" required></textarea>
 
@@ -102,7 +101,7 @@ function TicketForm() {
                                     <span id="fileChosen">{fileLabel}</span> 
                                 </div>
 
-                                <button type="submit" id="Submitbtn">Submit</button>
+                                <button type="submit" id="Submitbtn" className="ticket-submit-button">Submit</button>
                             </div>
                         </div>
                     </form>
