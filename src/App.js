@@ -8,6 +8,8 @@ import MyTickets from './pages/myTickets';
 import RoleBasedDashboard from './RoleBasedDashboard'; // Import the RoleBasedDashboard
 import AccountManagement from './pages/AdminDashboard';
 import SuccessTicket from './pages/SuccessTicket';
+import StaffDashboard from './pages/StaffDashboard';
+import TicketsCreated from './pages/ticketsCreated';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route path="/myTickets" element={<MyTickets />} />
       <Route path="/" element={<AccountManagement />} />
       <Route path="/SuccessTicket" element={<SuccessTicket />} />
+      <Route path="/StaffDashboard" element={<StaffDashboard />} />
+      <Route path="/TicketsCreated" element={<TicketsCreated />} />
     </Routes>
   );
 }

@@ -1,0 +1,86 @@
+.tickets-created,
+.tickets-fixed{
+    background-color: #800000;
+    color: #ffffff;
+    font-size: 24px;
+    padding: 10px 20px;
+    width: 400px;
+    height: 200px;
+    margin-left: 50px;
+    margin-top: -500px;
+    margin-bottom: 50px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button {
+    background-color: #800000;
+    color: #ffffff;
+    font-size: 18px;
+    width: 200px;
+    height: 50px;
+    margin-left: -1000px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+
+.tickets-fixed {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.logout-button {
+    margin-right: 820px;
+    margin-bottom: 100px;
+}
+
+.tickets-fixed:hover,
+.tickets-created:hover,
+.logout-button:hover {
+    background-color: #922B21;
+}
+
+.h3_ticket {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    text-align: center !important;
+    color: #FFD700;
+}
+
+.p {
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    color: #ffffff;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    max-width: 130px;
+    margin-right: 20px;
+    margin-top: 80px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* This prevents scrollbars within the container */
+}
+
+.user-info {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: -70px;
+}
