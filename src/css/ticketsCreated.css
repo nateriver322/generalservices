@@ -1,0 +1,183 @@
+.h3_tickets {
+    color: #800000;
+   }
+   
+
+    .view-container {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px; /* Add padding inside the container */
+        color: #800000;
+        background-color: #ffffff; /* Red square border */
+        text-align: center; /* Center align content */
+        border: 2px solid;
+        border-radius: 10px; /* Add border radius for rounded corners */
+        box-sizing: border-box; /* Include padding and border in the width */
+        margin-top: -350px;
+        max-height: 70%;
+        max-width: 50%;
+        overflow-x: auto;
+        overflow-y: auto;
+
+    }
+
+    .button-myTicketcontainer {
+        display: flex;
+        justify-content: flex-start; /* Align buttons to the left */
+    }
+    
+    .home-ticket-button {
+        width: 120px; /* Adjust width as needed */
+        margin-right: 10px; /* Add margin between buttons */
+        margin-left: 20px; /* Align button to the left */
+        padding: 10px 20px;
+        background-color: #800000; /* Change to your desired color */
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    
+
+    .home-ticket-button:hover{
+        background-color: #922B21;
+    }
+    .ticket-table {
+        width: 100%;
+        border-collapse: collapse; /* Collapse borders between cells */
+    }
+    
+    .ticket-table th, .ticket-table td {
+        padding: 10px;
+        border: 1px solid #fff; /* Add borders around cells */
+        font-family: 'Inter', sans-serif; 
+        font-size: 18px;
+    }
+    
+    .ticket-table th:nth-child(2) {
+        text-align: center; /* Center-align the Tickets column */
+    }
+
+    /* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#ticketImage {
+    max-width: 20%;
+    height: auto;
+    margin-top: 20px; /* Adds some space above the image */
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    text-align: left;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
+
+.ticket-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.emergency-tag {
+    color: red;
+    font-weight: bold;
+}
+
+button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.view-button {
+    margin-right: 10px; /* Adds space between the View and Delete buttons */
+    
+}
+
+.delete-button {
+    padding: 10px 20px;
+    background-color: red;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.view-details-button {
+    padding: 10px 20px;
+    background-color: #ffd700;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
