@@ -44,23 +44,23 @@ function MyTickets() {
     };
 
     const handleDeleteTicket = async (id) => {
-    if (window.confirm('Are you sure you want to delete this ticket?')) {
-        try {
-            const response = await fetch(`http://localhost:8080/api/tickets/${id}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                alert('Ticket deleted successfully.');
-                setTickets(tickets.filter(ticket => ticket.id !== id));
-            } else {
-                alert('Failed to delete the ticket.');
+        if (window.confirm('Are you sure you want to delete this ticket?')) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/tickets/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Ticket deleted successfully.');
+                    setTickets(tickets.filter(ticket => ticket.id !== id));
+                } else {
+                    alert('Failed to delete the ticket.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the ticket.');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while deleting the ticket.');
         }
-    }
-};
+    };
 
     return (
         <>
@@ -73,12 +73,13 @@ function MyTickets() {
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-container">
-                <div className="button-myTicketcontainer">
-                <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                </div>
+                    <div className="button-myTicketcontainer">
+                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
+                    </div>
                     <table className="ticket-table">
                         <thead>
                             <tr>
+                                <th>Status</th>
                                 <th>Priority</th>
                                 <th>Location</th>
                                 <th>Description</th>
@@ -87,14 +88,15 @@ function MyTickets() {
                         <tbody>
                             {tickets.map((ticket, index) => (
                                 <tr key={index}>
+                                    <td>{ticket.status}</td>
                                     <td>{ticket.priority}</td>
                                     <td>{ticket.location}</td>
                                     <td>{ticket.description}</td>
                                     <td>
-                                    <div className="button-group">
-                                        <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                        <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
-                                    </div>
+                                        <div className="button-group">
+                                            <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
+                                            <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -105,6 +107,7 @@ function MyTickets() {
                             <div className="modal-content">
                                 <span className="close" onClick={closeModal}>&times;</span>
                                 <h2>Ticket Details</h2>
+                                <p><strong>Status:</strong> {selectedTicket.status}</p>
                                 <p><strong>Description:</strong> {selectedTicket.description}</p>
                                 <p><strong>Priority:</strong> {selectedTicket.priority}</p>
                                 <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>

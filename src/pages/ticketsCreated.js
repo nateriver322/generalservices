@@ -13,13 +13,13 @@ function TicketsCreated() {
         if (!username) {
             navigate('/');
         } else {
-            fetchTickets(username);
+            fetchTickets();
         }
     }, [navigate]);
 
-    const fetchTickets = async (username) => {
+    const fetchTickets = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/tickets/`);
+            const response = await fetch('http://localhost:8080/api/tickets');
             if (response.ok) {
                 const data = await response.json();
                 setTickets(data);
@@ -74,8 +74,8 @@ function TicketsCreated() {
                                     <td>{ticket.id}</td>
                                     <td>{ticket.status}</td>
                                     <td>{ticket.username}</td>
-                                    <td>{ticket.created}</td>
-                                    <td>{ticket.assignstaff}</td>
+                                    <td>{ticket.datetime}</td>
+                                    <td>{/* Leave this column blank for now */}</td>
                                     <td>
                                         <div className="button-group">
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
