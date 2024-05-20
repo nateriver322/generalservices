@@ -62,6 +62,7 @@ function TicketsCreated() {
                             <tr>
                                 <th>Ticket Number</th>
                                 <th>Status</th>
+                                <th>Priority</th>
                                 <th>Reported By</th>
                                 <th>Date Created</th>
                                 <th>Staff Assigned</th>
@@ -73,6 +74,7 @@ function TicketsCreated() {
                                 <tr key={index}>
                                     <td>{ticket.id}</td>
                                     <td>{ticket.status}</td>
+                                    <td>{ticket.priority}</td>
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
                                     <td>{/* Leave this column blank for now */}</td>
