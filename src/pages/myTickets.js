@@ -76,32 +76,37 @@ function MyTickets() {
                     <div className="button-myTicketcontainer">
                         <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
                     </div>
-                    <table className="ticket-table">
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Priority</th>
-                                <th>Location</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tickets.map((ticket, index) => (
-                                <tr key={index}>
-                                    <td>{ticket.status}</td>
-                                    <td>{ticket.priority}</td>
-                                    <td>{ticket.location}</td>
-                                    <td>{ticket.description}</td>
-                                    <td>
-                                        <div className="button-group">
-                                            <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                            <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
-                                        </div>
-                                    </td>
+                    {tickets.length === 0 ? (
+                        <p className="no-tickets-message">No Tickets Submitted</p>
+                    ) : (
+                        <table className="ticket-table">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Location</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {tickets.map((ticket, index) => (
+                                    <tr key={index}>
+                                        <td>{ticket.status}</td>
+                                        <td>{ticket.priority}</td>
+                                        <td>{ticket.location}</td>
+                                        <td>{ticket.description}</td>
+                                        <td>
+                                            <div className="button-group">
+                                                <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
+                                                <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                     {selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
