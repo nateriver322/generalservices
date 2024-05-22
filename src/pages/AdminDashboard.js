@@ -32,6 +32,123 @@ const SavedModal = ({ message, onClose }) => {
   );
 };
 
+// RegistrationModal component
+const RegistrationModal = ({ onClose, onRegister }) => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    contactNumber: '',
+    role: 'User'
+  });
+  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setIsFormChanged(true); // Form has been changed
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/user/register', formData);
+      if (response.status === 201) {
+        console.log("User registered successfully");
+        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
+        onRegister(); // Call onRegister to refresh the account list
+      } else {
+        console.error("Failed to register user");
+        alert("Failed to register user");
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+      alert("Error registering user");
+    }
+  };
+
+  const handleSavedModalClose = () => {
+    setIsSavedModalOpen(false);
+    onClose(); // Close the registration modal
+  };
+
+  return (
+    <>
+      <div className="modal">
+        <div className="modal-content">
+          <h2>Register Account</h2>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Contact No.</label>
+              <input
+                type="text"
+                name="contactNumber"
+                value={formData.contactNumber}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Account Type</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="Staff">PCO Staff</option>
+              <option value="User">User</option>
+              <option value="Personnel">Repair Personnel</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div className="modal-buttons">
+            <button onClick={handleSaveClick}>Register</button>
+            <button onClick={onClose}>Cancel</button>
+          </div>
+        </div>
+        {isSavedModalOpen && (
+          <SavedModal
+            message="Account Registered Successfully"
+            onClose={handleSavedModalClose}
+          />
+        )}
+      </div>
+    </>
+  );
+};
+
 // EditAccountModal component
 const EditAccountModal = ({ account, onClose, onSave }) => {
   const [formData, setFormData] = useState({ ...account });
@@ -107,7 +224,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
             <div className="form-group">
               <label>Password</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -173,10 +290,11 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 // AccountManagement component
 const AccountManagement = () => {
   const [accounts, setAccounts] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
   const [currentAccount, setCurrentAccount] = useState(null);
   const [searchUsername, setSearchUsername] = useState('');
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // New state for confirmation modal
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -206,13 +324,12 @@ const AccountManagement = () => {
   };
 
   const handleCreateAccountButtonClick = () => {
-    localStorage.removeItem('username');
-    navigate('/register');
+    setIsRegistrationModalOpen(true);
   };
 
   const handleEditClick = (account) => {
     setCurrentAccount(account);
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
   const handleDeleteClick = (accountId) => {
@@ -263,12 +380,25 @@ const AccountManagement = () => {
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentAccount(null);
   };
 
+  const handleCloseRegistrationModal = () => {
+    setIsRegistrationModalOpen(false);
+  };
+
   const handleSaveAccountChanges = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/user/accounts');
+      setAccounts(response.data);
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
+    }
+  };
+
+  const handleRegisterNewAccount = async () => {
     try {
       const response = await axios.get('http://localhost:8080/user/accounts');
       setAccounts(response.data);
@@ -294,11 +424,17 @@ const AccountManagement = () => {
         </div>
       </div>
       <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
-      {isModalOpen && (
+      {isEditModalOpen && (
         <EditAccountModal
           account={currentAccount}
-          onClose={handleCloseModal}
+          onClose={handleCloseEditModal}
           onSave={handleSaveAccountChanges}
+        />
+      )}
+      {isRegistrationModalOpen && (
+        <RegistrationModal
+          onClose={handleCloseRegistrationModal}
+          onRegister={handleRegisterNewAccount}
         />
       )}
       {isConfirmModalOpen && (
