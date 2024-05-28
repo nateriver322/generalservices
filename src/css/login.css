@@ -122,6 +122,16 @@ header {
 .forgot-password a {
     color: #ffffff; /* Change the text color to white */
 }
+.eye-icon-login {
+    position: absolute;
+    top: 40%;
+    margin-right: 255px;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 30px;
+}
 
 
 
