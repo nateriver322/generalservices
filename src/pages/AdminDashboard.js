@@ -124,8 +124,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="Staff">User</option>
-              <option value="User">PCO Staff</option>
+              <option value="User">User</option>
+              <option value="PCO Staff">PCO Staff</option>
               <option value="Personnel">Repair Personnel</option>
               <option value="Admin">Admin</option>
             </select>
