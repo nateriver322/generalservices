@@ -38,9 +38,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     password: '',
     email: '',
     contactNumber: '',
-    role: ''
+    role: 'User'
   });
-  const [ setIsFormChanged] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -49,7 +48,6 @@ const RegistrationModal = ({ onClose, onRegister }) => {
       ...formData,
       [name]: value,
     });
-    setIsFormChanged(true); // Form has been changed
   };
 
   const handleSaveClick = async () => {
@@ -126,8 +124,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="Staff">PCO Staff</option>
-              <option value="User">User</option>
+              <option value="Staff">User</option>
+              <option value="User">PCO Staff</option>
               <option value="Personnel">Repair Personnel</option>
               <option value="Admin">Admin</option>
             </select>
