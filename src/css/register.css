@@ -1,5 +1,5 @@
 body {
-    background-color: #FFD700; /* Bright yellow background */
+    background-color: #ffd700; /* Bright yellow background */
     margin: 0;
     overflow: hidden;
     font-family: 'Inter', sans-serif; /* Consistent font for the whole page */
@@ -7,7 +7,7 @@ body {
 
 header {
     text-align: center;
-    padding: 10px; 
+    padding: 10px;
     margin-bottom: 20px; /* Adds some space below the header */
 }
 
@@ -80,6 +80,7 @@ header {
     align-items: flex-start;
     width: 100%;
     margin-bottom: 10px;
+    position: relative; /* Position relative for error messages */
 }
 
 .input-field {
@@ -91,7 +92,7 @@ header {
 }
 
 .input-field:focus {
-    border-color: #FFD700; /* Highlight focus */
+    border-color: #ffd700; /* Highlight focus */
 }
 
 .buttoncontainer {
@@ -103,7 +104,7 @@ header {
 
 .signup-button, .login-button {
     margin: 0 5px; /* Add some margin for spacing between buttons */
-    background-color: #FFD700;
+    background-color: #ffd700;
     color: #000000;
     padding: 10px 20px;
     border: none;
@@ -113,7 +114,7 @@ header {
 }
 
 .signup-button:hover, .login-button:hover {
-    background-color: #FFC300;
+    background-color: #ffc300;
 }
 
 .h3 {
@@ -122,7 +123,7 @@ header {
 }
 
 .error {
-    color: #FFD700;
+    color: #ffd700;
     font-size: 10px;
     position: absolute;
     background-color: #ccc;
@@ -140,3 +141,13 @@ header {
     margin-left: 5px;
 }
 
+.eye-icon {
+    position: absolute;
+    top: 35%;
+    margin-right: 255px;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 30px;
+}
