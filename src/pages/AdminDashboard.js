@@ -32,16 +32,15 @@ const SavedModal = ({ message, onClose }) => {
   );
 };
 
-// RegistrationModal component
 const RegistrationModal = ({ onClose, onRegister }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     email: '',
     contactNumber: '',
-    role: 'User'
+    role: ''
   });
-  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [ setIsFormChanged] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -362,21 +361,20 @@ const AccountManagement = () => {
   };
 
   const handleSearchClick = async () => {
-    if (searchUsername.trim() === '') {
-      const response = await axios.get('http://localhost:8080/user/accounts');
-      setAccounts(response.data);
-    } else {
-      try {
-        const response = await axios.get(`http://localhost:8080/user/${searchUsername}`);
-        if (response.status === 200) {
-          setAccounts([response.data]);
-        } else {
-          alert('User not found');
-        }
-      } catch (error) {
-        console.error('Error searching for user:', error);
-        alert('Error searching for user');
+    try {
+      let response;
+      if (searchUsername.trim() === '') {
+        response = await axios.get('http://localhost:8080/user/accounts');
+      } else {
+        response = await axios.get(`http://localhost:8080/user/search?query=${searchUsername}`);
       }
+      if (response.status === 200) {
+        setAccounts(response.data);
+      } else {
+        console.error('Failed to fetch accounts');
+      }
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
     }
   };
 
