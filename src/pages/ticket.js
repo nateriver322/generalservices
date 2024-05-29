@@ -14,6 +14,22 @@ function TicketForm() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        // Set the maximum date and time for the datetime input to now
+        const datetimeInput = document.getElementById('datetime');
+        if (datetimeInput) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            datetimeInput.max = currentDateTime;
+        }
+    }, []);
+
+
     const handleHomeButtonClick = () => {
         navigate("/dashboard"); 
     };
@@ -25,6 +41,14 @@ function TicketForm() {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
+        const selectedDateTime = new Date(formData.get('datetime'));
+        const now = new Date();
+
+        if (selectedDateTime > now) {
+            alert("The selected date and time cannot be in the future.");
+            return;
+        }
+
         formData.append('username', localStorage.getItem('username'));
     
         try {
@@ -45,7 +69,6 @@ function TicketForm() {
             alert(`Error submitting the ticket: ${error.message}`);
         }
     };
-
     const handleFileChange = (event) => {
         const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
         setFileLabel(fileName); // Update the state with the new file name
