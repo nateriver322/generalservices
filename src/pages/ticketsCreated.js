@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import '../css/ticketsCreated.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
+import axios from 'axios';
 
 function TicketsCreated() {
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [personnelList, setPersonnelList] = useState([]);
+    const [assignModalOpen, setAssignModalOpen] = useState(false);
+    const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+    const [selectedPersonnel, setSelectedPersonnel] = useState('');
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -14,6 +19,7 @@ function TicketsCreated() {
             navigate('/');
         } else {
             fetchTickets();
+            fetchPersonnel();
         }
     }, [navigate]);
 
@@ -31,16 +37,53 @@ function TicketsCreated() {
         }
     };
 
-    const handleViewTicket = (ticket) => {
-        setSelectedTicket(ticket);
+    const fetchPersonnel = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/user/personnel');
+            setPersonnelList(response.data);
+        } catch (error) {
+            console.error('Error fetching personnel:', error);
+        }
     };
 
-    const closeModal = () => {
+    const handleViewTicket = (ticket) => {
+        setSelectedTicket(ticket);
+        setDetailsModalOpen(true);
+    };
+
+    const closeDetailsModal = () => {
+        setDetailsModalOpen(false);
         setSelectedTicket(null);
     };
 
     const handleHomeButtonClick = () => {
         navigate("/dashboard");
+    };
+
+    const handleAssignTicket = (ticket) => {
+        setSelectedTicket(ticket);
+        setAssignModalOpen(true);
+    };
+
+    const handleAssignPersonnel = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/tickets/assign', null, {
+                params: {
+                    ticketId: selectedTicket.id,
+                    personnelUsername: selectedPersonnel
+                }
+            });
+            if (response.status === 200) {
+                alert('Ticket successfully assigned');
+                setAssignModalOpen(false);
+                fetchTickets();
+            } else {
+                alert('Failed to assign ticket');
+            }
+        } catch (error) {
+            console.error('Error assigning ticket:', error);
+            alert('Error assigning ticket');
+        }
     };
 
     return (
@@ -65,7 +108,7 @@ function TicketsCreated() {
                                 <th>Priority</th>
                                 <th>Reported By</th>
                                 <th>Date Created</th>
-                                <th>Staff Assigned</th>
+                                <th>Personnel Assigned</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -77,9 +120,10 @@ function TicketsCreated() {
                                     <td>{ticket.priority}</td>
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
-                                    <td>{/* Leave this column blank for now */}</td>
+                                    <td>{ticket.assignedPersonnel || 'None'}</td>
                                     <td>
                                         <div className="button-group">
+                                            <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                         </div>
                                     </td>
@@ -87,10 +131,10 @@ function TicketsCreated() {
                             ))}
                         </tbody>
                     </table>
-                    {selectedTicket && (
+                    {detailsModalOpen && selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
-                                <span className="close" onClick={closeModal}>&times;</span>
+                                <span className="close" onClick={closeDetailsModal}>&times;</span>
                                 <h2>Ticket Details</h2>
                                 <p><strong>Description:</strong> {selectedTicket.description}</p>
                                 <p><strong>Priority:</strong> {selectedTicket.priority}</p>
@@ -101,6 +145,21 @@ function TicketsCreated() {
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}
+                            </div>
+                        </div>
+                    )}
+                    {assignModalOpen && selectedTicket && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={() => setAssignModalOpen(false)}>&times;</span>
+                                <h2>Assign Ticket</h2>
+                                <select value={selectedPersonnel} onChange={(e) => setSelectedPersonnel(e.target.value)}>
+                                    <option value="">Select Personnel</option>
+                                    {personnelList.map(personnel => (
+                                        <option key={personnel.username} value={personnel.username}>{personnel.username}</option>
+                                    ))}
+                                </select>
+                                <button onClick={handleAssignPersonnel} className="assign-button">Assign</button>
                             </div>
                         </div>
                     )}

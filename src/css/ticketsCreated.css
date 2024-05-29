@@ -181,3 +181,17 @@ button {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
+
+/* Add this to ticketsCreated.css */
+.assign-button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.assign-button:hover {
+    background-color: darkgreen;
+}

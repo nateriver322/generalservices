@@ -15,8 +15,8 @@ function StaffDashboard() {
     }, [navigate, username]);
 
     const handleTicketButtonClick = () => {
-        navigate("/ticketsCreated"); 
-        console.log("Ticket Created button clicked");
+        navigate("/PersonnelTickets"); 
+        console.log("Tickets assigned button clicked");
     };
 
     const handleViewButtonClick = () => {
@@ -45,8 +45,8 @@ function StaffDashboard() {
             </div>
             <div className="container">
                 <div className="buttoncontainer">
-                    <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Created</button>
-                    <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets fixed</button>
+                    <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Assigned</button>
+                    <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets History</button>
                 </div>
                 <button className="logout-button" onClick={handleLogoutButtonClick}>Logout</button>
             </div>

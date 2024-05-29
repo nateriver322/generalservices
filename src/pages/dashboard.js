@@ -19,8 +19,6 @@ function Dashboard() {
     };
 
     const handleViewButtonClick = () => {
-        // Logic to handle view button click
-        // For example, navigate to the tickets viewing page
         navigate("/myTickets"); 
         console.log("View Tickets button clicked");
     };
@@ -34,7 +32,7 @@ function Dashboard() {
         <>
             <header>
                 <div className="header-content">
-                <img src={logo} className="logo" alt="Logo" />
+                    <img src={logo} className="logo" alt="Logo" />
                     <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
                 </div>
             </header>

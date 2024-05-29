@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import '../css/myTickets.css';
+import '../css/ticketsCreated.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 
-function MyTickets() {
+function PersonnelTickets() {
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
@@ -19,7 +19,7 @@ function MyTickets() {
 
     const fetchTickets = async (username) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/tickets/user/${username}`);
+            const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
             if (response.ok) {
                 const data = await response.json();
                 setTickets(data);
@@ -43,25 +43,6 @@ function MyTickets() {
         navigate("/dashboard");
     };
 
-    const handleDeleteTicket = async (id) => {
-        if (window.confirm('Are you sure you want to delete this ticket?')) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/tickets/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    alert('Ticket deleted successfully.');
-                    setTickets(tickets.filter(ticket => ticket.id !== id));
-                } else {
-                    alert('Failed to delete the ticket.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the ticket.');
-            }
-        }
-    };
-
     return (
         <>
             <header>
@@ -76,37 +57,34 @@ function MyTickets() {
                     <div className="button-myTicketcontainer">
                         <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
                     </div>
-                    {tickets.length === 0 ? (
-                        <p className="no-tickets-message">No Tickets Submitted</p>
-                    ) : (
-                        <table className="ticket-table">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Priority</th>
-                                    <th>Location</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
+                    <table className="ticket-table">
+                        <thead>
+                            <tr>
+                                <th>Ticket Number</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Reported By</th>
+                                <th>Date Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tickets.map((ticket, index) => (
+                                <tr key={index}>
+                                    <td>{ticket.id}</td>
+                                    <td>{ticket.status}</td>
+                                    <td>{ticket.priority}</td>
+                                    <td>{ticket.username}</td>
+                                    <td>{ticket.datetime}</td>
+                                    <td>
+                                        <div className="button-group">
+                                            <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {tickets.map((ticket, index) => (
-                                    <tr key={index}>
-                                        <td>{ticket.status}</td>
-                                        <td>{ticket.priority}</td>
-                                        <td>{ticket.location}</td>
-                                        <td>{ticket.description}</td>
-                                        <td>
-                                            <div className="button-group">
-                                                <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                                <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                            ))}
+                        </tbody>
+                    </table>
                     {selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
@@ -130,4 +108,4 @@ function MyTickets() {
     );
 }
 
-export default MyTickets;
+export default PersonnelTickets;

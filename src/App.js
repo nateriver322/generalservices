@@ -10,6 +10,7 @@ import AccountManagement from './pages/AdminDashboard';
 import SuccessTicket from './pages/SuccessTicket';
 import StaffDashboard from './pages/StaffDashboard';
 import TicketsCreated from './pages/ticketsCreated';
+import PersonnelTickets from './pages/personneltickets';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/SuccessTicket" element={<SuccessTicket />} />
       <Route path="/StaffDashboard" element={<StaffDashboard />} />
       <Route path="/TicketsCreated" element={<TicketsCreated />} />
+      <Route path="/PersonnelTickets" element={<PersonnelTickets />} />
     </Routes>
   );
 }
