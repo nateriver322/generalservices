@@ -152,7 +152,7 @@ const Register = () => {
                                     )}
                                 </div>
                                 {errors.password && <span className="error">{errors.password}</span>}
-                                <span className="pass-guide">Must be 8 characters numerical value.</span>
+                                <span className="pass-guide">Must be 8 characters with numerical values.</span>
                             </div>
                             <div className="input-group">
                                 <input type="text" placeholder="Contact Number" name="contactNumber" className="input-field" pattern="[0-9]*" maxLength="11" required onChange={handleInputChange} />

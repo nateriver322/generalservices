@@ -11,6 +11,8 @@ import SuccessTicket from './pages/SuccessTicket';
 import StaffDashboard from './pages/StaffDashboard';
 import TicketsCreated from './pages/ticketsCreated';
 import PersonnelTickets from './pages/personneltickets';
+import TicketsFixed from './pages/ticketsFixed';
+import TicketsHistory from './pages/ticketsHistory';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
       <Route path="/StaffDashboard" element={<StaffDashboard />} />
       <Route path="/TicketsCreated" element={<TicketsCreated />} />
       <Route path="/PersonnelTickets" element={<PersonnelTickets />} />
+      <Route path="/TicketsFixed" element={<TicketsFixed />} />
+      <Route path="/TicketsHistory" element={<TicketsHistory />} />
     </Routes>
   );
 }
