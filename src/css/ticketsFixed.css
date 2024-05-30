@@ -1,4 +1,4 @@
-   .h3_tickets {
+.h3_tickets {
     color: #800000;
    }
    
@@ -180,4 +180,102 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+}
+
+/* Add this to ticketsCreated.css */
+.assign-button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.assign-button:hover {
+    background-color: darkgreen;
+}
+
+/* Modal Container */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modalopen 0.4s; /* Modal open animation */
+}
+
+/* Close Button (X) */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Close Button */
+.close-button {
+    background-color: #f44336; /* Red background for close button */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.close-button:hover, .close-button:focus {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+/* Assign Button */
+.assign-button {
+    background-color: #4CAF50; /* Green background for assign button */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.assign-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Modal open animation */
+@keyframes modalopen {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
