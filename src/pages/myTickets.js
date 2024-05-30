@@ -7,6 +7,7 @@ function MyTickets() {
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [ticketToDelete, setTicketToDelete] = useState(null); // State for the ticket to be deleted
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -43,15 +44,23 @@ function MyTickets() {
         navigate("/dashboard");
     };
 
-    const handleDeleteTicket = async (id) => {
-        if (window.confirm('Are you sure you want to delete this ticket?')) {
+    const openDeleteModal = (ticket) => {
+        setTicketToDelete(ticket);
+    };
+
+    const closeDeleteModal = () => {
+        setTicketToDelete(null);
+    };
+
+    const confirmDeleteTicket = async () => {
+        if (ticketToDelete) {
             try {
-                const response = await fetch(`http://localhost:8080/api/tickets/${id}`, {
+                const response = await fetch(`http://localhost:8080/api/tickets/${ticketToDelete.id}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
-                    alert('Ticket deleted successfully.');
-                    setTickets(tickets.filter(ticket => ticket.id !== id));
+                    setTickets(tickets.filter(ticket => ticket.id !== ticketToDelete.id));
+                    closeDeleteModal();
                 } else {
                     alert('Failed to delete the ticket.');
                 }
@@ -99,7 +108,7 @@ function MyTickets() {
                                         <td>
                                             <div className="button-group">
                                                 <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                                <button onClick={() => handleDeleteTicket(ticket.id)} className="delete-button">Delete</button>
+                                                <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -121,6 +130,16 @@ function MyTickets() {
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}
+                            </div>
+                        </div>
+                    )}
+                    {ticketToDelete && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Confirm Deletion</h2>
+                                <p>Are you sure you want to delete this ticket?</p>
+                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Delete</button>
+                                <button onClick={closeDeleteModal} className="cancel-delete-button">Cancel</button>
                             </div>
                         </div>
                     )}

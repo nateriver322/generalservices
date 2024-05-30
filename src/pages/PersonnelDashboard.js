@@ -20,9 +20,7 @@ function StaffDashboard() {
     };
 
     const handleViewButtonClick = () => {
-        // Logic to handle view button click
-        // For example, navigate to the tickets viewing page
-        //navigate("/myTickets"); 
+        navigate("/ticketsHistory"); 
         console.log("Fixed Tickets button clicked");
     };
 

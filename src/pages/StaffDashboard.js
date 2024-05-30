@@ -20,9 +20,8 @@ function StaffDashboard() {
     };
 
     const handleViewButtonClick = () => {
-        // Logic to handle view button click
-        // For example, navigate to the tickets viewing page
-        //navigate("/myTickets"); 
+
+        navigate("/ticketsFixed"); 
         console.log("Fixed Tickets button clicked");
     };
 
@@ -46,7 +45,7 @@ function StaffDashboard() {
             <div className="container">
                 <div className="buttoncontainer">
                     <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Created</button>
-                    <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets fixed</button>
+                    <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets Fixed</button>
                 </div>
                 <button className="logout-button" onClick={handleLogoutButtonClick}>Logout</button>
             </div>

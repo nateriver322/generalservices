@@ -11,6 +11,7 @@ function TicketsCreated() {
     const [personnelList, setPersonnelList] = useState([]);
     const [assignModalOpen, setAssignModalOpen] = useState(false);
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
     const [selectedPersonnel, setSelectedPersonnel] = useState('');
 
     useEffect(() => {
@@ -74,8 +75,8 @@ function TicketsCreated() {
                 }
             });
             if (response.status === 200) {
-                alert('Ticket successfully assigned');
                 setAssignModalOpen(false);
+                setSuccessModalOpen(true);
                 fetchTickets();
             } else {
                 alert('Failed to assign ticket');
@@ -123,7 +124,11 @@ function TicketsCreated() {
                                     <td>{ticket.assignedPersonnel || 'None'}</td>
                                     <td>
                                         <div className="button-group">
-                                            <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
+                                            {ticket.status === 'Working' ?(
+                                                <button className="assigned-button" disabled>Assigned</button>
+                                            ) : (
+                                                <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button> 
+                                            )}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                         </div>
                                     </td>
@@ -134,7 +139,6 @@ function TicketsCreated() {
                     {detailsModalOpen && selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
-                                <span className="close" onClick={closeDetailsModal}>&times;</span>
                                 <h2>Ticket Details</h2>
                                 <p><strong>Description:</strong> {selectedTicket.description}</p>
                                 <p><strong>Priority:</strong> {selectedTicket.priority}</p>
@@ -145,6 +149,7 @@ function TicketsCreated() {
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}
+                                <button onClick={closeDetailsModal} className="close-button">Close</button>
                             </div>
                         </div>
                     )}
@@ -160,6 +165,15 @@ function TicketsCreated() {
                                     ))}
                                 </select>
                                 <button onClick={handleAssignPersonnel} className="assign-button">Assign</button>
+                            </div>
+                        </div>
+                    )}
+                    {successModalOpen && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Success</h2>
+                                <p>Ticket successfully assigned.</p>
+                                <button onClick={() => setSuccessModalOpen(false)} className="close-button">Close</button>
                             </div>
                         </div>
                     )}
