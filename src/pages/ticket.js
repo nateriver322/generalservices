@@ -25,7 +25,7 @@ function TicketForm() {
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-            datetimeInput.min = currentDateTime;
+            datetimeInput.max = currentDateTime;
         }
     }, []);
 
@@ -43,8 +43,8 @@ function TicketForm() {
         const selectedDateTime = new Date(formData.get('datetime'));
         const now = new Date();
 
-        if (selectedDateTime < now) {
-            alert("The selected date and time cannot be in the past.");
+        if (selectedDateTime > now) {
+            alert("The selected date and time cannot be in the future.");
             return;
         }
 
