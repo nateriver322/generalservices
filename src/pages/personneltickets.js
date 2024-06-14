@@ -65,6 +65,7 @@ function PersonnelTickets() {
                                 <th>Priority</th>
                                 <th>Reported By</th>
                                 <th>Date Created</th>
+                                <th>Scheduled Repair Date</th> {/* New Column */}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -76,6 +77,7 @@ function PersonnelTickets() {
                                     <td>{ticket.priority}</td>
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
+                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td> {/* Display Scheduled Repair Date */}
                                     <td>
                                         <div className="button-group">
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
@@ -95,7 +97,8 @@ function PersonnelTickets() {
                                 <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>
                                 <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
                                 <p><strong>Location:</strong> {selectedTicket.location}</p>
-                                <p><strong>Date:</strong> {selectedTicket.datetime}</p>
+                                <p><strong>Date Created:</strong> {selectedTicket.datetime}</p>
+                                <p><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate}</p> {/* Display Scheduled Repair Date in modal */}
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}

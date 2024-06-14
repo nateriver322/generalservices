@@ -13,6 +13,7 @@ function TicketsCreated() {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     const [selectedPersonnel, setSelectedPersonnel] = useState('');
+    const [scheduledRepairDate, setScheduledRepairDate] = useState(''); // New state for scheduled repair date
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -71,7 +72,8 @@ function TicketsCreated() {
             const response = await axios.post('http://localhost:8080/api/tickets/assign', null, {
                 params: {
                     ticketId: selectedTicket.id,
-                    personnelUsername: selectedPersonnel
+                    personnelUsername: selectedPersonnel,
+                    scheduledRepairDate: scheduledRepairDate // Include the date
                 }
             });
             if (response.status === 200) {
@@ -110,6 +112,7 @@ function TicketsCreated() {
                                 <th>Reported By</th>
                                 <th>Date Created</th>
                                 <th>Personnel Assigned</th>
+                                <th>Scheduled Repair Date</th> {/* New Column */}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -122,12 +125,13 @@ function TicketsCreated() {
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
                                     <td>{ticket.assignedPersonnel || 'None'}</td>
+                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td> {/* Display Scheduled Repair Date */}
                                     <td>
                                         <div className="button-group">
-                                            {ticket.status === 'Working' ?(
+                                            {ticket.status === 'Working' ? (
                                                 <button className="assigned-button" disabled>Assigned</button>
                                             ) : (
-                                                <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button> 
+                                                <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
                                             )}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                         </div>
@@ -164,7 +168,8 @@ function TicketsCreated() {
                                         <option key={personnel.username} value={personnel.username}>{personnel.username}</option>
                                     ))}
                                 </select>
-                                <button onClick={handleAssignPersonnel} className="assign-button">Assign</button>
+                                <input type="datetime-local" value={scheduledRepairDate} onChange={(e) => setScheduledRepairDate(e.target.value)} />
+                                <button onClick={handleAssignPersonnel}>Assign</button>
                             </div>
                         </div>
                     )}
@@ -172,8 +177,8 @@ function TicketsCreated() {
                         <div className="modal">
                             <div className="modal-content">
                                 <h2>Success</h2>
-                                <p>Ticket successfully assigned.</p>
-                                <button onClick={() => setSuccessModalOpen(false)} className="close-button">Close</button>
+                                <p>Ticket successfully assigned</p>
+                                <button onClick={() => setSuccessModalOpen(false)}>Close</button>
                             </div>
                         </div>
                     )}
