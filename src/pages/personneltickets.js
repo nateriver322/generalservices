@@ -7,6 +7,12 @@ function PersonnelTickets() {
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [feedback, setFeedback] = useState('');
+    const [isTicketDetailsModalOpen, setIsTicketDetailsModalOpen] = useState(false);
+    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+    const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
+    const [feedbackError, setFeedbackError] = useState('');
+    
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -31,16 +37,54 @@ function PersonnelTickets() {
         }
     };
 
-    const handleViewTicket = (ticket) => {
-        setSelectedTicket(ticket);
+    const openFeedbackModal = (ticket) => {
+        setFeedbackModalTicket(ticket);
     };
 
-    const closeModal = () => {
+    const handleViewTicket = (ticket) => {
+        setSelectedTicket(ticket);
+        setIsTicketDetailsModalOpen(true);
+    };
+
+
+    const closeTicketDetailsModal = () => {
         setSelectedTicket(null);
+        setIsTicketDetailsModalOpen(false);
     };
 
     const handleHomeButtonClick = () => {
         navigate("/dashboard");
+    };
+
+    const handleDoneClick = (ticket) => {
+        setSelectedTicket(ticket);
+        setIsFeedbackModalOpen(true);
+    };
+
+    const closeFeedbackModal = () => {
+        setFeedbackModalTicket(null);
+        setFeedbackError('');
+    };
+
+    const handleFeedbackSubmit = async (ticketId, feedback) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/tickets/${ticketId}/feedback?feedback=${encodeURIComponent(feedback)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+
+            if (response.ok) {
+                setFeedback('');
+                setIsFeedbackModalOpen(false);
+                fetchTickets(localStorage.getItem('username')); // Refresh the ticket list
+            } else {
+                console.error('Failed to submit feedback');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -65,7 +109,7 @@ function PersonnelTickets() {
                                 <th>Priority</th>
                                 <th>Reported By</th>
                                 <th>Date Created</th>
-                                <th>Scheduled Repair Date</th> {/* New Column */}
+                                <th>Scheduled Repair Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -77,9 +121,16 @@ function PersonnelTickets() {
                                     <td>{ticket.priority}</td>
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
-                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td> {/* Display Scheduled Repair Date */}
+                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
                                     <td>
-                                        <div className="button-group">
+                                    <div className="button-group">
+                                            {ticket.status === 'Done' ? (
+                                                <button className="Finish-button" disabled>Finished</button>
+                                            ) : (
+                                                <button onClick={() => handleDoneClick(ticket)} className="done-button">Done</button>
+                                            )}
+                                            {ticket.feedback && (
+                                                    <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>)}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                         </div>
                                     </td>
@@ -87,10 +138,13 @@ function PersonnelTickets() {
                             ))}
                         </tbody>
                     </table>
-                    {selectedTicket && (
+
+                    
+                    
+                    {isTicketDetailsModalOpen && selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
-                                <span className="close" onClick={closeModal}>&times;</span>
+                                <span className="close" onClick={closeTicketDetailsModal}>&times;</span>
                                 <h2>Ticket Details</h2>
                                 <p><strong>Description:</strong> {selectedTicket.description}</p>
                                 <p><strong>Priority:</strong> {selectedTicket.priority}</p>
@@ -98,9 +152,44 @@ function PersonnelTickets() {
                                 <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
                                 <p><strong>Location:</strong> {selectedTicket.location}</p>
                                 <p><strong>Date Created:</strong> {selectedTicket.datetime}</p>
-                                <p><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate}</p> {/* Display Scheduled Repair Date in modal */}
+                                <p><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate}</p>
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
+                                )}
+                            </div>
+                        </div>
+                    )}
+                    {isFeedbackModalOpen && selectedTicket && (
+                        <div className="modal">
+                            <div className="modal-content" style={{ width: '600px' }}>
+                                <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
+                                <h2>Provide Feedback</h2>
+                                <textarea
+                                    value={feedback}
+                                    onChange={(e) => setFeedback(e.target.value)}
+                                    placeholder="Enter your feedback here..."
+                                    style={{ width: '100%', height: '150px' }}
+                                />
+                                <button className="confirm-button" onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}>Confirm</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {feedbackModalTicket && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={closeFeedbackModal}>&times;</span>
+                                <h2>Feedback</h2>
+                                {feedbackModalTicket.feedback && (
+                                    <p>Personnel/Staff Feedback: {feedbackModalTicket.feedback}</p>
+                                )}
+                                {feedbackModalTicket.userFeedback ? (
+                                    <p>User Feedback: {feedbackModalTicket.userFeedback}</p>
+                                ) : (
+                                    <>
+                                    
+                                        {feedbackError && <p className="error-message">{feedbackError}</p>}
+                                    </>
                                 )}
                             </div>
                         </div>

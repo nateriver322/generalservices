@@ -248,3 +248,83 @@ button {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+
+.done-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.done-button:hover {
+    background-color: #218838;
+}
+
+
+
+/* New CSS for the feedback modal */
+.confirm-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover {
+    background-color: #0056b3;
+}
+
+.Finish-button {
+    background-color: #888; /* Green background for assign button */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.Finish-button:hover {
+    background-color: #aaa; /* Darker green on hover */
+}
+
+
+.notifications-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.notification button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 5px;
+    cursor: pointer;
+}

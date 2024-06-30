@@ -13,7 +13,13 @@ function TicketsCreated() {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     const [selectedPersonnel, setSelectedPersonnel] = useState('');
-    const [scheduledRepairDate, setScheduledRepairDate] = useState(''); // New state for scheduled repair date
+    const [scheduledRepairDate, setScheduledRepairDate] = useState('');
+    const [ticketToDelete, setTicketToDelete] = useState(null);
+    const [assessModalOpen, setAssessModalOpen] = useState(false);
+    const [staffFeedback, setStaffFeedback] = useState('');
+    const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
+    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+    const [feedbackError, setFeedbackError] = useState('');
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -53,9 +59,68 @@ function TicketsCreated() {
         setDetailsModalOpen(true);
     };
 
+    const handleAssessTicket = (ticket) => {
+        setSelectedTicket(ticket);
+        setAssessModalOpen(true);
+    };
+
+    const closeFeedbackModal = () => {
+        setFeedbackModalTicket(null);
+        setFeedbackError('');
+    };
+
+    const handleStaffFeedbackSubmit = async () => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/staff-feedback`, {
+                feedback: staffFeedback
+            });
+            if (response.status === 200) {
+                setAssessModalOpen(false);
+                setSuccessModalOpen(true);
+                fetchTickets();
+            } else {
+                alert('Failed to submit feedback');
+            }
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            alert('Error submitting feedback');
+        }
+    };
+
     const closeDetailsModal = () => {
         setDetailsModalOpen(false);
         setSelectedTicket(null);
+    };
+
+    const openDeleteModal = (ticket) => {
+        setTicketToDelete(ticket);
+    };
+
+    const closeDeleteModal = () => {
+        setTicketToDelete(null);
+    };
+
+    const openFeedbackModal = (ticket) => {
+        setFeedbackModalTicket(ticket);
+    };
+
+    const confirmDeleteTicket = async () => {
+        if (ticketToDelete) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/tickets/${ticketToDelete.id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    setTickets(tickets.filter(ticket => ticket.id !== ticketToDelete.id));
+                    closeDeleteModal();
+                } else {
+                    alert('Failed to delete the ticket.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the ticket.');
+            }
+        }
     };
 
     const handleHomeButtonClick = () => {
@@ -73,7 +138,7 @@ function TicketsCreated() {
                 params: {
                     ticketId: selectedTicket.id,
                     personnelUsername: selectedPersonnel,
-                    scheduledRepairDate: scheduledRepairDate // Include the date
+                    scheduledRepairDate: scheduledRepairDate
                 }
             });
             if (response.status === 200) {
@@ -112,7 +177,7 @@ function TicketsCreated() {
                                 <th>Reported By</th>
                                 <th>Date Created</th>
                                 <th>Personnel Assigned</th>
-                                <th>Scheduled Repair Date</th> {/* New Column */}
+                                <th>Scheduled Repair Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -125,15 +190,22 @@ function TicketsCreated() {
                                     <td>{ticket.username}</td>
                                     <td>{ticket.datetime}</td>
                                     <td>{ticket.assignedPersonnel || 'None'}</td>
-                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td> {/* Display Scheduled Repair Date */}
+                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
                                     <td>
                                         <div className="button-group">
-                                            {ticket.status === 'Working' ? (
+                                            {ticket.status === 'Working' || ticket.status === 'Done' ? (
                                                 <button className="assigned-button" disabled>Assigned</button>
                                             ) : (
                                                 <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
                                             )}
+                                            {ticket.status !== 'Done' && (
+                                                <button onClick={() => handleAssessTicket(ticket)} className="assess-button">Assess</button>
+                                            )}
+                                            {ticket.feedback && (
+                                            <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
+                                            )}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
+                                            <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -173,12 +245,57 @@ function TicketsCreated() {
                             </div>
                         </div>
                     )}
+                    {ticketToDelete && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Confirm Deletion</h2>
+                                <p>Are you sure you want to delete this ticket?</p>
+                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Delete</button>
+                                <button onClick={closeDeleteModal} className="cancel-delete-button">Cancel</button>
+                            </div>
+                        </div>
+                    )}
                     {successModalOpen && (
                         <div className="modal">
                             <div className="modal-content">
                                 <h2>Success</h2>
-                                <p>Ticket successfully assigned</p>
+                                <p>Action completed successfully</p>
                                 <button onClick={() => setSuccessModalOpen(false)}>Close</button>
+                            </div>
+                        </div>
+                    )}
+                    {assessModalOpen && selectedTicket && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={() => setAssessModalOpen(false)}>&times;</span>
+                                <h2>Assess Ticket</h2>
+                                <p>Submitting feedback will mark the ticket as Done.</p>
+                                <textarea
+                                    value={staffFeedback}
+                                    onChange={(e) => setStaffFeedback(e.target.value)}
+                                    placeholder="Enter your feedback"
+                                />
+                                <button onClick={handleStaffFeedbackSubmit}>Submit Feedback and Mark as Done</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {feedbackModalTicket && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={closeFeedbackModal}>&times;</span>
+                                <h2>Feedback</h2>
+                                {feedbackModalTicket.feedback && (
+                                    <p>Personnel/Staff Feedback: {feedbackModalTicket.feedback}</p>
+                                )}
+                                {feedbackModalTicket.userFeedback ? (
+                                    <p>User Feedback: {feedbackModalTicket.userFeedback}</p>
+                                ) : (
+                                    <>
+                                    
+                                        {feedbackError && <p className="error-message">{feedbackError}</p>}
+                                    </>
+                                )}
                             </div>
                         </div>
                     )}

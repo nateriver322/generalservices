@@ -120,7 +120,6 @@
     border-radius: 10px;
     width: 80%;
     max-width: 500px;
-    text-align: left;
 }
 
 .close {
@@ -180,4 +179,46 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+}
+
+.view-feedback-button {
+    padding: 10px 20px;
+    background-color: #87CEEB;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.notifications {
+    margin-bottom: 20px;
+}
+
+.notification {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.notification button:hover {
+    background-color: #45a049;
 }
