@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* CSS for Sort By Container */
+.sort-by-container {
+  margin-bottom: 20px;
+}
+
+.sort-by-container label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.sort-by-container select {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.sort-by-container select:focus {
+  outline: none;
+  border: 1px solid #007bff; /* Example color for focus */
+}
+
+.sort-by-container select option {
+  font-size: 14px;
+}
+

@@ -20,6 +20,7 @@ function TicketsCreated() {
     const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [feedbackError, setFeedbackError] = useState('');
+    const [sortBy, setSortBy] = useState('id'); // Default sort by Ticket Number
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -154,6 +155,30 @@ function TicketsCreated() {
         }
     };
 
+    const handleSort = (e) => {
+        const selectedColumn = e.target.value;
+        setSortBy(selectedColumn);
+    };
+
+    const sortedTickets = [...tickets].sort((a, b) => {
+        if (sortBy === 'status') {
+            return a.status.localeCompare(b.status);
+        } else if (sortBy === 'priority') {
+            return a.priority.localeCompare(b.priority);
+        } else if (sortBy === 'reportedBy') {
+            return a.username.localeCompare(b.username);
+        } else if (sortBy === 'dateCreated') {
+            return new Date(a.datetime) - new Date(b.datetime);
+        } else if (sortBy === 'personnelAssigned') {
+            return (a.assignedPersonnel || '').localeCompare(b.assignedPersonnel || '');
+        } else if (sortBy === 'scheduledRepairDate') {
+            return new Date(a.scheduledRepairDate) - new Date(b.scheduledRepairDate);
+        } else {
+            // Default to sorting by ticket id
+            return a.id - b.id;
+        }
+    });
+
     return (
         <>
             <header>
@@ -164,9 +189,21 @@ function TicketsCreated() {
             </header>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
-                <div className="view-container">
+                <div className="created-view-container">
                     <div className="button-myTicketcontainer">
                         <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
+                    </div>
+                    <div className="sort-by-container">
+                        <label htmlFor="sortBy">Sort By:</label>
+                        <select id="sortBy" value={sortBy} onChange={handleSort}>
+                            <option value="id">Ticket Number</option>
+                            <option value="status">Status</option>
+                            <option value="priority">Priority</option>
+                            <option value="reportedBy">Reported By</option>
+                            <option value="dateCreated">Date Created</option>
+                            <option value="personnelAssigned">Personnel Assigned</option>
+                            <option value="scheduledRepairDate">Scheduled Repair Date</option>
+                        </select>
                     </div>
                     <table className="ticket-table">
                         <thead>
@@ -182,7 +219,7 @@ function TicketsCreated() {
                             </tr>
                         </thead>
                         <tbody>
-                            {tickets.map((ticket, index) => (
+                            {sortedTickets.map((ticket, index) => (
                                 <tr key={index}>
                                     <td>{ticket.id}</td>
                                     <td>{ticket.status}</td>
@@ -202,7 +239,7 @@ function TicketsCreated() {
                                                 <button onClick={() => handleAssessTicket(ticket)} className="assess-button">Assess</button>
                                             )}
                                             {ticket.feedback && (
-                                            <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
+                                                <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
                                             )}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                             <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
@@ -225,7 +262,7 @@ function TicketsCreated() {
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}
-                                <button onClick={closeDetailsModal} className="close-button">Close</button>
+                                <button onClick={closeDetailsModal} className="close-Button">Close</button>
                             </div>
                         </div>
                     )}
@@ -240,11 +277,22 @@ function TicketsCreated() {
                                         <option key={personnel.username} value={personnel.username}>{personnel.username}</option>
                                     ))}
                                 </select>
-                                <input type="datetime-local" value={scheduledRepairDate} onChange={(e) => setScheduledRepairDate(e.target.value)} />
-                                <button onClick={handleAssignPersonnel}>Assign</button>
+                                <input
+                                    type="datetime-local"
+                                    value={scheduledRepairDate}
+                                    onChange={(e) => setScheduledRepairDate(e.target.value)}
+                                />
+                                <button
+                                    onClick={handleAssignPersonnel}
+                                    className="modal-assign-button"
+                                    disabled={!selectedPersonnel || !scheduledRepairDate}
+                                >
+                                    Assign
+                                </button>
                             </div>
                         </div>
                     )}
+
                     {ticketToDelete && (
                         <div className="modal">
                             <div className="modal-content">
@@ -260,7 +308,7 @@ function TicketsCreated() {
                             <div className="modal-content">
                                 <h2>Success</h2>
                                 <p>Action completed successfully</p>
-                                <button onClick={() => setSuccessModalOpen(false)}>Close</button>
+                                <button onClick={() => setSuccessModalOpen(false)} className="close-Button">Close</button>
                             </div>
                         </div>
                     )}
@@ -270,12 +318,12 @@ function TicketsCreated() {
                                 <span className="close" onClick={() => setAssessModalOpen(false)}>&times;</span>
                                 <h2>Assess Ticket</h2>
                                 <p>Submitting feedback will mark the ticket as Done.</p>
-                                <textarea
+                                <textarea className="textarea-feedback"
                                     value={staffFeedback}
                                     onChange={(e) => setStaffFeedback(e.target.value)}
                                     placeholder="Enter your feedback"
                                 />
-                                <button onClick={handleStaffFeedbackSubmit}>Submit Feedback and Mark as Done</button>
+                                <button onClick={handleStaffFeedbackSubmit} className="submit-feedback-button">Submit Feedback and Mark as Done</button>
                             </div>
                         </div>
                     )}
@@ -286,13 +334,18 @@ function TicketsCreated() {
                                 <span className="close" onClick={closeFeedbackModal}>&times;</span>
                                 <h2>Feedback</h2>
                                 {feedbackModalTicket.feedback && (
-                                    <p>Personnel/Staff Feedback: {feedbackModalTicket.feedback}</p>
+                                    <>
+                                        <p>Personnel/Staff Feedback:</p>
+                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.feedback} />
+                                    </>
                                 )}
                                 {feedbackModalTicket.userFeedback ? (
-                                    <p>User Feedback: {feedbackModalTicket.userFeedback}</p>
+                                    <>
+                                        <p>User Feedback:</p>
+                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.userFeedback} />
+                                    </>
                                 ) : (
                                     <>
-                                    
                                         {feedbackError && <p className="error-message">{feedbackError}</p>}
                                     </>
                                 )}

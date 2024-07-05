@@ -3,7 +3,7 @@
    }
    
 
-    .view-container {
+    .personnel-view-container {
         width: 100%;
         max-width: 800px;
         padding: 20px; /* Add padding inside the container */
@@ -15,7 +15,7 @@
         box-sizing: border-box; /* Include padding and border in the width */
         margin-top: -350px;
         max-height: 70%;
-        max-width: 50%;
+        max-width: 80%;
         overflow-x: auto;
         overflow-y: auto;
 
@@ -80,20 +80,6 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 #ticketImage {
@@ -268,9 +254,9 @@ button {
 
 
 /* New CSS for the feedback modal */
-.confirm-button {
+.perso-confirm-button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #4CAF50;
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -280,8 +266,8 @@ button {
     transition: background-color 0.3s ease;
 }
 
-.confirm-button:hover {
-    background-color: #0056b3;
+.perso-confirm-button:hover {
+    background-color: #45a049;
 }
 
 .Finish-button {
@@ -296,7 +282,7 @@ button {
 }
 
 .Finish-button:hover {
-    background-color: #aaa; /* Darker green on hover */
+    background-color: #888; /* Darker green on hover */
 }
 
 
@@ -327,4 +313,41 @@ button {
     font-size: 12px;
     margin-top: 5px;
     cursor: pointer;
+}
+
+.personnel-close-button {
+    background-color: #f44336; /* Red background for close button */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    float: right;
+}
+
+.personnel-close-button:hover, .personnel-close-button:focus {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.personnel-feedback {
+    width: 100%; 
+    height: 150px; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif; 
+    font-size: 16px; 
+    resize: vertical; 
+    background-color: #fff; 
+    color: #333; 
+    transition: border-color 0.3s ease; 
+}
+
+.personnel-feedback:focus {
+    border-color: #800000; 
+    outline: none; 
 }

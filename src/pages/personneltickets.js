@@ -12,6 +12,7 @@ function PersonnelTickets() {
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
     const [feedbackError, setFeedbackError] = useState('');
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
     
 
     useEffect(() => {
@@ -77,6 +78,7 @@ function PersonnelTickets() {
 
             if (response.ok) {
                 setFeedback('');
+                setSuccessModalOpen(true);
                 setIsFeedbackModalOpen(false);
                 fetchTickets(localStorage.getItem('username')); // Refresh the ticket list
             } else {
@@ -97,7 +99,7 @@ function PersonnelTickets() {
             </header>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
-                <div className="view-container">
+                <div className="personnel-view-container">
                     <div className="button-myTicketcontainer">
                         <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
                     </div>
@@ -159,36 +161,48 @@ function PersonnelTickets() {
                             </div>
                         </div>
                     )}
-                    {isFeedbackModalOpen && selectedTicket && (
+                    {successModalOpen && (
                         <div className="modal">
-                            <div className="modal-content" style={{ width: '600px' }}>
-                                <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
-                                <h2>Provide Feedback</h2>
-                                <textarea
-                                    value={feedback}
-                                    onChange={(e) => setFeedback(e.target.value)}
-                                    placeholder="Enter your feedback here..."
-                                    style={{ width: '100%', height: '150px' }}
-                                />
-                                <button className="confirm-button" onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}>Confirm</button>
+                            <div className="modal-content">
+                                <h2>Success</h2>
+                                <p>Action completed successfully</p>
+                                <button onClick={() => setSuccessModalOpen(false)} className="personnel-close-button">Close</button>
                             </div>
                         </div>
                     )}
-
+                    {isFeedbackModalOpen && selectedTicket && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
+                                <h2>Provide Feedback</h2>
+                                <textarea className="personnel-feedback"
+                                    value={feedback}
+                                    onChange={(e) => setFeedback(e.target.value)}
+                                    placeholder="Enter your feedback here..."
+                                />
+                                <button className="perso-confirm-button" onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}>Confirm</button>
+                            </div>
+                        </div>
+                    )}
                     {feedbackModalTicket && (
                         <div className="modal">
                             <div className="modal-content">
                                 <span className="close" onClick={closeFeedbackModal}>&times;</span>
                                 <h2>Feedback</h2>
                                 {feedbackModalTicket.feedback && (
-                                    <p>Personnel/Staff Feedback: {feedbackModalTicket.feedback}</p>
+                                    <>
+                                        <p>Personnel/Staff Feedback:</p>
+                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.feedback} />
+                                    </>
                                 )}
                                 {feedbackModalTicket.userFeedback ? (
-                                    <p>User Feedback: {feedbackModalTicket.userFeedback}</p>
+                                    <>
+                                        <p>User Feedback:</p>
+                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.userFeedback} />
+                                    </>
                                 ) : (
                                     <>
-                                    
-                                        {feedbackError && <p className="error-message">{feedbackError}</p>}
+                                    {feedbackError && <p className="error-message">{feedbackError}</p>}
                                     </>
                                 )}
                             </div>

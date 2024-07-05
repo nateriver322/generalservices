@@ -12,6 +12,8 @@ function MyTickets() {
     const [userFeedback, setUserFeedback] = useState('');
     const [feedbackError, setFeedbackError] = useState('');
     const [notifications, setNotifications] = useState([]);
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
+
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -95,6 +97,7 @@ function MyTickets() {
                 if (response.ok) {
                     setTickets(tickets.filter(ticket => ticket.id !== ticketToDelete.id));
                     closeDeleteModal();
+                    setSuccessModalOpen(true);
                 } else {
                     alert('Failed to delete the ticket.');
                 }
@@ -133,9 +136,9 @@ function MyTickets() {
             });
 
             if (response.ok) {
-                alert('Feedback sent successfully');
                 setUserFeedback('');
                 closeFeedbackModal();
+                setSuccessModalOpen(true);
                 fetchTickets(localStorage.getItem('username'));
             } else if (response.status === 400) {
                 const errorData = await response.json();
@@ -159,7 +162,7 @@ function MyTickets() {
             </header>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
-                <div className="view-container">
+                <div className="view-ticket-container">
                     <div className="button-myTicketcontainer">
                         <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
                     </div>
@@ -233,19 +236,34 @@ function MyTickets() {
                             </div>
                         </div>
                     )}
+                    {successModalOpen && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Success</h2>
+                                <p>Action completed successfully</p>
+                                <button onClick={() => setSuccessModalOpen(false)} className="user-close-button">Close</button>
+                            </div>
+                        </div>
+                    )}
                     {feedbackModalTicket && (
                         <div className="modal">
                             <div className="modal-content">
                                 <span className="close" onClick={closeFeedbackModal}>&times;</span>
                                 <h2>Feedback</h2>
                                 {feedbackModalTicket.feedback && (
-                                    <p>Personnel/Staff Feedback: {feedbackModalTicket.feedback}</p>
+                                    <>
+                                        <p>Personnel/Staff Feedback:</p>
+                                        <textarea className="user-feedback" readOnly value= {feedbackModalTicket.feedback}/>
+                                    </>
                                 )}
                                 {feedbackModalTicket.userFeedback ? (
-                                    <p>Your Feedback: {feedbackModalTicket.userFeedback}</p>
+                                    <>
+                                    <p>Your Feedback:</p>
+                                    <textarea className="user-feedback" readOnly value= {feedbackModalTicket.userFeedback}/>
+                                    </>
                                 ) : (
                                     <>
-                                        <textarea
+                                        <textarea className="user-feedback"
                                             value={userFeedback}
                                             onChange={(e) => setUserFeedback(e.target.value)}
                                             placeholder="Enter your feedback for personnel/staff."
