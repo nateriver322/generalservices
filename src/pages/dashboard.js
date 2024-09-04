@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/dashboard.css';
 import logo from '../images/logo.png';
+import ResponsiveAppBar from './ResponsiveAppBar';
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -30,12 +31,8 @@ function Dashboard() {
 
     return (
         <>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
+            <ResponsiveAppBar />
+            
             <h2 className="h2">General Services Portal</h2>
             <div className="user-info">
                 <h3>Welcome, {username}!</h3>
@@ -45,7 +42,7 @@ function Dashboard() {
                     <button className="ticket-button" onClick={handleTicketButtonClick}>Submit Ticket</button>
                     <button className="view-button" onClick={handleViewButtonClick}>View Tickets</button>
                 </div>
-                <button className="logout-button" onClick={handleLogoutButtonClick}>Logout</button>
+               
             </div>
         </>
     );

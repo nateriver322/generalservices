@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/staffDashboard.css';
 import logo from '../images/logo.png';
+import ResponsiveAppBar from './ResponsiveAppBar';
 
 function StaffDashboard() {
     const navigate = useNavigate();
@@ -32,12 +33,7 @@ function StaffDashboard() {
 
     return (
         <>
-            <header>
-                <div className="header-content">
-                <img src={logo} className="logo" alt="Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
+            <ResponsiveAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="user-info">
                 <h3>Welcome Staff {username}!</h3>
@@ -47,7 +43,7 @@ function StaffDashboard() {
                     <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Created</button>
                     <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets Fixed</button>
                 </div>
-                <button className="logout-button" onClick={handleLogoutButtonClick}>Logout</button>
+            
             </div>
         </>
     );

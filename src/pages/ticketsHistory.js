@@ -3,6 +3,8 @@ import '../css/ticketsHistory.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import axios from 'axios';
+import ResponsiveAppBar from './ResponsiveAppBar';
+
 
 function TicketsFixed() {
     const navigate = useNavigate();
@@ -36,12 +38,7 @@ function TicketsFixed() {
 
     return (
         <>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
+            <ResponsiveAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-container">

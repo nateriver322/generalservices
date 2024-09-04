@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
+import TicketAppBar from './TicketAppBar';
 
 function MyTickets() {
     const navigate = useNavigate();
@@ -154,18 +155,11 @@ function MyTickets() {
 
     return (
         <>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
+            <TicketAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-ticket-container">
-                    <div className="button-myTicketcontainer">
-                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                    </div>
+                    
                     <div className="notifications">
                         {notifications.map((notification, index) => (
                             <div key={index} className="notification">

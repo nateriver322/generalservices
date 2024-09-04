@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/ticket.css';
 import logo from '../images/logo.png';
+import TicketAppBar from './TicketAppBar';
 
 function TicketForm() {
     const navigate = useNavigate();
@@ -29,13 +30,7 @@ function TicketForm() {
         }
     }, []);
 
-    const handleHomeButtonClick = () => {
-        navigate("/dashboard"); 
-    };
-
-    const handleViewButtonClick = () => {
-        navigate("/myTickets"); 
-    };
+   
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -76,20 +71,11 @@ function TicketForm() {
 
     return (
         <>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
+            <TicketAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="ticket-form-container">
-                    <div className="ticket-buttoncontainer">
-                        <button className="home-button" onClick={handleHomeButtonClick}>Home</button>
-                        <button className="tickets-button" onClick={handleViewButtonClick}>My Tickets</button>
-                    </div>
-                    <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
+                       <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
                         <h3 className="h3_ticket">Submit a request</h3>
                         <div className="ticket-input-container">
                             <div className="select-container">
