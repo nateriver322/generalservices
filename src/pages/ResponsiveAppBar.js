@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-
+import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 // Import the logo image
 import citLogo from '../images/logo.png';
 
@@ -128,7 +128,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+              <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
               </IconButton>
             </Tooltip>
             <Menu

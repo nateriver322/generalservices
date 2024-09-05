@@ -451,7 +451,7 @@ const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
       <thead>
         <tr>
           <th>Username</th>
-          <th>Password</th>
+          
           <th>Email</th>
           <th>Contact No.</th>
           <th>Account Type</th>
@@ -472,7 +472,7 @@ const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
   return (
     <tr>
       <td>{account.username}</td>
-      <td>{account.password}</td>
+      
       <td>{account.email}</td>
       <td>{account.contactNumber}</td>
       <td>{account.role}</td>
