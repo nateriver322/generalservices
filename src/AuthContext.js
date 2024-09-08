@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 
 const AuthContext = createContext(null);
 
@@ -12,8 +11,12 @@ export const AuthProvider = ({ children }) => {
       const username = localStorage.getItem('username');
       if (username) {
         try {
-          const response = await axios.get(`http://localhost:8080/user/${username}`);
-          setUser(response.data);
+          const response = await fetch(`http://localhost:8080/user/${username}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const userData = await response.json();
+          setUser(userData);
         } catch (error) {
           console.error('Error fetching user data:', error);
           setUser(null);
@@ -26,15 +29,24 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:8080/user/login', { email, password });
-      const userData = response.data;
+      const response = await fetch('http://localhost:8080/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const userData = await response.json();
       setUser(userData);
       localStorage.setItem('username', userData.username);
       return userData;
     } catch (error) {
       console.error('Login error:', error);
-      if (error.response && error.response.data && error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.message.includes('HTTP error')) {
+        throw new Error('Login failed');
       } else {
         throw new Error('Login failed');
       }
