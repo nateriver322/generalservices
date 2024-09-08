@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/ticket.css';
-import logo from '../images/logo.png';
 import TicketAppBar from './TicketAppBar';
 
 function TicketForm() {
@@ -15,36 +14,17 @@ function TicketForm() {
         }
     }, [navigate]);
 
-    useEffect(() => {
-        // Set the minimum date and time for the datetime input to now
-        const datetimeInput = document.getElementById('datetime');
-        if (datetimeInput) {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-            datetimeInput.max = currentDateTime;
-        }
-    }, []);
-
-   
-
     const handleFormSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault(); 
         const formData = new FormData(event.target);
-        const selectedDateTime = new Date(formData.get('datetime'));
+
+        // Automatically set the current datetime
         const now = new Date();
+        const currentDateTime = now.toISOString(); // Format as ISO string
 
-        if (selectedDateTime > now) {
-            alert("The selected date and time cannot be in the future.");
-            return;
-        }
-
+        formData.append('datetime', currentDateTime); // Add current datetime to the form data
         formData.append('username', localStorage.getItem('username'));
-    
+
         try {
             const response = await fetch('http://localhost:8080/api/tickets', {
                 method: 'POST',
@@ -54,7 +34,6 @@ function TicketForm() {
                 navigate('/SuccessTicket');
             } else {
                 console.error('Submission failed');
-                // Extract error message from response if possible
                 const errorMsg = await response.text();
                 alert(`Submission failed: ${errorMsg}`);
             }
@@ -76,7 +55,7 @@ function TicketForm() {
             <div className="container">
                 <div className="ticket-form-container">
                        <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
-                        <h3 className="h3_ticket">Submit a request</h3>
+                       <h3 className="h3_ticket">Submit a request</h3>
                         <div className="ticket-input-container">
                             <div className="select-container">
                                 <select id="Priority" name="priority" required>
@@ -100,8 +79,6 @@ function TicketForm() {
                                 </select>
                                 
                                 <input type="text" placeholder="Location" name="location" id="locInp" required />
-                                <label htmlFor="datetime" className="label-date">Select a Date and Time:</label>
-                                <input type="datetime-local" id="datetime" name="datetime" required />
                                 <textarea placeholder="Details of the Request" name="description" id="DesInp" required></textarea>
 
                                 <div className="file-upload">
