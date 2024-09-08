@@ -62,13 +62,19 @@ function TicketAppBar() {
           <img
             src={citLogo}
             alt="CIT-U Logo"
-            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: '50px' }} // Adjust height as needed
+            style={{
+              display: { xs: 'none', md: 'flex' },
+              marginRight: '10px',
+              height: '50px', // Adjust height as needed
+              cursor: 'pointer', // Add this line to display an open hand cursor on hover
+            }}
+            onClick={() => navigate('/dashboard')} // Navigate to /dashboard when image is clicked
           />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/dashboard')}
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -77,6 +83,7 @@ function TicketAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: 'pointer'
             }}
           >
             CIT-U
@@ -121,7 +128,7 @@ function TicketAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/dashboard')}
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -131,9 +138,10 @@ function TicketAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: 'pointer'
             }}
           >
-            LOGO
+            CIT-U
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
