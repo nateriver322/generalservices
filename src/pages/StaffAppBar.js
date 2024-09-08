@@ -16,7 +16,7 @@ import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 // Import the logo image
 import citLogo from '../images/cit-logo.png';
 
-
+const pages= ['Home'];
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
@@ -44,6 +44,16 @@ function ResponsiveAppBar() {
     localStorage.removeItem('username'); // Remove username from localStorage
     navigate('/'); // Redirect to login page after logout
   };
+
+  const handlePageNavigation = (page) => {
+    handleCloseNavMenu(); // Close the navigation menu
+    
+    // Redirect to the dashboard (Home) page only
+    if (page === 'Home') {
+      navigate('/dashboard'); // Redirect to the dashboard page
+    }
+};
+
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#d4ac0d' }}>  {/* Maroon color */}
@@ -122,7 +132,15 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-           
+          {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={() => handlePageNavigation(page)}
+                sx={{ my: 2, color: '#800000', display: 'bold' }}
+              >
+                {page}
+              </Button>
+            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
