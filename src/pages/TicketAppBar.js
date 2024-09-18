@@ -14,7 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 // Import the logo image
-import citLogo from '../images/logo.png';
+import citLogo from '../images/cit-logo.png';
 
 const pages = ['Home', 'My Tickets'];
 const settings = ['Logout'];
@@ -56,7 +56,7 @@ function TicketAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#800000' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img
@@ -86,7 +86,7 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
-            CIT-U
+           
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -141,7 +141,7 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
-            CIT-U
+          
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

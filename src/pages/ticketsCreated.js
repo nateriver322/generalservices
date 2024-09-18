@@ -3,7 +3,7 @@ import '../css/ticketsCreated.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import axios from 'axios';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import StaffAppBar from './StaffAppBar';
 
 
 function TicketsCreated() {
@@ -183,13 +183,11 @@ function TicketsCreated() {
 
     return (
         <>
-            <ResponsiveAppBar/>
+            <StaffAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="created-view-container">
-                    <div className="button-myTicketcontainer">
-                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                    </div>
+                    
                     <div className="sort-by-container">
                         <label htmlFor="sortBy">Sort By:</label>
                         <select id="sortBy" value={sortBy} onChange={handleSort}>
@@ -216,35 +214,48 @@ function TicketsCreated() {
                             </tr>
                         </thead>
                         <tbody>
-                            {sortedTickets.map((ticket, index) => (
-                                <tr key={index}>
-                                    <td>{ticket.id}</td>
-                                    <td>{ticket.status}</td>
-                                    <td>{ticket.priority}</td>
-                                    <td>{ticket.username}</td>
-                                    <td>{ticket.datetime}</td>
-                                    <td>{ticket.assignedPersonnel || 'None'}</td>
-                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
-                                    <td>
-                                        <div className="button-group">
-                                            {ticket.status === 'Working' || ticket.status === 'Done' ? (
-                                                <button className="assigned-button" disabled>Assigned</button>
-                                            ) : (
-                                                <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
-                                            )}
-                                            {ticket.status !== 'Done' && (
-                                                <button onClick={() => handleAssessTicket(ticket)} className="assess-button">Assess</button>
-                                            )}
-                                            {ticket.feedback && (
-                                                <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
-                                            )}
-                                            <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                            <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+    {sortedTickets.map((ticket, index) => (
+        <tr key={index}>
+            <td>{ticket.id}</td>
+            <td
+                style={{
+                    color: ticket.status === 'Done' ? 'green' : 
+                           ticket.status === 'Working' ? '#FFBF00' : 
+                           'red',
+                    fontWeight: 'bold'
+                }}
+            >
+                {ticket.status === 'Done' ? 'Finished' : 
+                 ticket.status === 'Working' ? 'Ongoing' : 
+                 'Not Started'}
+            </td>
+            <td>{ticket.priority}</td>
+            <td>{ticket.username}</td>
+            <td>{ticket.datetime}</td>
+            <td>{ticket.assignedPersonnel || 'None'}</td>
+            <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
+            <td>
+                <div className="button-group">
+                    {ticket.status === 'Working' || ticket.status === 'Done' ? (
+                        <button className="assigned-button" disabled>Assigned</button>
+                    ) : (
+                        <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
+                    )}
+                    {ticket.status !== 'Done' && (
+                        <button onClick={() => handleAssessTicket(ticket)} className="assess-button">Assess</button>
+                    )}
+                    {ticket.feedback && (
+                        <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
+                    )}
+                    <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
+                    <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
+                </div>
+            </td>
+        </tr>
+    ))}
+</tbody>
+
+
                     </table>
                     {detailsModalOpen && selectedTicket && (
                         <div className="modal">

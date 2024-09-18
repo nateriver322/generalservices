@@ -38,7 +38,7 @@ function StaffDashboard() {
                 <h3>Welcome Personnel {username}!</h3>
             </div>
             <div className="container">
-                <div className="buttoncontainer">
+                <div className="buttoncontainer">   
                     <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Assigned</button>
                     <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets History</button>
                 </div>
