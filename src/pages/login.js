@@ -4,16 +4,20 @@ import { useAuth } from '../AuthContext';
 import '../css/login.css';
 import logo from '../images/logo.png';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { loginRequest } from "../AuthConfig"; // Import AuthConfig for Microsoft login
+import { useMsal } from "@azure/msal-react"; // Import useMsal hook
+import { microsoftLogin } from '../AuthContext'; // Import microsoftLogin function
 
 const Login = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, microsoftLogin } = useAuth();
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
     });
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const { instance } = useMsal();
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -31,6 +35,17 @@ const Login = () => {
         } catch (error) {
             console.error('Error:', error);
             setError(error.message);
+        }
+    };
+
+    const handleMicrosoftLogin = async () => {
+        try {
+            const result = await instance.loginPopup(loginRequest);
+            const userData = await microsoftLogin(result.accessToken);
+            navigate('/dashboard', { state: { username: userData.username } });
+        } catch (error) {
+            console.error('Microsoft login error:', error);
+            setError('Microsoft login failed');
         }
     };
 
@@ -79,6 +94,7 @@ const Login = () => {
                         <div className="buttoncontainer">
                             <input type="submit" value="Login" className="log_in-button" />
                             <button type="button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
+                            <button type="button" onClick={handleMicrosoftLogin} className="microsoft-login-button">Login with Microsoft</button>
                         </div>
                     </form>
                 </div>
