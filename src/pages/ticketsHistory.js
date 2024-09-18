@@ -3,7 +3,7 @@ import '../css/ticketsHistory.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import axios from 'axios';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import StaffAppBar from './StaffAppBar';
 
 
 function TicketsFixed() {
@@ -38,13 +38,11 @@ function TicketsFixed() {
 
     return (
         <>
-            <ResponsiveAppBar/>
+            <StaffAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-container">
-                    <div className="button-myTicketcontainer">
-                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                    </div>
+                    
                     {fixedTickets.length > 0 ? (
                         <table className="ticket-table">
                             <thead>

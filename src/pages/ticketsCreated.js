@@ -3,7 +3,7 @@ import '../css/ticketsCreated.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import axios from 'axios';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import StaffAppBar from './StaffAppBar';
 
 
 function TicketsCreated() {
@@ -183,13 +183,11 @@ function TicketsCreated() {
 
     return (
         <>
-            <ResponsiveAppBar/>
+            <StaffAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="created-view-container">
-                    <div className="button-myTicketcontainer">
-                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                    </div>
+                    
                     <div className="sort-by-container">
                         <label htmlFor="sortBy">Sort By:</label>
                         <select id="sortBy" value={sortBy} onChange={handleSort}>

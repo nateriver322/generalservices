@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/personnelTicket.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import StaffAppBar from './StaffAppBar';
 
 function PersonnelTickets() {
     const navigate = useNavigate();
@@ -92,13 +92,11 @@ function PersonnelTickets() {
 
     return (
         <>
-           <ResponsiveAppBar/>
+           <StaffAppBar/>
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="personnel-view-container">
-                    <div className="button-myTicketcontainer">
-                        <button onClick={handleHomeButtonClick} className="home-ticket-button">Home</button>
-                    </div>
+                    
                     <table className="ticket-table">
                         <thead>
                             <tr>
