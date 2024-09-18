@@ -217,15 +217,17 @@ function TicketsCreated() {
     {sortedTickets.map((ticket, index) => (
         <tr key={index}>
             <td>{ticket.id}</td>
-            <td 
+            <td
                 style={{
                     color: ticket.status === 'Done' ? 'green' : 
-                           ticket.status === 'Working' ? '#FFD700' : 
+                           ticket.status === 'Working' ? '#FFBF00' : 
                            'red',
                     fontWeight: 'bold'
                 }}
             >
-                {ticket.status}
+                {ticket.status === 'Done' ? 'Finished' : 
+                 ticket.status === 'Working' ? 'Ongoing' : 
+                 'Not Started'}
             </td>
             <td>{ticket.priority}</td>
             <td>{ticket.username}</td>
@@ -252,6 +254,8 @@ function TicketsCreated() {
         </tr>
     ))}
 </tbody>
+
+
                     </table>
                     {detailsModalOpen && selectedTicket && (
                         <div className="modal">
