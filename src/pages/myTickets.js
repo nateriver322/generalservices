@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo.png';
 import TicketAppBar from './TicketAppBar';
 
 function MyTickets() {
@@ -77,9 +76,7 @@ function MyTickets() {
         setSelectedTicket(null);
     };
 
-    const handleHomeButtonClick = () => {
-        navigate("/dashboard");
-    };
+   
 
     const openDeleteModal = (ticket) => {
         setTicketToDelete(ticket);
@@ -195,7 +192,7 @@ function MyTickets() {
                                                 <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
                                                 {ticket.feedback && (
                                                     <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>)}
-                                                <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
+                                                <button onClick={() => openDeleteModal(ticket)} className="delete-button">Cancel</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -223,10 +220,10 @@ function MyTickets() {
                     {ticketToDelete && (
                         <div className="modal">
                             <div className="modal-content">
-                                <h2>Confirm Deletion</h2>
-                                <p>Are you sure you want to delete this ticket?</p>
-                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Delete</button>
-                                <button onClick={closeDeleteModal} className="cancel-delete-button">Cancel</button>
+                                <h2>Confirm Cancelation</h2>
+                                <p>Are you sure you want to cancel this ticket?</p>
+                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Yes</button>
+                                <button onClick={closeDeleteModal} className="cancel-delete-button">No</button>
                             </div>
                         </div>
                     )}
@@ -234,7 +231,7 @@ function MyTickets() {
                         <div className="modal">
                             <div className="modal-content">
                                 <h2>Success</h2>
-                                <p>Action completed successfully</p>
+                                <p>Ticket Cancelled</p>
                                 <button onClick={() => setSuccessModalOpen(false)} className="user-close-button">Close</button>
                             </div>
                         </div>
