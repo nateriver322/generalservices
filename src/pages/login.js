@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import '../css/login.css';
-import logo from '../images/logo.png';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { loginRequest } from "../AuthConfig"; // Import AuthConfig for Microsoft login
-import { useMsal } from "@azure/msal-react"; // Import useMsal hook
-import { microsoftLogin } from '../AuthContext'; // Import microsoftLogin function
+import { loginRequest } from "../AuthConfig";
+import { useMsal } from "@azure/msal-react";
+import LoginResponsiveAppBar from './LoginResponsiveAppBar';
+import { FaMicrosoft } from 'react-icons/fa';
 
-const Login = () => {
+const Login = React.memo(() => {
     const navigate = useNavigate();
     const { login, microsoftLogin } = useAuth();
     const [credentials, setCredentials] = useState({
@@ -31,7 +31,7 @@ const Login = () => {
         event.preventDefault();
         try {
             const userData = await login(credentials.email, credentials.password);
-            navigate('/dashboard', { state: { username: userData.username } }); // Navigate with username
+            navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             console.error('Error:', error);
             setError(error.message);
@@ -50,7 +50,7 @@ const Login = () => {
     };
 
     const handleSignUpClick = () => {
-        navigate('/register'); // Navigate back to the registration page
+        navigate('/register');
     };
 
     const togglePasswordVisibility = () => {
@@ -59,48 +59,155 @@ const Login = () => {
 
     return (
         <div>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="CIT-U Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
-            <h2 className="h2">General Services Portal</h2>
-            <div className="container">
-                <div className="form-container">
-                    <form className="login-form" onSubmit={handleLoginSubmit}>
-                        <h3 className="h3-login">Log in</h3>
-                        {error && <p className="error-message">{error}</p>} {/* Display error message */}
-                        <div className="input-container">
-                            <input type="email" placeholder="Email" name="email" className="input-field" required onChange={handleInputChange} />
-                            <div className="input-group">
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Password"
-                                    name="password"
-                                    className="input-field"
-                                    required
-                                    onChange={handleInputChange}
-                                />
-                                <div className="eye-icon-login" onClick={togglePasswordVisibility}>
-                                    {showPassword ? (
-                                        <AiOutlineEye />
-                                    ) : (
-                                        <AiOutlineEyeInvisible />
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="buttoncontainer">
-                            <input type="submit" value="Login" className="log_in-button" />
-                            <button type="button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
-                            <button type="button" onClick={handleMicrosoftLogin} className="microsoft-login-button">Login with Microsoft</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <LoginResponsiveAppBar />
+            <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{
+                    textAlign: 'center',
+                    width: '100%',
+                    marginBottom: '20px'
+                }}
+            >
+                JobTrack
+            </Typography>
+            <Box
+                component="form"
+                onSubmit={handleLoginSubmit}
+                sx={{
+                    maxWidth: '400px',
+                    width: '100%',
+                    bgcolor: 'white',
+                    p: 4,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    margin: '0 auto'
+                }}
+            >
+                <Typography variant="h5" component="h3" gutterBottom>
+                    Log In
+                </Typography>
+
+                {error && <Typography color="error" gutterBottom>{error}</Typography>}
+
+                <TextField
+                    label="Email"
+                    type="email"
+                    name="email"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    value={credentials.email}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    value={credentials.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={togglePasswordVisibility} edge="end">
+                                    {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                            bgcolor: '#800000',
+                            '&:hover': {
+                                bgcolor: '#A00000',
+                            },
+                            color: 'white',
+                            mb: 2
+                        }}
+                        fullWidth
+                    >
+                        Log In
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        fullWidth
+                        onClick={handleSignUpClick}
+                        sx={{
+                            borderColor: '#800000',
+                            color: '#800000',
+                            mb: 2,
+                        }}
+                    >
+                        Sign Up
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        fullWidth
+                        onClick={handleMicrosoftLogin}
+                        startIcon={<FaMicrosoft size={20} style={{ marginRight: 10 }} />}
+                        sx={{
+                            borderColor: '#800000',
+                            color: '#800000',
+                        }}
+                    >
+                        Login with Microsoft
+                    </Button>
+                </Box>
+            </Box>
         </div>
     );
-}
+});
 
 export default Login;

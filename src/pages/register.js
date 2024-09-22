@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import '../css/register.css';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo.png';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -22,11 +22,9 @@ const Register = () => {
         let updatedValue = value;
 
         if (name === 'contactNumber') {
-            // Restrict input to numbers only and limit length to 11 characters
             updatedValue = value.replace(/[^0-9]/g, '').slice(0, 11);
         }
 
-        // Clear email error when user starts editing email field
         if (name === 'email' && emailError) {
             setEmailError('');
         }
@@ -43,13 +41,11 @@ const Register = () => {
 
     const validateForm = async () => {
         const newErrors = {};
-
-        // Email validation: only accept valid email address
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
         } else {
-            // Check if email is already registered
             const isRegistered = await isEmailAlreadyRegistered(userData.email);
             if (isRegistered) {
                 setEmailError("This email is already registered.");
@@ -57,13 +53,11 @@ const Register = () => {
             }
         }
 
-        // Password validation: minimum 8 characters with letters, numbers, at least one symbol, and one capital letter
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
         if (!passwordPattern.test(userData.password)) {
             newErrors.password = "Password must be 8 characters long and include at least 1 number.";
         }
 
-        // Contact number validation: should not accept letters and must be exactly 11 digits
         const contactNumberPattern = /^\d{11}$/;
         if (!contactNumberPattern.test(userData.contactNumber)) {
             newErrors.contactNumber = "Contact number must be exactly 11 digits.";
@@ -74,7 +68,7 @@ const Register = () => {
     };
 
     const handleFormSubmit = async (event) => {
-        event.preventDefault(); // Prevent the form from refreshing the page
+        event.preventDefault();
 
         if (!await validateForm()) {
             return;
@@ -86,16 +80,11 @@ const Register = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    username: userData.username,
-                    email: userData.email,
-                    password: userData.password,
-                    contactNumber: userData.contactNumber
-                })
+                body: JSON.stringify(userData)
             });
             if (response.ok) {
                 console.log('Registration successful');
-                navigate('/successregistration'); // Navigate to home page or wherever you want after registration
+                navigate('/successregistration');
             } else {
                 throw new Error('Registration failed');
             }
@@ -104,10 +93,9 @@ const Register = () => {
         }
     };
 
-    // New function to handle navigation to the login page
     const handleLoginClick = (event) => {
-        event.preventDefault(); // Prevent the default action
-        navigate('/'); // Navigate to the login page
+        event.preventDefault();
+        navigate('/');
     };
 
     const isEmailAlreadyRegistered = async (email) => {
@@ -123,52 +111,190 @@ const Register = () => {
 
     return (
         <div>
-            <header>
-                <div className="header-content">
-                    <img src={logo} className="logo" alt="CIT-U Logo" />
-                    <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-                </div>
-            </header>
-            <h2 className="h2">General Services Portal</h2>
-            <div className="container">
-                <div className="form-container">
-                    <form className="registration-form" onSubmit={handleFormSubmit}>
-                        <h3 className="h3">Create Account</h3>
-                        <div className="input-container">
-                            <div className="input-group">
-                                <input type="text" placeholder="Username" name="username" className="input-field" required onChange={handleInputChange} />
-                            </div>
-                            <div className="input-group">
-                                <input type="email" placeholder="Email" name="email" className="input-field" required onChange={handleInputChange} />
-                                {errors.email && <span className="error">{errors.email}</span>}
-                                {emailError && <span className="error">{emailError}</span>}
-                            </div>
-                            <div className="input-group"> <input type={showPassword ? "text" : "password"} placeholder="Password" name="password" className="input-field" required onChange={handleInputChange} />
-                                <div className="eye-icon" onClick={togglePasswordVisibility}>
-                                    {showPassword ? (
-                                        <AiOutlineEye />
-                                    ) : (
-                                        <AiOutlineEyeInvisible />
-                                    )}
-                                </div>
-                                {errors.password && <span className="error">{errors.password}</span>}
-                                <span className="pass-guide">Must be 8 characters with numerical values.</span>
-                            </div>
-                            <div className="input-group">
-                                <input type="text" placeholder="Contact Number" name="contactNumber" className="input-field" pattern="[0-9]*" maxLength="11" required onChange={handleInputChange} />
-                                {errors.contactNumber && <span className="error">{errors.contactNumber}</span>}
-                            </div>
-                        </div>
-                        <div className="buttoncontainer">
-                            <input type="submit" value="Sign up" className="signup-button" />
-                            <button className="signup-button" onClick={handleLoginClick}>Login</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <LoginResponsiveAppBar />
+            <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: 'center', margin: '20px 0' }}>
+                JobTrack
+            </Typography>
+            <Box
+                component="form"
+                onSubmit={handleFormSubmit}
+                sx={{
+                    maxWidth: '400px',
+                    bgcolor: 'white',
+                    p: 4,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    margin: '0 auto'
+                }}
+            >
+                <Typography variant="h5" component="h3" gutterBottom>
+                    Create Account
+                </Typography>
+                {emailError && <Typography color="error" gutterBottom>{emailError}</Typography>}
+
+                <TextField
+                    label="Username"
+                    name="username"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Email"
+                    type="email"
+                    name="email"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={togglePasswordVisibility} edge="end">
+                                    {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+                <Typography variant="body2" color="textSecondary">Must be 8 characters with numerical values.</Typography>
+
+                <TextField
+                    label="Contact Number"
+                    type="text"
+                    name="contactNumber"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    error={!!errors.contactNumber}
+                    helperText={errors.contactNumber}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                            bgcolor: '#800000',
+                            '&:hover': {
+                                bgcolor: '#A00000',
+                            },
+                            color: 'white',
+                            mb: 2
+                        }}
+                        fullWidth
+                    >
+                        Sign Up
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        fullWidth
+                        onClick={handleLoginClick}
+                        sx={{
+                            borderColor: '#800000',
+                            color: '#800000',
+                        }}
+                    >
+                        Login
+                    </Button>
+                </Box>
+            </Box>
         </div>
     );
 }
 
 export default Register;
-
