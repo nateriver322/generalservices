@@ -5,17 +5,20 @@ import AdminDashboard from './pages/AdminDashboard';
 import StaffDashboard from './pages/StaffDashboard';
 import PersonnelDashboard from './pages/PersonnelDashboard';
 import Dashboard from './pages/dashboard';
-import LoginPage from './pages/login';
+import Login from './pages/login';
 
 const RoleBasedDashboard = () => {
   const { user, loading } = useAuth();
+
+  console.log('RoleBasedDashboard rendering. User:', user, 'Loading:', loading);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (!user) {
-    return <LoginPage />;
+    console.log('No user, rendering LoginPage from RoleBasedDashboard');
+    return <Login />;
   }
 
   switch (user.role) {

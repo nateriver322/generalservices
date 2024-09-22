@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/personnelTicket.css';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo.png';
 import StaffAppBar from './StaffAppBar';
 
 function PersonnelTickets() {

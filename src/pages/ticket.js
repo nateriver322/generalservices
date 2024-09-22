@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/ticket.css';
+import { TextField, Button, Box, Typography } from '@mui/material';
 import TicketAppBar from './TicketAppBar';
 
 function TicketForm() {
     const navigate = useNavigate();
-    const [fileLabel, setFileLabel] = useState('No file chosen'); // State to hold the file name
+    const [fileLabel, setFileLabel] = useState('No file chosen');
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -15,14 +15,11 @@ function TicketForm() {
     }, [navigate]);
 
     const handleFormSubmit = async (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
         const formData = new FormData(event.target);
-
-        // Automatically set the current datetime
         const now = new Date();
-        const currentDateTime = now.toISOString(); // Format as ISO string
-
-        formData.append('datetime', currentDateTime); // Add current datetime to the form data
+        const currentDateTime = now.toISOString();
+        formData.append('datetime', currentDateTime);
         formData.append('username', localStorage.getItem('username'));
 
         try {
@@ -33,66 +30,241 @@ function TicketForm() {
             if (response.ok) {
                 navigate('/SuccessTicket');
             } else {
-                console.error('Submission failed');
                 const errorMsg = await response.text();
                 alert(`Submission failed: ${errorMsg}`);
             }
         } catch (error) {
-            console.error('Error:', error);
             alert(`Error submitting the ticket: ${error.message}`);
         }
     };
 
     const handleFileChange = (event) => {
         const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
-        setFileLabel(fileName); // Update the state with the new file name
+        setFileLabel(fileName);
     };
 
     return (
         <>
-            <TicketAppBar/>
-            <h2 className="h2">General Services Portal</h2>
-            <div className="container">
-                <div className="ticket-form-container">
-                       <form onSubmit={handleFormSubmit} className="ticket-form" encType="multipart/form-data">
-                       <h3 className="h3_ticket">Submit a request</h3>
-                        <div className="ticket-input-container">
-                            <div className="select-container">
-                                <select id="Priority" name="priority" required>
-                                    <option value="" disabled selected hidden>Select Priority</option>
-                                    <option value="Emergency">Emergency</option>
-                                    <option value="Non-Emergency">Non-Emergency</option>
-                                </select>
+            <TicketAppBar />
+            <Typography variant="h4" component="h2" sx={{ textAlign: 'center', margin: '20px 0' }}>
+                General Services Portal
+            </Typography>
+            <Box
+                component="form"
+                onSubmit={handleFormSubmit}
+                sx={{
+                    maxWidth: '600px',
+                    width: '100%',
+                    bgcolor: 'white',
+                    p: 4,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    margin: '0 auto'
+                }}
+                encType="multipart/form-data"
+            >
+                <Typography variant="h5" component="h3" gutterBottom>
+                    Submit a Request
+                </Typography>
 
-                                <select id="WorkType" name="workType" required>
-                                    <option value="" disabled selected hidden>Select Work Type</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Carpentry/Masonry/Steel Works">Carpentry/Masonry/Steel Works</option>
-                                    <option value="Electrical">Electrical</option>
-                                    <option value="Electro-Mech">Electro-Mechanical</option>
-                                </select>
+                <TextField
+                    select
+                    label="Select Priority"
+                    name="priority"
+                    required
+                    fullWidth
+                    margin="normal"
+                    defaultValue=""
+                    SelectProps={{
+                        native: true,
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black', // Default border color
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000', // Border color when focused
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                >
+                    <option value="" disabled>Select Priority</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Non-Emergency">Non-Emergency</option>
+                </TextField>
 
-                                <select id="ReqType" name="requestType" required>
-                                    <option value="" disabled selected hidden>Select Type of Request</option>
-                                    <option value="Repair/Maintenance">Repair/Maintenance</option>
-                                    <option value="Installation">Installation</option>
-                                </select>
-                                
-                                <input type="text" placeholder="Location" name="location" id="locInp" required />
-                                <textarea placeholder="Details of the Request" name="description" id="DesInp" required></textarea>
+                <TextField
+                    select
+                    label="Select Work Type"
+                    name="workType"
+                    required
+                    fullWidth
+                    margin="normal"
+                    defaultValue=""
+                    SelectProps={{
+                        native: true,
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black', // Default border color
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000', // Border color when focused
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                >
+                    <option value="" disabled>Select Work Type</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="Carpentry/Masonry/Steel Works">Carpentry/Masonry/Steel Works</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Electro-Mech">Electro-Mechanical</option>
+                </TextField>
 
-                                <div className="file-upload">
-                                    <input type="file" name="image" id="imageInput" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
-                                    <label htmlFor="imageInput">Choose File</label>
-                                    <span id="fileChosen">{fileLabel}</span> 
-                                </div>
+                <TextField
+                    select
+                    label="Select Type of Request"
+                    name="requestType"
+                    required
+                    fullWidth
+                    margin="normal"
+                    defaultValue=""
+                    SelectProps={{
+                        native: true,
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black', // Default border color
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000', // Border color when focused
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                >
+                    <option value="" disabled>Select Type of Request</option>
+                    <option value="Repair/Maintenance">Repair/Maintenance</option>
+                    <option value="Installation">Installation</option>
+                </TextField>
 
-                                <button type="submit" id="Submitbtn" className="ticket-submit-button">Submit</button>
-                            </div>
-                        </div>
-                    </form>
+                <TextField
+                    label="Location"
+                    name="location"
+                    required
+                    fullWidth
+                    margin="normal"
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black', // Default border color
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000', // Border color when focused
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Details of the Request"
+                    name="description"
+                    required
+                    fullWidth
+                    multiline
+                    rows={4}
+                    margin="normal"
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black', // Default border color
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000', // Border color when focused
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black', // Default label color
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black', // Label color when focused
+                        },
+                    }}
+                />
+
+                <div className="file-upload">
+                    <input
+                        type="file"
+                        name="image"
+                        id="imageInput"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                    <label htmlFor="imageInput">
+                        <Button
+                            variant="outlined"
+                            component="span"
+                            sx={{
+                                borderColor: '#800000',
+                                color: '#800000',
+                                '&:hover': {
+                                    borderColor: '#922B21',
+                                    color: '#922B21',
+                                },
+                            }}
+                        >
+                            Choose File
+                        </Button>
+                    </label>
+                    <span style={{ marginLeft: '10px' }}>{fileLabel}</span>
                 </div>
-            </div>
+
+                <Button type="submit" variant="contained" sx={{ mt: 2, bgcolor: '#800000', color: '#ffffff', '&:hover': { bgcolor: '#922B21' } }} fullWidth>
+                    Submit
+                </Button>
+            </Box>
         </>
     );
 }

@@ -29,7 +29,7 @@ code {
 
 .sort-by-container select:focus {
   outline: none;
-  border: 1px solid #007bff; /* Example color for focus */
+  border: 1px solid #007bff; 
 }
 
 .sort-by-container select option {

@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "./AuthConfig";
 import { AuthProvider } from './AuthContext';
-import LoginPage from './pages/login';
+import Login from './pages/login';
 import Register from './pages/register';
 import SuccessRegistration from './pages/successregistration'; // Ensure this path is correct
 import TicketForm from './pages/ticket';
@@ -18,15 +18,16 @@ import TicketsFixed from './pages/ticketsFixed';
 import TicketsHistory from './pages/ticketsHistory';
 
 function App() {
+  console.log('App rendering');
   return (
     <MsalProvider instance={msalInstance}>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/successregistration" element={<SuccessRegistration />} />
           <Route path="/ticket" element={<TicketForm />} />
-          <Route path="/dashboard" element={<RoleBasedDashboard />} /> {/* Use RoleBasedDashboard */}
+          <Route path="/dashboard" element={<RoleBasedDashboard />} /> 
           <Route path="/myTickets" element={<MyTickets />} />
           <Route path="/AccountManagement" element={<AccountManagement />} />
           <Route path="/SuccessTicket" element={<SuccessTicket />} />

@@ -13,7 +13,7 @@ function MyTickets() {
     const [feedbackError, setFeedbackError] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
-
+    const [feedbackSuccessModalOpen, setFeedbackSuccessModalOpen] = useState(false); // New state for feedback success modal
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -76,8 +76,6 @@ function MyTickets() {
         setSelectedTicket(null);
     };
 
-   
-
     const openDeleteModal = (ticket) => {
         setTicketToDelete(ticket);
     };
@@ -95,7 +93,7 @@ function MyTickets() {
                 if (response.ok) {
                     setTickets(tickets.filter(ticket => ticket.id !== ticketToDelete.id));
                     closeDeleteModal();
-                    setSuccessModalOpen(true);
+                    setSuccessModalOpen(true); // Open success modal after deletion
                 } else {
                     alert('Failed to delete the ticket.');
                 }
@@ -136,7 +134,7 @@ function MyTickets() {
             if (response.ok) {
                 setUserFeedback('');
                 closeFeedbackModal();
-                setSuccessModalOpen(true);
+                setFeedbackSuccessModalOpen(true); // Open feedback success modal
                 fetchTickets(localStorage.getItem('username'));
             } else if (response.status === 400) {
                 const errorData = await response.json();
@@ -156,7 +154,6 @@ function MyTickets() {
             <h2 className="h2">General Services Portal</h2>
             <div className="container">
                 <div className="view-ticket-container">
-                    
                     <div className="notifications">
                         {notifications.map((notification, index) => (
                             <div key={index} className="notification">
@@ -171,7 +168,7 @@ function MyTickets() {
                         <table className="ticket-table">
                             <thead>
                                 <tr>
-                                <th>Ticket Number</th>
+                                    <th>Ticket Number</th>
                                     <th>Status</th>
                                     <th>Priority</th>
                                     <th>Location</th>
@@ -265,6 +262,15 @@ function MyTickets() {
                                         </button>
                                     </>
                                 )}
+                            </div>
+                        </div>
+                    )}
+                    {feedbackSuccessModalOpen && ( // Feedback success modal
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Success</h2>
+                                <p>Feedback submitted successfully!</p>
+                                <button onClick={() => setFeedbackSuccessModalOpen(false)} className="user-close-button">Close</button>
                             </div>
                         </div>
                     )}

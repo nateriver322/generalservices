@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/dashboard.css';
-import logo from '../images/logo.png';
+import { Button, Box, Typography } from '@mui/material';
 import ResponsiveAppBar from './ResponsiveAppBar';
 
 function Dashboard() {
@@ -24,26 +24,66 @@ function Dashboard() {
         console.log("View Tickets button clicked");
     };
 
-    const handleLogoutButtonClick = () => {
-        localStorage.removeItem('username');
-        navigate('/');
-    };
-
     return (
         <>
             <ResponsiveAppBar />
-            
-            <h2 className="h2">General Services Portal</h2>
-            <div className="user-info">
-                <h3>Welcome, {username}!</h3>
-            </div>
-            <div className="container">
-                <div className="buttoncontainer">
-                    <button className="ticket-button" onClick={handleTicketButtonClick}>Submit Ticket</button>
-                    <button className="view-button" onClick={handleViewButtonClick}>View Tickets</button>
-                </div>
-               
-            </div>
+            <Box sx={{ textAlign: 'center', mb: 4 }}>
+                <Typography variant="h2" className="h2" sx={{ mb: 2 }}>
+                    General Services Portal
+                </Typography>
+                <Typography variant="h3">Welcome, {username}!</Typography>
+            </Box>
+            <Box className="container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                <Box className="buttoncontainer"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' }, // Column on mobile, row on larger screens
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: { xs: 2, sm: 4 },  // Space between buttons
+                    }}>
+                    
+                    {/* Submit Ticket Button */}
+                    <Button
+                        variant="contained"
+                        onClick={handleTicketButtonClick}
+                        sx={{
+                            width: { xs: '90%', sm: 400 },
+                            height: { xs: 150, sm: 200 },
+                            fontSize: { xs: '18px', sm: '24px' },
+                            backgroundColor: '#800000',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: '#922B21',
+                            },
+                            boxShadow: 3,
+                            borderRadius: 2,
+                        }}
+                    >
+                        Submit Ticket
+                    </Button>
+                    
+                    {/* View Tickets Button */}
+                    <Button
+                        variant="contained"
+                        onClick={handleViewButtonClick}
+                        sx={{
+                            width: { xs: '90%', sm: 400 },
+                            height: { xs: 150, sm: 200 },
+                            fontSize: { xs: '18px', sm: '24px' },
+                            backgroundColor: '#800000',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: '#922B21',
+                            },
+                            boxShadow: 3,
+                            borderRadius: 2,
+                        }}
+                    >
+                        View Tickets
+                    </Button>
+                </Box>
+            </Box>
         </>
     );
 }

@@ -6,9 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,7 +17,7 @@ import citLogo from '../images/cit-logo.png';
 const pages= ['Home'];
 const settings = ['Logout'];
 
-function ResponsiveAppBar() {
+function LoginResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
@@ -64,55 +62,51 @@ function ResponsiveAppBar() {
             alt="CIT-U Logo"
             style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
           />
-          
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="#"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+           
+          </Typography>
 
           
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+           
+          </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-  {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => handlePageNavigation(page)}
-                sx={{ my: 2, color: '#800000', display: 'bold' }}
-              >
-                {page}
-              </Button>
-            ))}
-</Box>
+          
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); if (setting === 'Logout') handleLogout(); }}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
 
-export default ResponsiveAppBar;
+export default LoginResponsiveAppBar;
