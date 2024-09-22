@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Box, Typography } from '@mui/material'; // Import MUI components
 import '../css/PersonnelDashboard.css';
 import ResponsiveAppBar from './ResponsiveAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 function PersonnelDashboard() {
     const navigate = useNavigate();
@@ -29,7 +30,25 @@ function PersonnelDashboard() {
     return (
         <>
             <ResponsiveAppBar />
-            <Typography variant="h2" className="h2">General Services Portal</Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px',
+                    marginTop: '30px' // Move the form down
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
+                </Typography>
+            </Box>
             <div className="user-info">
                 <Typography variant="h3">Welcome Personnel {username}!</Typography>
             </div>

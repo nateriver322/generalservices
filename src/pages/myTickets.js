@@ -3,7 +3,22 @@ import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import { Box, Typography } from '@mui/material';
+import {
+    Box,
+    Typography,
+    Button,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    Snackbar,
+} from '@mui/material';
 
 function MyTickets() {
     const navigate = useNavigate();
@@ -14,8 +29,8 @@ function MyTickets() {
     const [userFeedback, setUserFeedback] = useState('');
     const [feedbackError, setFeedbackError] = useState('');
     const [notifications, setNotifications] = useState([]);
-    const [successModalOpen, setSuccessModalOpen] = useState(false);
-    const [feedbackSuccessModalOpen, setFeedbackSuccessModalOpen] = useState(false); // New state for feedback success modal
+    const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+    const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -74,16 +89,8 @@ function MyTickets() {
         setSelectedTicket(ticket);
     };
 
-    const closeModal = () => {
-        setSelectedTicket(null);
-    };
-
     const openDeleteModal = (ticket) => {
         setTicketToDelete(ticket);
-    };
-
-    const closeDeleteModal = () => {
-        setTicketToDelete(null);
     };
 
     const confirmDeleteTicket = async () => {
@@ -94,14 +101,15 @@ function MyTickets() {
                 });
                 if (response.ok) {
                     setTickets(tickets.filter(ticket => ticket.id !== ticketToDelete.id));
-                    closeDeleteModal();
-                    setSuccessModalOpen(true); // Open success modal after deletion
+                    setSuccessSnackbarOpen(true);
                 } else {
                     alert('Failed to delete the ticket.');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred while deleting the ticket.');
+            } finally {
+                setTicketToDelete(null);
             }
         }
     };
@@ -134,15 +142,12 @@ function MyTickets() {
             });
 
             if (response.ok) {
-                setUserFeedback('');
                 closeFeedbackModal();
-                setFeedbackSuccessModalOpen(true); // Open feedback success modal
+                setFeedbackSuccessSnackbarOpen(true);
                 fetchTickets(localStorage.getItem('username'));
-            } else if (response.status === 400) {
-                const errorData = await response.json();
-                setFeedbackError(errorData.message || 'Failed to send feedback. It may have already been submitted.');
             } else {
-                setFeedbackError('Failed to send feedback. Please try again later.');
+                const errorData = await response.json();
+                setFeedbackError(errorData.message || 'Failed to send feedback.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -152,150 +157,171 @@ function MyTickets() {
 
     return (
         <>
-            <TicketAppBar/>
+            <TicketAppBar />
             <Box
                 sx={{
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '10px',
-                    marginTop: '30px' // Move the form down
+                    padding: '20px',
+                    
                 }}
             >
-                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography
-                    variant="h4"
-                    component="h2"
-                    
-                   
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '20px',
+                    }}
                 >
-                    JobTrack
-                </Typography>
-            </Box>
-            <div className="container">
-                <div className="view-ticket-container">
-                    <div className="notifications">
-                        {notifications.map((notification, index) => (
-                            <div key={index} className="notification">
-                                <p>{notification.message}</p>
-                                <button onClick={() => markNotificationAsRead(notification.id)}>Mark as Read</button>
-                            </div>
+                    <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                    <Typography
+                        variant="h4"
+                        component="h2"
+                    >
+                        JobTrack
+                    </Typography>
+                </Box>
+
+                <Box sx={{ width: '100%', maxWidth: 1450 }}>
+                    <Box sx={{ mb: 2 }}>
+                        {notifications.map((notification) => (
+                            <Box key={notification.id} sx={{ p: 1, border: '1px solid gray', mb: 1 }}>
+                                <Typography>{notification.message}</Typography>
+                                <Button onClick={() => markNotificationAsRead(notification.id)}>Mark as Read</Button>
+                            </Box>
                         ))}
-                    </div>
+                    </Box>
                     {tickets.length === 0 ? (
-                        <p className="no-tickets-message">No Tickets Submitted</p>
+                        <Typography>No Tickets Submitted</Typography>
                     ) : (
-                        <table className="ticket-table">
-                            <thead>
-                                <tr>
-                                    <th>Ticket Number</th>
-                                    <th>Status</th>
-                                    <th>Priority</th>
-                                    <th>Location</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {tickets.map((ticket, index) => (
-                                    <tr key={index}>
-                                        <td>{ticket.id}</td>
-                                        <td>{ticket.status}</td>
-                                        <td>{ticket.priority}</td>
-                                        <td>{ticket.location}</td>
-                                        <td>{ticket.description}</td>
-                                        <td>
-                                            <div className="button-group">
-                                                <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                                {ticket.feedback && (
-                                                    <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>)}
-                                                <button onClick={() => openDeleteModal(ticket)} className="delete-button">Cancel</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                            <Table sx={{ margin: 0, padding: 0 }} >
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Ticket Number</TableCell>
+                                        <TableCell>Status</TableCell>
+                                        <TableCell>Priority</TableCell>
+                                        <TableCell>Location</TableCell>
+                                        <TableCell>Description</TableCell>
+                                        <TableCell>Actions</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {tickets.map((ticket) => (
+                                        <TableRow key={ticket.id}>
+                                            <TableCell>{ticket.id}</TableCell>
+                                            <TableCell>{ticket.status}</TableCell>
+                                            <TableCell>{ticket.priority}</TableCell>
+                                            <TableCell>{ticket.location}</TableCell>
+                                            <TableCell>{ticket.description}</TableCell>
+                                            <TableCell>
+                                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                                    <Button 
+                                                        variant="outlined" 
+                                                        onClick={() => handleViewTicket(ticket)}
+                                                        sx={{ width: '120px', height: '60px' }}
+                                                    >
+                                                        View Details
+                                                    </Button>
+                                                    {ticket.feedback && (
+                                                        <Button 
+                                                            variant="outlined" 
+                                                            onClick={() => openFeedbackModal(ticket)}
+                                                            sx={{ width: '120px' }}
+                                                        >
+                                                            View Feedback
+                                                        </Button>
+                                                    )}
+                                                    <Button 
+                                                        variant="contained" 
+                                                        color="error" 
+                                                        onClick={() => openDeleteModal(ticket)}
+                                                        sx={{ width: '120px' }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </Box>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Box>
                     )}
-                    {selectedTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={closeModal}>&times;</span>
-                                <h2>Ticket Details</h2>
-                                <p><strong>Description:</strong> {selectedTicket.description}</p>
-                                <p><strong>Priority:</strong> {selectedTicket.priority}</p>
-                                <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>
-                                <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
-                                <p><strong>Location:</strong> {selectedTicket.location}</p>
-                                <p><strong>Date:</strong> {selectedTicket.datetime}</p>
-                                {selectedTicket.imageBase64 && (
-                                    <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
-                                )}
-                            </div>
-                        </div>
+                </Box>
+            </Box>
+
+            {selectedTicket && (
+                <Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
+                <DialogTitle>Ticket Details</DialogTitle>
+                <DialogContent>
+                    <Typography><strong>Description:</strong> {selectedTicket.description}</Typography>
+                    <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
+                    <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
+                    <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
+                    <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
+                    <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
+                    {selectedTicket.imageBase64 && (
+                        <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                     )}
-                    {ticketToDelete && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <h2>Confirm Cancelation</h2>
-                                <p>Are you sure you want to cancel this ticket?</p>
-                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Yes</button>
-                                <button onClick={closeDeleteModal} className="cancel-delete-button">No</button>
-                            </div>
-                        </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setSelectedTicket(null)}>Close</Button>
+                </DialogActions>
+            </Dialog>
+            )}
+            <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
+                <DialogTitle>Confirm Cancellation</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure you want to cancel this ticket?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={confirmDeleteTicket} color="error">Yes</Button>
+                    <Button onClick={() => setTicketToDelete(null)}>No</Button>
+                </DialogActions>
+            </Dialog>
+            <Snackbar
+                open={successSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSuccessSnackbarOpen(false)}
+                message="Ticket Cancelled"
+            />
+            <Snackbar
+                open={feedbackSuccessSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setFeedbackSuccessSnackbarOpen(false)}
+                message="Feedback submitted successfully!"
+            />
+            {feedbackModalTicket && (
+                <Dialog open={Boolean(feedbackModalTicket)} onClose={closeFeedbackModal} maxWidth="md" fullWidth>
+                <DialogTitle>Feedback</DialogTitle>
+                <DialogContent>
+                    {feedbackModalTicket.feedback && (
+                        <Typography sx={{ mb: '20px' }}><strong>Personnel/Staff Feedback:</strong> {feedbackModalTicket.feedback}</Typography>
                     )}
-                    {successModalOpen && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <h2>Success</h2>
-                                <p>Ticket Cancelled</p>
-                                <button onClick={() => setSuccessModalOpen(false)} className="user-close-button">Close</button>
-                            </div>
-                        </div>
+                    {feedbackModalTicket.userFeedback ? (
+                        <Typography><strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}</Typography>
+                    ) : (
+                        <TextField
+                            
+                            label="Enter your feedback"
+                            multiline
+                            fullWidth
+                            value={userFeedback}
+                            onChange={(e) => setUserFeedback(e.target.value)}
+                            error={!!feedbackError}
+                            helperText={feedbackError}
+                        />
                     )}
-                    {feedbackModalTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={closeFeedbackModal}>&times;</span>
-                                <h2>Feedback</h2>
-                                {feedbackModalTicket.feedback && (
-                                    <>
-                                        <p>Personnel/Staff Feedback:</p>
-                                        <textarea className="user-feedback" readOnly value= {feedbackModalTicket.feedback}/>
-                                    </>
-                                )}
-                                {feedbackModalTicket.userFeedback ? (
-                                    <>
-                                    <p>Your Feedback:</p>
-                                    <textarea className="user-feedback" readOnly value= {feedbackModalTicket.userFeedback}/>
-                                    </>
-                                ) : (
-                                    <>
-                                        <textarea className="user-feedback"
-                                            value={userFeedback}
-                                            onChange={(e) => setUserFeedback(e.target.value)}
-                                            placeholder="Enter your feedback for personnel/staff."
-                                        />
-                                        {feedbackError && <p className="error-message">{feedbackError}</p>}
-                                        <button onClick={() => handleSendFeedback(feedbackModalTicket.id)} className="send-feedback-button">
-                                            Send feedback
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                    {feedbackSuccessModalOpen && ( // Feedback success modal
-                        <div className="modal">
-                            <div className="modal-content">
-                                <h2>Success</h2>
-                                <p>Feedback submitted successfully!</p>
-                                <button onClick={() => setFeedbackSuccessModalOpen(false)} className="user-close-button">Close</button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleSendFeedback(feedbackModalTicket.id)} color="primary">Send feedback</Button>
+                    <Button onClick={closeFeedbackModal}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
+            )}
         </>
     );
 }
