@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -112,9 +113,25 @@ const Register = () => {
     return (
         <div>
             <LoginResponsiveAppBar />
-            <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: 'center', margin: '20px 0' }}>
-                JobTrack
-            </Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '70px' // Move the form down
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
+                </Typography>
+            </Box>
             <Box
                 component="form"
                 onSubmit={handleFormSubmit}

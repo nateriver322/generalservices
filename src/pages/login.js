@@ -7,6 +7,7 @@ import { loginRequest } from "../AuthConfig";
 import { useMsal } from "@azure/msal-react";
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
+import ConstructionIcon from '@mui/icons-material/Construction'; // Import ConstructionIcon
 
 const Login = React.memo(() => {
     const navigate = useNavigate();
@@ -60,18 +61,25 @@ const Login = React.memo(() => {
     return (
         <div>
             <LoginResponsiveAppBar />
-            <Typography
-                variant="h4"
-                component="h2"
-                gutterBottom
+            <Box
                 sx={{
-                    textAlign: 'center',
-                    width: '100%',
-                    marginBottom: '20px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '70px' // Move the form down
                 }}
             >
-                JobTrack
-            </Typography>
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
+                </Typography>
+            </Box>
             <Box
                 component="form"
                 onSubmit={handleLoginSubmit}
@@ -82,7 +90,8 @@ const Login = React.memo(() => {
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
-                    margin: '0 auto'
+                    margin: '0 auto',
+                    mt: 4 // Move the form lower vertically
                 }}
             >
                 <Typography variant="h5" component="h3" gutterBottom>
