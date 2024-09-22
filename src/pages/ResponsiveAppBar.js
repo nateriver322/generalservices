@@ -62,13 +62,31 @@ function ResponsiveAppBar() {
             alt="CIT-U Logo"
             style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
           />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            onClick={() => navigate('/dashboard')}
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              cursor: 'pointer'
+            }}
+          ></Typography>
+
+          
          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => handlePageNavigation(page)}
-                sx={{ my: 2, color: '#800000', display: 'bold' }}
+                sx={{ my: 2, color: 'white', display: 'bold' }}
               >
                 {page}
               </Button>
