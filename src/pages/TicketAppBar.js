@@ -56,19 +56,13 @@ function TicketAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>  {/* Maroon color */}
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img
             src={citLogo}
             alt="CIT-U Logo"
-            style={{
-              display: { xs: 'none', md: 'flex' },
-              marginRight: '10px',
-              height: '50px', // Adjust height as needed
-              cursor: 'pointer', // Add this line to display an open hand cursor on hover
-            }}
-            onClick={() => navigate('/dashboard')} // Navigate to /dashboard when image is clicked
+            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
           />
           <Typography
             variant="h6"

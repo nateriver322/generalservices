@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/dashboard.css';
 import { Button, Box, Typography } from '@mui/material';
 import ResponsiveAppBar from './ResponsiveAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -27,20 +28,38 @@ function Dashboard() {
     return (
         <>
             <ResponsiveAppBar />
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
-                <Typography variant="h2" className="h2" sx={{ mb: 2 }}>
-                    General Services Portal
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px',
+                    marginTop: '30px' // Move the form down
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
                 </Typography>
-                <Typography variant="h3">Welcome, {username}!</Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center', mb: -15, mt: 5  }}>
+                
+                <Typography variant="h3"sx={{ fontSize: '40px' }}>Welcome, {username}!</Typography>
             </Box>
             <Box className="container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
                 <Box className="buttoncontainer"
                     sx={{
                         display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' }, // Column on mobile, row on larger screens
+                        flexDirection: { xs: 'row', sm: 'row' }, // Column on mobile, row on larger screens
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: { xs: 2, sm: 4 },  // Space between buttons
+                        gap: { xs: 2, sm: 4 },
+                     
                     }}>
                     
                     {/* Submit Ticket Button */}

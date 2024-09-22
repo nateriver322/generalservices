@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import { Box, Typography } from '@mui/material';
 
 function MyTickets() {
     const navigate = useNavigate();
@@ -151,7 +153,25 @@ function MyTickets() {
     return (
         <>
             <TicketAppBar/>
-            <h2 className="h2">General Services Portal</h2>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px',
+                    marginTop: '30px' // Move the form down
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
+                </Typography>
+            </Box>
             <div className="container">
                 <div className="view-ticket-container">
                     <div className="notifications">

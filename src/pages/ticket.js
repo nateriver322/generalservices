@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import TicketAppBar from './TicketAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 function TicketForm() {
     const navigate = useNavigate();
@@ -46,20 +47,41 @@ function TicketForm() {
     return (
         <>
             <TicketAppBar />
-            <Typography variant="h4" component="h2" sx={{ textAlign: 'center', margin: '20px 0' }}>
-                General Services Portal
-            </Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '30px' // Move the form down
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography
+                    variant="h4"
+                    component="h2"
+                    
+                   
+                >
+                    JobTrack
+                </Typography>
+            </Box>
             <Box
                 component="form"
                 onSubmit={handleFormSubmit}
                 sx={{
-                    maxWidth: '600px',
+                    maxWidth: '600px', // Default width for larger screens
                     width: '100%',
                     bgcolor: 'white',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
-                    margin: '0 auto'
+                    margin: '0 auto',
+                    // Responsive styles
+                    '@media (max-width:600px)': {
+                        maxWidth: '400px', // Smaller width for small screens
+                        p: 3, // Adjust padding for small screens
+                    },
                 }}
                 encType="multipart/form-data"
             >
@@ -81,20 +103,20 @@ function TicketForm() {
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'black', // Default border color
+                                borderColor: 'black',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#922B21', // Border color on hover
+                                borderColor: '#922B21',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#800000', // Border color when focused
+                                borderColor: '#800000',
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 >
@@ -117,20 +139,20 @@ function TicketForm() {
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'black', // Default border color
+                                borderColor: 'black',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#922B21', // Border color on hover
+                                borderColor: '#922B21',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#800000', // Border color when focused
+                                borderColor: '#800000',
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 >
@@ -155,20 +177,20 @@ function TicketForm() {
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'black', // Default border color
+                                borderColor: 'black',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#922B21', // Border color on hover
+                                borderColor: '#922B21',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#800000', // Border color when focused
+                                borderColor: '#800000',
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 >
@@ -186,20 +208,20 @@ function TicketForm() {
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'black', // Default border color
+                                borderColor: 'black',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#922B21', // Border color on hover
+                                borderColor: '#922B21',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#800000', // Border color when focused
+                                borderColor: '#800000',
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
@@ -215,20 +237,20 @@ function TicketForm() {
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'black', // Default border color
+                                borderColor: 'black',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#922B21', // Border color on hover
+                                borderColor: '#922B21',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#800000', // Border color when focused
+                                borderColor: '#800000',
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />

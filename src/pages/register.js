@@ -119,7 +119,7 @@ const Register = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: '20px',
-                    marginTop: '70px' // Move the form down
+                    marginTop: '30px' // Move the form down
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
