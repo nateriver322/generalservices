@@ -39,7 +39,9 @@ function TicketsCreated() {
             const response = await fetch('http://localhost:8080/api/tickets');
             if (response.ok) {
                 const data = await response.json();
-                setTickets(data);
+                // Filter out tickets that are done
+                const activeTickets = data.filter(ticket => ticket.status !== 'Done');
+                setTickets(activeTickets);
             } else {
                 console.error('Failed to fetch tickets');
             }
@@ -80,7 +82,7 @@ function TicketsCreated() {
             if (response.status === 200) {
                 setAssessModalOpen(false);
                 setSuccessModalOpen(true);
-                fetchTickets();
+                fetchTickets(); // Re-fetch tickets to update the state
             } else {
                 alert('Failed to submit feedback');
             }
@@ -89,7 +91,7 @@ function TicketsCreated() {
             alert('Error submitting feedback');
         }
     };
-
+    
     const closeDetailsModal = () => {
         setDetailsModalOpen(false);
         setSelectedTicket(null);
@@ -248,7 +250,7 @@ function TicketsCreated() {
                         <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>
                     )}
                     <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                    <button onClick={() => openDeleteModal(ticket)} className="delete-button">Delete</button>
+                    <button onClick={() => openDeleteModal(ticket)} className="delete-button">Terminate</button>
                 </div>
             </td>
         </tr>
@@ -270,6 +272,8 @@ function TicketsCreated() {
                                 {selectedTicket.imageBase64 && (
                                     <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
                                 )}
+                               
+
                                 <button onClick={closeDetailsModal} className="close-Button">Close</button>
                             </div>
                         </div>
@@ -304,10 +308,10 @@ function TicketsCreated() {
                     {ticketToDelete && (
                         <div className="modal">
                             <div className="modal-content">
-                                <h2>Confirm Deletion</h2>
-                                <p>Are you sure you want to delete this ticket?</p>
-                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Delete</button>
-                                <button onClick={closeDeleteModal} className="cancel-delete-button">Cancel</button>
+                                <h2>Confirm Termination</h2>
+                                <p>Are you sure you want to terminate this ticket?</p>
+                                <button onClick={confirmDeleteTicket} className="confirm-delete-button">Yes</button>
+                                <button onClick={closeDeleteModal} className="cancel-delete-button">No</button>
                             </div>
                         </div>
                     )}
