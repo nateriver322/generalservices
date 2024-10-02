@@ -163,7 +163,7 @@ function MyTickets() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    padding: '20px',
+                    padding: '30px',
                     
                 }}
             >

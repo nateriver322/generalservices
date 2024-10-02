@@ -40,8 +40,19 @@ function TicketForm() {
     };
 
     const handleFileChange = (event) => {
-        const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
-        setFileLabel(fileName);
+        const file = event.target.files[0];
+        if (file) {
+            const fileSizeInMB = file.size / (1024 * 1024); // Convert bytes to MB
+            if (fileSizeInMB > 10) {
+                alert("File size exceeds the 10MB limit. Please choose a smaller file.");
+                setFileLabel('No file chosen'); // Reset label
+                event.target.value = ""; // Clear the file input
+            } else {
+                setFileLabel(file.name);
+            }
+        } else {
+            setFileLabel('No file chosen');
+        }
     };
 
     return (
@@ -57,12 +68,7 @@ function TicketForm() {
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography
-                    variant="h4"
-                    component="h2"
-                    
-                   
-                >
+                <Typography variant="h4" component="h2">
                     JobTrack
                 </Typography>
             </Box>
@@ -114,6 +120,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -150,6 +157,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -188,6 +196,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -200,11 +209,13 @@ function TicketForm() {
                 </TextField>
 
                 <TextField
-                    label="Location"
+                     
+                    label="Input Location"
                     name="location"
                     required
                     fullWidth
                     margin="normal"
+                    defaultValue=""
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -219,6 +230,9 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 540,
+                            
+                            
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -234,6 +248,8 @@ function TicketForm() {
                     multiline
                     rows={4}
                     margin="normal"
+                    defaultValue=""
+                    
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -248,6 +264,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -283,7 +300,17 @@ function TicketForm() {
                     <span style={{ marginLeft: '10px' }}>{fileLabel}</span>
                 </div>
 
-                <Button type="submit" variant="contained" sx={{ mt: 2, bgcolor: '#800000', color: '#ffffff', '&:hover': { bgcolor: '#922B21' } }} fullWidth>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                        mt: 2,
+                        bgcolor: '#800000',
+                        color: '#ffffff',
+                        '&:hover': { bgcolor: '#922B21' },
+                    }}
+                    fullWidth
+                >
                     Submit
                 </Button>
             </Box>

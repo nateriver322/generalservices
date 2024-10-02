@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import { Button, Box, Typography } from '@mui/material';
 import '../css/staffDashboard.css';
-import logo from '../images/logo.png';
 import ResponsiveAppBar from './ResponsiveAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 function StaffDashboard() {
     const navigate = useNavigate();
@@ -17,11 +18,10 @@ function StaffDashboard() {
 
     const handleTicketButtonClick = () => {
         navigate("/ticketsCreated"); 
-        console.log("Ticket Created button clicked");
+        console.log("Tickets Created button clicked");
     };
 
     const handleViewButtonClick = () => {
-
         navigate("/ticketsFixed"); 
         console.log("Fixed Tickets button clicked");
     };
@@ -33,18 +33,81 @@ function StaffDashboard() {
 
     return (
         <>
-            <ResponsiveAppBar/>
-            <h2 className="h2">General Services Portal</h2>
-            <div className="user-info">
-                <h3>Welcome Staff {username}!</h3>
-            </div>
-            <div className="container">
-                <div className="buttoncontainer">
-                    <button className="tickets-created" onClick={handleTicketButtonClick}>Tickets Created</button>
-                    <button className="tickets-fixed" onClick={handleViewButtonClick}>Tickets Fixed</button>
-                </div>
-            
-            </div>
+            <ResponsiveAppBar />
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '10px',
+                    marginTop: '30px',
+                }}
+            >
+                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+                <Typography variant="h4" component="h2">
+                    JobTrack
+                </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center', mb: -15, mt: 5 }}>
+                <Typography variant="h3" sx={{ fontSize: '40px' }}>
+                    Welcome Staff, {username}!
+                </Typography>
+            </Box>
+            <Box className="container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                <Box
+                    className="buttoncontainer"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' }, // Column on mobile, row on larger screens
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: { xs: 2, sm: 4 },
+                    }}
+                >
+                    {/* Tickets Created Button */}
+                    <Button
+                        variant="contained"
+                        onClick={handleTicketButtonClick}
+                        sx={{
+                            width: { xs: '90%', sm: 400 },
+                            height: { xs: 150, sm: 200 },
+                            fontSize: { xs: '18px', sm: '24px' },
+                            backgroundColor: '#800000',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: '#922B21',
+                            },
+                            boxShadow: 3,
+                            borderRadius: 2,
+                        }}
+                    >
+                        Tickets Created
+                    </Button>
+
+                    {/* Tickets Fixed Button */}
+                    <Button
+                        variant="contained"
+                        onClick={handleViewButtonClick}
+                        sx={{
+                            width: { xs: '90%', sm: 400 },
+                            height: { xs: 150, sm: 200 },
+                            fontSize: { xs: '18px', sm: '24px' },
+                            backgroundColor: '#800000',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: '#922B21',
+                            },
+                            boxShadow: 3,
+                            borderRadius: 2,
+                        }}
+                    >
+                        Tickets Fixed
+                    </Button>
+                </Box>
+            </Box>
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+                
+            </Box>
         </>
     );
 }
