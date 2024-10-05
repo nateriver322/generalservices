@@ -7,6 +7,8 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 function TicketForm() {
     const navigate = useNavigate();
     const [fileLabel, setFileLabel] = useState('No file chosen');
+    const [selectedWorkTypes, setSelectedWorkTypes] = useState([]);
+    const [showWorkTypeDropdown, setShowWorkTypeDropdown] = useState(false);
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -22,6 +24,9 @@ function TicketForm() {
         const currentDateTime = now.toISOString();
         formData.append('datetime', currentDateTime);
         formData.append('username', localStorage.getItem('username'));
+        
+        // Join the selected work types as a comma-separated string
+        formData.append("workType", selectedWorkTypes.join(",")); 
 
         try {
             const response = await fetch('http://localhost:8080/api/tickets', {
@@ -40,18 +45,17 @@ function TicketForm() {
     };
 
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const fileSizeInMB = file.size / (1024 * 1024); // Convert bytes to MB
-            if (fileSizeInMB > 10) {
-                alert("File size exceeds the 10MB limit. Please choose a smaller file.");
-                setFileLabel('No file chosen'); // Reset label
-                event.target.value = ""; // Clear the file input
-            } else {
-                setFileLabel(file.name);
-            }
+        const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
+        setFileLabel(fileName);
+    };
+
+    const handleWorkTypeChange = (e) => {
+        const value = e.target.value;
+        // Toggle work type selection
+        if (selectedWorkTypes.includes(value)) {
+            setSelectedWorkTypes(selectedWorkTypes.filter((item) => item !== value));
         } else {
-            setFileLabel('No file chosen');
+            setSelectedWorkTypes([...selectedWorkTypes, value]);
         }
     };
 
@@ -64,7 +68,7 @@ function TicketForm() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: '20px',
-                    marginTop: '30px' // Move the form down
+                    marginTop: '30px',
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
@@ -76,17 +80,16 @@ function TicketForm() {
                 component="form"
                 onSubmit={handleFormSubmit}
                 sx={{
-                    maxWidth: '600px', // Default width for larger screens
+                    maxWidth: '600px',
                     width: '100%',
                     bgcolor: 'white',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    // Responsive styles
                     '@media (max-width:600px)': {
-                        maxWidth: '400px', // Smaller width for small screens
-                        p: 3, // Adjust padding for small screens
+                        maxWidth: '400px',
+                        p: 3,
                     },
                 }}
                 encType="multipart/form-data"
@@ -120,7 +123,6 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
-                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -132,44 +134,59 @@ function TicketForm() {
                     <option value="Non-Emergency">Non-Emergency</option>
                 </TextField>
 
-                <TextField
-                    select
-                    label="Select Work Type"
-                    name="workType"
-                    required
-                    fullWidth
-                    margin="normal"
-                    defaultValue=""
-                    SelectProps={{
-                        native: true,
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                            fontWeight: 540,
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                >
-                    <option value="" disabled>Select Work Type</option>
-                    <option value="Plumbing">Plumbing</option>
-                    <option value="Carpentry/Masonry/Steel Works">Carpentry/Masonry/Steel Works</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="Electro-Mech">Electro-Mechanical</option>
-                </TextField>
+                {/* Custom Dropdown for Work Type */}
+                <Box sx={{ position: 'relative', marginBottom: '20px' }}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => setShowWorkTypeDropdown(!showWorkTypeDropdown)}
+                        fullWidth
+                    >
+                        {selectedWorkTypes.length > 0
+                            ? selectedWorkTypes.join(', ')
+                            : 'Select Work Type'}
+                    </Button>
+                    {showWorkTypeDropdown && (
+                       <Box
+                           sx={{
+                               display: 'flex',
+                               flexDirection: 'column', // Makes the checkboxes align vertically
+                               marginBottom: '16px',
+                           }}
+                       >
+                           <Typography
+                               variant="h6"
+                               component="label"
+                               sx={{
+                                   color: '#000000',
+                                   marginBottom: '8px',
+                                   fontWeight: 'bold',
+                               }}
+                           >
+                               Scope of Work
+                           </Typography>
+                   
+                           <Box
+                               sx={{
+                                   display: 'flex',
+                                   flexDirection: 'column', // Ensures each checkbox is on a new line
+                               }}
+                           >
+                               {['Plumbing', 'Carpentry/Masonry/Steel Works', 'Electrical', 'Electro-Mechanical'].map((workType) => (
+                                   <label key={workType} style={{ marginBottom: '8px' }}>
+                                       <input
+                                           type="checkbox"
+                                           value={workType}
+                                           checked={selectedWorkTypes.includes(workType)}
+                                           onChange={handleWorkTypeChange}
+                                           style={{ marginRight: '8px' }}
+                                       />
+                                       {workType}
+                                   </label>
+                               ))}
+                           </Box>
+                       </Box>
+                    )}
+                </Box>
 
                 <TextField
                     select
@@ -196,7 +213,6 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
-                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -209,13 +225,11 @@ function TicketForm() {
                 </TextField>
 
                 <TextField
-                     
-                    label="Input Location"
+                    label="Location"
                     name="location"
                     required
                     fullWidth
                     margin="normal"
-                    defaultValue=""
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -230,9 +244,6 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
-                            fontWeight: 540,
-                            
-                            
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -248,8 +259,6 @@ function TicketForm() {
                     multiline
                     rows={4}
                     margin="normal"
-                    defaultValue=""
-                    
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -264,7 +273,6 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
-                            fontWeight: 540,
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -307,7 +315,9 @@ function TicketForm() {
                         mt: 2,
                         bgcolor: '#800000',
                         color: '#ffffff',
-                        '&:hover': { bgcolor: '#922B21' },
+                        '&:hover': {
+                            bgcolor: '#922B21',
+                        },
                     }}
                     fullWidth
                 >
