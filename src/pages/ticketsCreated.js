@@ -40,7 +40,7 @@ function TicketsCreated() {
             if (response.ok) {
                 const data = await response.json();
                 // Filter out tickets that are done
-                const activeTickets = data.filter(ticket => ticket.status !== 'Done');
+                const activeTickets = data.filter(ticket => ticket.status !== 'Resolved');
                 setTickets(activeTickets);
             } else {
                 console.error('Failed to fetch tickets');
@@ -221,13 +221,13 @@ function TicketsCreated() {
             <td>{ticket.id}</td>
             <td
                 style={{
-                    color: ticket.status === 'Done' ? 'green' : 
+                    color: ticket.status === 'Resolved' ? 'green' : 
                            ticket.status === 'Working' ? '#FFBF00' : 
                            'red',
                     fontWeight: 'bold'
                 }}
             >
-                {ticket.status === 'Done' ? 'Finished' : 
+                {ticket.status === 'Resolved' ? 'Finished' : 
                  ticket.status === 'Working' ? 'Ongoing' : 
                  'Not Started'}
             </td>
@@ -238,12 +238,12 @@ function TicketsCreated() {
             <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
             <td>
                 <div className="button-group">
-                    {ticket.status === 'Working' || ticket.status === 'Done' ? (
+                    {ticket.status === 'Working' || ticket.status === 'Resolved' ? (
                         <button className="assigned-button" disabled>Assigned</button>
                     ) : (
                         <button onClick={() => handleAssignTicket(ticket)} className="assign-button">Assign</button>
                     )}
-                    {ticket.status !== 'Done' && (
+                    {ticket.status !== 'Resolved' && (
                         <button onClick={() => handleAssessTicket(ticket)} className="assess-button">Assess</button>
                     )}
                     {ticket.feedback && (

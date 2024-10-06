@@ -68,7 +68,7 @@ export default function TicketsDone() {
     try {
       const response = await axios.get('http://localhost:8080/api/tickets');
       if (response.status === 200) {
-        const doneTix = response.data.filter(ticket => ticket.status === 'Done');
+        const doneTix = response.data.filter(ticket => ticket.status === 'Resolved');
         setDoneTickets(doneTix);
       } else {
         console.error('Failed to fetch tickets');
