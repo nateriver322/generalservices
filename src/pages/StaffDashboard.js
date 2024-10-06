@@ -81,7 +81,7 @@ function StaffDashboard() {
                             borderRadius: 2,
                         }}
                     >
-                        Tickets Created
+                        Pending and On-Process
                     </Button>
 
                     {/* Tickets Fixed Button */}
@@ -101,7 +101,7 @@ function StaffDashboard() {
                             borderRadius: 2,
                         }}
                     >
-                        Tickets Fixed
+                        Resolved Tickets
                     </Button>
                 </Box>
             </Box>
