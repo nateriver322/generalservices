@@ -260,24 +260,31 @@ function TicketsCreated() {
 
                     </table>
                     {detailsModalOpen && selectedTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <h2>Ticket Details</h2>
-                                <p><strong>Description:</strong> {selectedTicket.description}</p>
-                                <p><strong>Priority:</strong> {selectedTicket.priority}</p>
-                                <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>
-                                <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
-                                <p><strong>Location:</strong> {selectedTicket.location}</p>
-                                <p><strong>Date:</strong> {selectedTicket.datetime}</p>
-                                {selectedTicket.imageBase64 && (
-                                    <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
-                                )}
-                               
+    <div className="modal">
+        <div className="modal-content">
+            <h2>Ticket Details</h2>
+            <p><strong>Description:</strong> {selectedTicket.description}</p>
+            <p><strong>Priority:</strong> {selectedTicket.priority}</p>
+            <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>
+            <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
+            <p><strong>Location:</strong> {selectedTicket.location}</p>
+            <p><strong>Date:</strong> {selectedTicket.datetime}</p>
+            <p><strong>Created By:</strong> {selectedTicket.username}</p> {/* Created by field */}
+            <p><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'None'}</p> {/* Assigned personnel */}
+            <p><strong>Acknowledge By:</strong> {selectedTicket.completedBy || ''}</p> {/* Completed by */}
+            <p><strong>Completed By:</strong> {selectedTicket.completedBy || ''}</p> {/* Completed by */}
+            
 
-                                <button onClick={closeDetailsModal} className="close-Button">Close</button>
-                            </div>
-                        </div>
-                    )}
+            {selectedTicket.imageBase64 && (
+                <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
+            )}
+
+            <button onClick={closeDetailsModal} className="close-Button">Close</button>
+            <button onClick={() => window.print()} className="print-button">Print</button> {/* Print button */}
+        </div>
+    </div>
+)}
+
                     {assignModalOpen && selectedTicket && (
                         <div className="modal">
                             <div className="modal-content">
