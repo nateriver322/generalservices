@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import TicketAppBar from './TicketAppBar';
@@ -9,6 +9,7 @@ function TicketForm() {
     const [fileLabel, setFileLabel] = useState('No file chosen');
     const [selectedWorkTypes, setSelectedWorkTypes] = useState([]);
     const [showWorkTypeDropdown, setShowWorkTypeDropdown] = useState(false);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -69,6 +70,20 @@ function TicketForm() {
             setSelectedWorkTypes([...selectedWorkTypes, value]);
         }
     };
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowWorkTypeDropdown(false);
+            }
+        }
+        // Attach event listener
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup event listener on component unmount
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownRef]);
 
     return (
         <>
@@ -134,6 +149,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -146,56 +162,81 @@ function TicketForm() {
                 </TextField>
 
                 {/* Custom Dropdown for Work Type */}
-                <Box sx={{ position: 'relative', marginBottom: '20px' }}>
+                <Box sx={{ position: 'relative', marginBottom: '1px', marginTop: '10px' }} ref={dropdownRef}>
                     <Button
                         variant="outlined"
                         onClick={() => setShowWorkTypeDropdown(!showWorkTypeDropdown)}
                         fullWidth
+                        sx={{
+                            borderColor: '#000000',
+                            color: '#000000',
+                            '&:hover': {
+                                borderColor: '#922B21',
+                               
+                            },
+                            height: '56px', // Adjust to match other buttons' height
+                            fontSize: '15px', // Adjust font size if needed
+                            textTransform: 'none', // Prevent text from being transformed to uppercase
+                            textAlign: 'left', // Align text to the left
+                            display: 'flex', // Use flexbox to align items
+                            justifyContent: 'flex-start', // Align content to the start (left)
+                            alignItems: 'center',
+                            fontWeight: 'bold', // Ensure vertical alignment
+                        }}
                     >
                         {selectedWorkTypes.length > 0
                             ? selectedWorkTypes.join(', ')
-                            : 'Select Work Type'}
+                            : 'Select Work Type *'}
                     </Button>
                     {showWorkTypeDropdown && (
-                       <Box
-                           sx={{
-                               display: 'flex',
-                               flexDirection: 'column', // Makes the checkboxes align vertically
-                               marginBottom: '16px',
-                           }}
-                       >
-                           <Typography
-                               variant="h6"
-                               component="label"
-                               sx={{
-                                   color: '#000000',
-                                   marginBottom: '8px',
-                                   fontWeight: 'bold',
-                               }}
-                           >
-                               Scope of Work
-                           </Typography>
-                   
-                           <Box
-                               sx={{
-                                   display: 'flex',
-                                   flexDirection: 'column', // Ensures each checkbox is on a new line
-                               }}
-                           >
-                               {['Plumbing', 'Carpentry/Masonry/Steel Works', 'Electrical', 'Electro-Mechanical'].map((workType) => (
-                                   <label key={workType} style={{ marginBottom: '8px' }}>
-                                       <input
-                                           type="checkbox"
-                                           value={workType}
-                                           checked={selectedWorkTypes.includes(workType)}
-                                           onChange={handleWorkTypeChange}
-                                           style={{ marginRight: '8px' }}
-                                       />
-                                       {workType}
-                                   </label>
-                               ))}
-                           </Box>
-                       </Box>
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                zIndex: 10,
+                                width: '100%',
+                                bgcolor: 'white',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                                mt: 1,
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                            }}
+                        >
+                            <Typography
+                                variant="h6"
+                                component="label"
+                                sx={{
+                                    color: '#000000',
+                                    marginBottom: '8px',
+                                    fontWeight: 'bold',
+                                    p: 1,
+                                }}
+                            >
+                                Scope of Work
+                            </Typography>
+
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    p: 1,
+                                }}
+                            >
+                                {['Plumbing', 'Carpentry/Masonry/Steel Works', 'Electrical', 'Electro-Mechanical'].map((workType) => (
+                                    <label key={workType} style={{ marginBottom: '8px' }}>
+                                        <input
+                                            type="checkbox"
+                                            value={workType}
+                                            checked={selectedWorkTypes.includes(workType)}
+                                            onChange={handleWorkTypeChange}
+                                            style={{ marginRight: '8px' }}
+                                        />
+                                        {workType}
+                                    </label>
+                                ))}
+                            </Box>
+                        </Box>
                     )}
                 </Box>
 
@@ -255,6 +296,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 'bold',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
@@ -284,6 +326,7 @@ function TicketForm() {
                         },
                         '& .MuiInputLabel-root': {
                             color: 'black',
+                            fontWeight: 'bold',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
