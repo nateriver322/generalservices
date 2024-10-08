@@ -392,3 +392,28 @@ button {
 .view-feedback-button:hover {
     background-color: #00b9b9; /* Darker green on hover */
 }
+
+@media print {
+    /* Hide buttons */
+    .button-group,
+    .view-details-button,
+    .delete-button,
+    .close-Button,
+    .print-button {
+      display: none;
+    }
+  
+    /* Adjust the modal for printing */
+    .modal {
+      position: static; /* Reset position */
+      box-shadow: none; /* Remove shadow */
+      border: none; /* Remove border */
+    }
+  
+    .modal-content {
+      width: 100%; /* Adjust width */
+    }
+  }
+  
+
+  
