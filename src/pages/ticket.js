@@ -45,8 +45,19 @@ function TicketForm() {
     };
 
     const handleFileChange = (event) => {
-        const fileName = event.target.files[0] ? event.target.files[0].name : 'No file chosen';
-        setFileLabel(fileName);
+        const file = event.target.files[0];
+        if (file) {
+            const fileSizeMB = file.size / (1024 * 1024); // Convert size to MB
+            if (fileSizeMB > 10) {
+                alert("File size exceeds 10MB limit. Please choose a smaller file.");
+                setFileLabel('No file chosen');
+                event.target.value = ''; // Clear the file input
+            } else {
+                setFileLabel(file.name);
+            }
+        } else {
+            setFileLabel('No file chosen');
+        }
     };
 
     const handleWorkTypeChange = (e) => {
