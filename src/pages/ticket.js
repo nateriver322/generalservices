@@ -130,8 +130,8 @@ function TicketForm() {
                     }}
                 >
                     <option value="" disabled>Select Priority</option>
-                    <option value="Emergency">Emergency</option>
-                    <option value="Non-Emergency">Non-Emergency</option>
+                    <option value="High">High</option>
+                    <option value="Low">Low</option>
                 </TextField>
 
                 {/* Custom Dropdown for Work Type */}
@@ -225,7 +225,7 @@ function TicketForm() {
                 </TextField>
 
                 <TextField
-                    label="Location"
+                    label="Location & Room no."
                     name="location"
                     required
                     fullWidth
