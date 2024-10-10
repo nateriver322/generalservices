@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
@@ -18,13 +18,23 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [emailError, setEmailError] = useState('');
 
+    useEffect(() => {
+        if (emailError || Object.keys(errors).length > 0) {
+            const timer = setTimeout(() => {
+                setEmailError('');
+                setErrors({});
+            }, 2000); // Clear error after 2 seconds
+
+            return () => clearTimeout(timer); // Clean up timer on unmount
+        }
+    }, [emailError, errors]);
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         
         if (name === 'contactNumber') {
-            // Ensure only numbers and restrict length to 11 digits
-            const onlyNumbers = value.replace(/\D/g, ''); // Replace non-numeric characters
-            const limitedToElevenDigits = onlyNumbers.slice(0, 11); // Restrict to 11 digits
+            const onlyNumbers = value.replace(/\D/g, '');
+            const limitedToElevenDigits = onlyNumbers.slice(0, 11);
             setUserData({
                 ...userData,
                 [name]: limitedToElevenDigits
@@ -35,14 +45,12 @@ const Register = () => {
                 [name]: value
             });
         }
-    
-        // Clear email error if user is modifying the email field
+
         if (name === 'email' && emailError) {
             setEmailError('');
         }
     };
-    
-    
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -126,18 +134,11 @@ const Register = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: '20px',
-                    marginTop: '30px' // Move the form down
+                    marginTop: '30px'
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography
-                    variant="h4"
-                    component="h2"
-                    
-                   
-                >
-                    JobTrack
-                </Typography>
+                <Typography variant="h4" component="h2">JobTrack</Typography>
             </Box>
             <Box
                 component="form"
@@ -151,9 +152,7 @@ const Register = () => {
                     margin: '0 auto'
                 }}
             >
-                <Typography variant="h5" component="h3" gutterBottom>
-                    Create Account
-                </Typography>
+                <Typography variant="h5" component="h3" gutterBottom>Create Account</Typography>
                 {emailError && <Typography color="error" gutterBottom>{emailError}</Typography>}
 
                 <TextField
@@ -176,10 +175,10 @@ const Register = () => {
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
@@ -207,10 +206,10 @@ const Register = () => {
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
@@ -247,52 +246,51 @@ const Register = () => {
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
                 <Typography variant="body2" color="textSecondary">Must be 8 characters with numerical values.</Typography>
 
                 <TextField
-    label="Contact Number"
-    type="tel" // This ensures that the input is optimized for telephone numbers
-    name="contactNumber"
-    fullWidth
-    required
-    margin="normal"
-    onChange={handleInputChange}
-    value={userData.contactNumber} // Ensure that the value is controlled
-    error={!!errors.contactNumber}
-    helperText={errors.contactNumber}
-    inputProps={{
-        maxLength: 11, // Restrict input to a maximum of 11 characters
-        inputMode: 'numeric', // Ensure a numeric keyboard on mobile devices
-        pattern: '[0-9]*' // Ensure that only numbers are allowed
-    }}
-    sx={{
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: 'black',
-            },
-            '&:hover fieldset': {
-                borderColor: '#922B21',
-            },
-            '&.Mui-focused fieldset': {
-                borderColor: '#800000',
-            },
-        },
-        '& .MuiInputLabel-root': {
-            color: 'black',
-        },
-        '& .MuiInputLabel-root.Mui-focused': {
-            color: 'black',
-        },
-    }}
-/>
-
+                    label="Contact Number"
+                    type="tel"
+                    name="contactNumber"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    value={userData.contactNumber}
+                    error={!!errors.contactNumber}
+                    helperText={errors.contactNumber}
+                    inputProps={{
+                        maxLength: 11,
+                        inputMode: 'numeric',
+                        pattern: '[0-9]*'
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
+                    }}
+                />
 
                 <Box sx={{ mt: 2 }}>
                     <Button
@@ -326,6 +324,6 @@ const Register = () => {
             </Box>
         </div>
     );
-}
+};
 
 export default Register;
