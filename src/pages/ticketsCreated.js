@@ -75,6 +75,11 @@ function TicketsCreated() {
     };
 
     const handleStaffFeedbackSubmit = async () => {
+        if (!staffFeedback.trim()) {
+            alert('Feedback is required'); // Show an alert or error message
+            return; // Stop form submission if the field is empty
+        }
+        
         try {
             const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/staff-feedback`, {
                 feedback: staffFeedback
@@ -91,6 +96,7 @@ function TicketsCreated() {
             alert('Error submitting feedback');
         }
     };
+    
     
     const closeDetailsModal = () => {
         setDetailsModalOpen(false);

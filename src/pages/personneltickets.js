@@ -24,6 +24,28 @@ function PersonnelTickets() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (successModalOpen) {
+            const timer = setTimeout(() => {
+                setSuccessModalOpen(false);
+            }, 2000); // Close after 2 seconds
+    
+            return () => clearTimeout(timer); // Clear timeout if the modal is closed earlier
+        }
+    }, [successModalOpen]);
+
+    
+    useEffect(() => {
+        if (feedbackError) {
+            const timer = setTimeout(() => {
+                setFeedbackError('');
+            }, 2000); // Close after 2 seconds
+    
+            return () => clearTimeout(timer); // Clear timeout if error is resolved earlier
+        }
+    }, [feedbackError]);
+    
+
     const fetchTickets = async (username) => {
         try {
             const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
@@ -68,6 +90,11 @@ function PersonnelTickets() {
     };
 
     const handleFeedbackSubmit = async (ticketId, feedback) => {
+        if (feedback.trim() === '') {
+            setFeedbackError('Feedback is required.');
+            return;
+        }
+    
         try {
             const response = await fetch(`http://localhost:8080/api/tickets/${ticketId}/feedback?feedback=${encodeURIComponent(feedback)}`, {
                 method: 'POST',
@@ -75,9 +102,10 @@ function PersonnelTickets() {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             });
-
+    
             if (response.ok) {
-                setFeedback('');
+                setFeedback(''); // Clear the feedback field
+                setFeedbackError(''); // Clear any previous errors
                 setSuccessModalOpen(true);
                 setIsFeedbackModalOpen(false);
                 fetchTickets(localStorage.getItem('username')); // Refresh the ticket list
@@ -88,6 +116,7 @@ function PersonnelTickets() {
             console.error('Error:', error);
         }
     };
+    
 
     return (
         <>
@@ -163,20 +192,28 @@ function PersonnelTickets() {
                             </div>
                         </div>
                     )}
-                    {isFeedbackModalOpen && selectedTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
-                                <h2>Provide Feedback</h2>
-                                <textarea className="personnel-feedback"
-                                    value={feedback}
-                                    onChange={(e) => setFeedback(e.target.value)}
-                                    placeholder="Enter your feedback here..."
-                                />
-                                <button className="perso-confirm-button" onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}>Confirm</button>
-                            </div>
-                        </div>
-                    )}
+                   {isFeedbackModalOpen && selectedTicket && (
+    <div className="modal">
+        <div className="modal-content">
+            <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
+            <h2>Provide Feedback</h2>
+            <textarea
+                className={`personnel-feedback ${feedbackError ? 'error' : ''}`}
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                placeholder="Enter your feedback here..."
+            />
+            {feedbackError && <p className="error-message">{feedbackError}</p>}
+            <button
+                className="perso-confirm-button"
+                onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}
+            >
+                Confirm
+            </button>
+        </div>
+    </div>
+)}
+
                     {feedbackModalTicket && (
                         <div className="modal">
                             <div className="modal-content">
