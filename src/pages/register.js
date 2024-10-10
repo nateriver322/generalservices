@@ -20,22 +20,29 @@ const Register = () => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        let updatedValue = value;
-
+        
         if (name === 'contactNumber') {
-            updatedValue = value.replace(/[^0-9]/g, '').slice(0, 11);
+            // Ensure only numbers and restrict length to 11 digits
+            const onlyNumbers = value.replace(/\D/g, ''); // Replace non-numeric characters
+            const limitedToElevenDigits = onlyNumbers.slice(0, 11); // Restrict to 11 digits
+            setUserData({
+                ...userData,
+                [name]: limitedToElevenDigits
+            });
+        } else {
+            setUserData({
+                ...userData,
+                [name]: value
+            });
         }
-
+    
+        // Clear email error if user is modifying the email field
         if (name === 'email' && emailError) {
             setEmailError('');
         }
-
-        setUserData({
-            ...userData,
-            [name]: updatedValue
-        });
     };
-
+    
+    
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -250,35 +257,42 @@ const Register = () => {
                 <Typography variant="body2" color="textSecondary">Must be 8 characters with numerical values.</Typography>
 
                 <TextField
-                    label="Contact Number"
-                    type="text"
-                    name="contactNumber"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.contactNumber}
-                    helperText={errors.contactNumber}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
-                        },
-                    }}
-                />
+    label="Contact Number"
+    type="tel" // This ensures that the input is optimized for telephone numbers
+    name="contactNumber"
+    fullWidth
+    required
+    margin="normal"
+    onChange={handleInputChange}
+    value={userData.contactNumber} // Ensure that the value is controlled
+    error={!!errors.contactNumber}
+    helperText={errors.contactNumber}
+    inputProps={{
+        maxLength: 11, // Restrict input to a maximum of 11 characters
+        inputMode: 'numeric', // Ensure a numeric keyboard on mobile devices
+        pattern: '[0-9]*' // Ensure that only numbers are allowed
+    }}
+    sx={{
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'black',
+            },
+            '&:hover fieldset': {
+                borderColor: '#922B21',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#800000',
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'black',
+        },
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: 'black',
+        },
+    }}
+/>
+
 
                 <Box sx={{ mt: 2 }}>
                     <Button
