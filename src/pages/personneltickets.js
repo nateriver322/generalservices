@@ -119,11 +119,6 @@ function PersonnelTickets() {
                                     <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
                                     <td>
                                     <div className="button-group">
-                                            {ticket.status === 'Done' ? (
-                                                <button className="Finish-button" disabled>Finished</button>
-                                            ) : (
-                                                <button onClick={() => handleDoneClick(ticket)} className="done-button">Done</button>
-                                            )}
                                             {ticket.feedback && (
                                                     <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>)}
                                             <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>

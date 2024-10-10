@@ -155,6 +155,21 @@ function MyTickets() {
         }
     };
 
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Resolved':
+                return 'green';
+            case 'Ongoing':
+                return 'orange';
+            case 'Pending':
+                return 'red';
+            case 'Cancelled':
+                return 'red';
+            default:
+                return 'black';
+        }
+    };
+
     return (
         <>
             <TicketAppBar />
@@ -183,9 +198,12 @@ function MyTickets() {
                         JobTrack
                     </Typography>
                 </Box>
-
+                    
                 <Box sx={{ width: '100%', maxWidth: 1450 }}>
-                    <Box sx={{ mb: 2 }}>
+                    <Box sx={{
+                    maxHeight: '100px', // Set the max height of the notification container
+                 overflowY: 'auto',  // Enable vertical scrolling when content overflows
+  }}>
                         {notifications.map((notification) => (
                             <Box key={notification.id} sx={{ p: 1, border: '1px solid gray', mb: 1 }}>
                                 <Typography>{notification.message}</Typography>
@@ -194,7 +212,9 @@ function MyTickets() {
                         ))}
                     </Box>
                     {tickets.length === 0 ? (
-                        <Typography>No Tickets Submitted</Typography>
+                        <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
+              No tickets submitted
+            </Typography>
                     ) : (
                         <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
                             <Table sx={{ margin: 0, padding: 0 }} >
@@ -212,7 +232,9 @@ function MyTickets() {
                                     {tickets.map((ticket) => (
                                         <TableRow key={ticket.id}>
                                             <TableCell>{ticket.id}</TableCell>
-                                            <TableCell>{ticket.status}</TableCell>
+                                            <TableCell sx={{ color: getStatusColor(ticket.status) }}>
+                                                {ticket.status}
+                                            </TableCell>
                                             <TableCell>{ticket.priority}</TableCell>
                                             <TableCell>{ticket.location}</TableCell>
                                             <TableCell>{ticket.description}</TableCell>
@@ -220,6 +242,7 @@ function MyTickets() {
                                                 <Box sx={{ display: 'flex', gap: 1 }}>
                                                     <Button 
                                                         variant="outlined" 
+                                                         color="warning"
                                                         onClick={() => handleViewTicket(ticket)}
                                                         sx={{ width: '120px', height: '60px' }}
                                                     >
@@ -228,6 +251,7 @@ function MyTickets() {
                                                     {ticket.feedback && (
                                                         <Button 
                                                             variant="outlined" 
+                                                             color="success"
                                                             onClick={() => openFeedbackModal(ticket)}
                                                             sx={{ width: '120px' }}
                                                         >

@@ -16,6 +16,7 @@ import TicketsCreated from './pages/ticketsCreated';
 import PersonnelTickets from './pages/personneltickets';
 import TicketsFixed from './pages/ticketsFixed';
 import TicketsHistory from './pages/ticketsHistory';
+import AssignSubrole from './pages/subrole';
 
 function App() {
   console.log('App rendering');
@@ -36,6 +37,7 @@ function App() {
           <Route path="/PersonnelTickets" element={<PersonnelTickets />} />
           <Route path="/TicketsFixed" element={<TicketsFixed />} />
           <Route path="/TicketsHistory" element={<TicketsHistory />} />
+          <Route path="/subrole" element={<AssignSubrole />} />
         </Routes>
       </AuthProvider>
     </MsalProvider>
