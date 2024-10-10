@@ -43,6 +43,8 @@ function TicketsCreated() {
   const [staffFeedback, setStaffFeedback] = useState('');
   const [sortBy, setSortBy] = useState('id'); // Sorting criteria
   const [assessedModalOpen, setAssessedModalOpen] = useState(false);
+  const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
+  const [feedbackError, setFeedbackError] = useState('');
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -96,23 +98,11 @@ function TicketsCreated() {
         setFeedbackError('');
     };
 
-    const handleStaffFeedbackSubmit = async () => {
-        try {
-            const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/staff-feedback`, {
-                feedback: staffFeedback
-            });
-            if (response.status === 200) {
-                setAssessModalOpen(false);
-                setSuccessModalOpen(true);
-                fetchTickets(); // Re-fetch tickets to update the state
-            } else {
-                alert('Failed to submit feedback');
-            }
-        } catch (error) {
-            console.error('Error submitting feedback:', error);
-            alert('Error submitting feedback');
-        }
+    const handleAssignTicket = (ticket) => {
+      setSelectedTicket(ticket);
+      setAssignModalOpen(true);
     };
+
     
     const closeDetailsModal = () => {
         setDetailsModalOpen(false);
@@ -123,9 +113,6 @@ function TicketsCreated() {
         setTicketToDelete(ticket);
     };
 
-    const closeDeleteModal = () => {
-        setTicketToDelete(null);
-    };
 
     const openFeedbackModal = (ticket) => {
         setFeedbackModalTicket(ticket);
@@ -254,10 +241,6 @@ const closeDeleteModal = () => {
     borderRadius: 2,
   };
 
-  const handleAssessTicket = (ticket) => {
-    setSelectedTicket(ticket); // Set the selected ticket to assess
-    setAssessModalOpen(true); // Open the assessment modal
-  };
 
   return (
     <>
@@ -343,9 +326,9 @@ const closeDeleteModal = () => {
                       <div className="button-group">
                         {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
                           <Button
-                          onClick={() => handleAssignTicket(ticket)} // Show the assign modal
+                          onClick={() => handleAssignTicket(ticket)}
                           variant="outlined"
-                          sx={{ marginRight: 1,  width: '120px', height: '60px' }}
+                          sx={{ marginRight: 1, width: '120px', height: '60px' }}
                         >
                           Assign
                         </Button>
