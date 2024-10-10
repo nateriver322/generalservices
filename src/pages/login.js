@@ -32,24 +32,25 @@ const Login = React.memo(() => {
         event.preventDefault();
         try {
             const userData = await login(credentials.email, credentials.password);
-            navigate('/dashboard', { state: { username: userData.username } });
+            // Store username and other necessary data in sessionStorage
+            sessionStorage.setItem('username', userData.username); // Store username in sessionStorage
+            navigate('/dashboard', { state: { username: userData.username } }); // Pass username via state (optional)
         } catch (error) {
             setError(error.message);
-            // Clear error after 3 seconds
             setTimeout(() => {
                 setError('');
             }, 1000);
         }
     };
-
     const handleMicrosoftLogin = async () => {
         try {
             const result = await instance.loginPopup(loginRequest);
             const userData = await microsoftLogin(result.accessToken);
-            navigate('/dashboard', { state: { username: userData.username } });
+            // Store username and other necessary data in sessionStorage
+            sessionStorage.setItem('username', userData.username); // Store username in sessionStorage
+            navigate('/dashboard', { state: { username: userData.username } }); // Pass username via state (optional)
         } catch (error) {
             setError('Microsoft login failed');
-            // Clear error after 3 seconds
             setTimeout(() => {
                 setError('');
             }, 3000);

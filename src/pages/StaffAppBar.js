@@ -41,9 +41,9 @@ function StaffAppBar() {
   };
 
   const handleLogout = (settings) => {
-    localStorage.removeItem('username'); // Remove username from localStorage
-    navigate('/'); // Redirect to login page after logout
-  };
+    sessionStorage.removeItem('username'); // Clear username from sessionStorage
+    navigate('/'); // Redirect to login page
+}
 
   // Handle navigation when clicking on menu items
   const handlePageNavigation = (page) => {

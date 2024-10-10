@@ -213,7 +213,7 @@ function MyTickets() {
                     </Box>
                     {tickets.length === 0 ? (
                         <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
-              No tickets submitted
+              No Tickets submitted.
             </Typography>
                     ) : (
                         <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>

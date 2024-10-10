@@ -7,9 +7,10 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 function PersonnelDashboard() {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username'); // Get username from localStorage
+    const username = sessionStorage.getItem('username'); // Get username from localStorage
 
     useEffect(() => {
+        
         if (!username) {
             console.log('No user data found, redirecting to login');
             navigate('/'); // Adjust this if your login route is different

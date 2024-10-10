@@ -7,7 +7,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 function StaffDashboard() {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
 
     useEffect(() => {
         if (!username) {
@@ -31,10 +31,6 @@ function StaffDashboard() {
         console.log("Assign Subrole button clicked");
     };
 
-    const handleLogoutButtonClick = () => {
-        localStorage.removeItem('username');
-        navigate('/');
-    };
 
     return (
         <>

@@ -7,7 +7,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 function Dashboard() {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username'); // Get username from localStorage
+    const username = sessionStorage.getItem('username'); // Get username from localStorage
 
     useEffect(() => {
         if (!username) {

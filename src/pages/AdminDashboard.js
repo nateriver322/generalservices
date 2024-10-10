@@ -295,7 +295,8 @@ const AccountManagement = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
+
     if (!username) {
       console.log('No user data found, redirecting to login');
       navigate('/');
@@ -316,9 +317,9 @@ const AccountManagement = () => {
   }, []);
 
   const handleLogoutButtonClick = () => {
-    localStorage.removeItem('username');
-    navigate('/');
-  };
+    sessionStorage.removeItem('username'); // Clear username from sessionStorage
+    navigate('/'); // Redirect to login page
+}
 
   const handleCreateAccountButtonClick = () => {
     setIsRegistrationModalOpen(true);
