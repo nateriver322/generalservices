@@ -80,7 +80,6 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
-           
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

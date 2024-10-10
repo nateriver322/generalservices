@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Modal } from '@mui/material';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+
 
 function TicketForm() {
     const navigate = useNavigate();
@@ -10,6 +11,14 @@ function TicketForm() {
     const [selectedWorkTypes, setSelectedWorkTypes] = useState([]);
     const [showWorkTypeDropdown, setShowWorkTypeDropdown] = useState(false);
     const dropdownRef = useRef(null);
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
+    const formRef = useRef(null);
+
+    // New state for form fields
+    const [priority, setPriority] = useState('');
+    const [requestType, setRequestType] = useState('');
+    const [location, setLocation] = useState('');
+    const [description, setDescription] = useState('');
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -17,6 +26,18 @@ function TicketForm() {
             navigate('/');
         }
     }, [navigate]);
+
+    const resetForm = () => {
+        setPriority('');
+        setRequestType('');
+        setLocation('');
+        setDescription('');
+        setSelectedWorkTypes([]);
+        setFileLabel('No file chosen');
+        if (formRef.current) {
+            formRef.current.reset();
+        }
+    };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -26,8 +47,7 @@ function TicketForm() {
         formData.append('datetime', currentDateTime);
         formData.append('username', localStorage.getItem('username'));
         
-        // Join the selected work types as a comma-separated string
-        formData.append("workType", selectedWorkTypes.join(",")); 
+        formData.append("workType", selectedWorkTypes.join(","));
 
         try {
             const response = await fetch('http://localhost:8080/api/tickets', {
@@ -35,7 +55,8 @@ function TicketForm() {
                 body: formData,
             });
             if (response.ok) {
-                navigate('/SuccessTicket');
+                setSuccessModalOpen(true);
+                resetForm();
             } else {
                 const errorMsg = await response.text();
                 alert(`Submission failed: ${errorMsg}`);
@@ -44,6 +65,7 @@ function TicketForm() {
             alert(`Error submitting the ticket: ${error.message}`);
         }
     };
+
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -105,6 +127,7 @@ function TicketForm() {
             <Box
                 component="form"
                 onSubmit={handleFormSubmit}
+                ref={formRef}
                 sx={{
                     maxWidth: '600px',
                     width: '100%',
@@ -131,7 +154,8 @@ function TicketForm() {
                     required
                     fullWidth
                     margin="normal"
-                    defaultValue=""
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
                     SelectProps={{
                         native: true,
                     }}
@@ -247,7 +271,8 @@ function TicketForm() {
                     required
                     fullWidth
                     margin="normal"
-                    defaultValue=""
+                    value={requestType}
+                    onChange={(e) => setRequestType(e.target.value)}
                     SelectProps={{
                         native: true,
                     }}
@@ -282,6 +307,9 @@ function TicketForm() {
                     required
                     fullWidth
                     margin="normal"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    inputProps={{ maxLength: 20 }} 
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -312,6 +340,9 @@ function TicketForm() {
                     multiline
                     rows={4}
                     margin="normal"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    inputProps={{ maxLength: 80 }} 
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -378,6 +409,36 @@ function TicketForm() {
                     Submit
                 </Button>
             </Box>
+
+
+             {/* Success Modal */}
+             {successModalOpen && (
+                <Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)}>
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'white',
+                            padding: '20px',
+                            borderRadius: '4px',
+                            boxShadow: 24,
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Typography variant="h6">Success</Typography>
+                        <Typography>The ticket was successfully submitted!</Typography>
+                        <Button
+                            onClick={() => setSuccessModalOpen(false)}
+                            color="primary"
+                            sx={{ marginTop: '10px' }}
+                        >
+                            Close
+                        </Button>
+                    </Box>
+                </Modal>
+            )}
         </>
     );
 }

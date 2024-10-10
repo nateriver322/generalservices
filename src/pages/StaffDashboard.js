@@ -7,12 +7,12 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 function StaffDashboard() {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username'); // Get username from localStorage
+    const username = localStorage.getItem('username');
 
     useEffect(() => {
         if (!username) {
             console.log('No user data found, redirecting to login');
-            navigate('/'); // Adjust this if your login route is different
+            navigate('/');
         }
     }, [navigate, username]);
 
@@ -24,6 +24,11 @@ function StaffDashboard() {
     const handleViewButtonClick = () => {
         navigate("/ticketsFixed"); 
         console.log("Fixed Tickets button clicked");
+    };
+
+    const handleSubroleButtonClick = () => {
+        navigate("/subrole");
+        console.log("Assign Subrole button clicked");
     };
 
     const handleLogoutButtonClick = () => {
@@ -58,13 +63,12 @@ function StaffDashboard() {
                     className="buttoncontainer"
                     sx={{
                         display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' }, // Column on mobile, row on larger screens
+                        flexDirection: { xs: 'column', sm: 'row' },
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: { xs: 2, sm: 4 },
                     }}
                 >
-                    {/* Tickets Created Button */}
                     <Button
                         variant="contained"
                         onClick={handleTicketButtonClick}
@@ -84,7 +88,6 @@ function StaffDashboard() {
                         Pending and On-Process
                     </Button>
 
-                    {/* Tickets Fixed Button */}
                     <Button
                         variant="contained"
                         onClick={handleViewButtonClick}
@@ -103,10 +106,26 @@ function StaffDashboard() {
                     >
                         Resolved Tickets
                     </Button>
+
+                    <Button
+                        variant="contained"
+                        onClick={handleSubroleButtonClick}
+                        sx={{
+                            width: { xs: '90%', sm: 400 },
+                            height: { xs: 150, sm: 200 },
+                            fontSize: { xs: '18px', sm: '24px' },
+                            backgroundColor: '#800000',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: '#922B21',
+                            },
+                            boxShadow: 3,
+                            borderRadius: 2,
+                        }}
+                    >
+                        Assign Subrole
+                    </Button>
                 </Box>
-            </Box>
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-                
             </Box>
         </>
     );
