@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
@@ -7,7 +7,7 @@ import { loginRequest } from "../AuthConfig";
 import { useMsal } from "@azure/msal-react";
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
-import ConstructionIcon from '@mui/icons-material/Construction'; // Import ConstructionIcon
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 const Login = React.memo(() => {
     const navigate = useNavigate();
@@ -34,8 +34,11 @@ const Login = React.memo(() => {
             const userData = await login(credentials.email, credentials.password);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
-            console.error('Error:', error);
             setError(error.message);
+            // Clear error after 3 seconds
+            setTimeout(() => {
+                setError('');
+            }, 1000);
         }
     };
 
@@ -45,8 +48,11 @@ const Login = React.memo(() => {
             const userData = await microsoftLogin(result.accessToken);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
-            console.error('Microsoft login error:', error);
             setError('Microsoft login failed');
+            // Clear error after 3 seconds
+            setTimeout(() => {
+                setError('');
+            }, 3000);
         }
     };
 
@@ -71,12 +77,7 @@ const Login = React.memo(() => {
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography
-                    variant="h4"
-                    component="h2"
-                    
-                   
-                >
+                <Typography variant="h4" component="h2">
                     JobTrack
                 </Typography>
             </Box>

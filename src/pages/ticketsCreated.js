@@ -86,10 +86,50 @@ function TicketsCreated() {
     setDetailsModalOpen(true);
   };
 
-  const handleAssignTicket = (ticket) => {
-    setSelectedTicket(ticket);
-    setAssignModalOpen(true);
-  };
+    const handleAssessTicket = (ticket) => {
+        setSelectedTicket(ticket);
+        setAssessModalOpen(true);
+    };
+
+    const closeFeedbackModal = () => {
+        setFeedbackModalTicket(null);
+        setFeedbackError('');
+    };
+
+    const handleStaffFeedbackSubmit = async () => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/staff-feedback`, {
+                feedback: staffFeedback
+            });
+            if (response.status === 200) {
+                setAssessModalOpen(false);
+                setSuccessModalOpen(true);
+                fetchTickets(); // Re-fetch tickets to update the state
+            } else {
+                alert('Failed to submit feedback');
+            }
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            alert('Error submitting feedback');
+        }
+    };
+    
+    const closeDetailsModal = () => {
+        setDetailsModalOpen(false);
+        setSelectedTicket(null);
+    };
+
+    const openDeleteModal = (ticket) => {
+        setTicketToDelete(ticket);
+    };
+
+    const closeDeleteModal = () => {
+        setTicketToDelete(null);
+    };
+
+    const openFeedbackModal = (ticket) => {
+        setFeedbackModalTicket(ticket);
+    };
 
   const confirmDeleteTicket = async () => {
     if (ticketToDelete) {

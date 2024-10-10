@@ -41,6 +41,12 @@ function TicketForm() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+
+        if (selectedWorkTypes.length === 0) {
+            alert("Please select at least one work type.");
+            return;
+        }
+        
         const formData = new FormData(event.target);
         const now = new Date();
         const currentDateTime = now.toISOString();
