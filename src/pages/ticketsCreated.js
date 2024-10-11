@@ -45,6 +45,13 @@ function TicketsCreated() {
   const [assessedModalOpen, setAssessedModalOpen] = useState(false);
   const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
   const [feedbackError, setFeedbackError] = useState('');
+  const [today, setToday] = useState('');
+
+  useEffect(() => {
+    // Get today's date in YYYY-MM-DD format
+    const currentDate = new Date().toISOString().split('T')[0];
+    setToday(currentDate);
+  }, []);
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -377,52 +384,52 @@ const closeDeleteModal = () => {
 
           {/* Assign Personnel Modal */}
           {assignModalOpen && (
-            <Modal open={assignModalOpen} onClose={() => setAssignModalOpen(false)}>
-              <Box sx={{ ...modalStyle }}>
-                <Typography variant="h6">Assign Personnel</Typography>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                  <InputLabel htmlFor="personnel">Select Personnel</InputLabel>
-                  <Select
-                    value={selectedPersonnel}
-                    onChange={(e) => setSelectedPersonnel(e.target.value)}
-                  >
-                    {personnelList.map((personnel) => (
-                      <MenuItem key={personnel.id} value={personnel.username}>
-                        {personnel.username}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  label="Scheduled Repair Date"
-                  type="date"
-                  value={scheduledRepairDate}
-                  onChange={(e) => setScheduledRepairDate(e.target.value)}
-                  fullWidth             
-                  sx={{ marginBottom: 2 }}
-                  InputLabelProps={{ shrink: true }}
-                />
-               
-                <Button
-                  onClick={handleAssignPersonnel}
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginRight: 1 }}
-                >
-                  Assign
-                </Button>
-                <Button
-                  onClick={() => setAssignModalOpen(false)}
-                  variant="outlined"
-                  color="secondary"
+        <Modal open={assignModalOpen} onClose={() => setAssignModalOpen(false)}>
+          <Box sx={{ ...modalStyle }}>
+            <Typography variant="h6">Assign Personnel</Typography>
+            <FormControl fullWidth sx={{ marginBottom: 2 }}>
+              <InputLabel htmlFor="personnel">Select Personnel</InputLabel>
+              <Select
+                value={selectedPersonnel}
+                onChange={(e) => setSelectedPersonnel(e.target.value)}
+              >
+                {personnelList.map((personnel) => (
+                  <MenuItem key={personnel.id} value={personnel.username}>
+                    {personnel.username}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              label="Scheduled Repair Date"
+              type="date"
+              value={scheduledRepairDate}
+              onChange={(e) => setScheduledRepairDate(e.target.value)}
+              fullWidth
+              sx={{ marginBottom: 2 }}
+              InputLabelProps={{ shrink: true }}
+              // Prevent past dates by setting min attribute to today's date
+              inputProps={{ min: today }}
+            />
 
-                >
-                  Cancel
-                </Button>
-           
-              </Box>
-            </Modal>
-          )}
+            <Button
+              onClick={handleAssignPersonnel}
+              variant="contained"
+              color="primary"
+              sx={{ marginRight: 1 }}
+            >
+              Assign
+            </Button>
+            <Button
+              onClick={() => setAssignModalOpen(false)}
+              variant="outlined"
+              color="secondary"
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Modal>
+      )}
 
 {ticketToDelete && (
   <Modal open={!!ticketToDelete} onClose={closeDeleteModal}>
