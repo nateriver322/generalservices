@@ -467,14 +467,16 @@ function TicketsCreated() {
               </Select>
             </FormControl>
             <TextField
-              label="Scheduled Repair Date"
-              type="date"
-              value={scheduledRepairDate}
-              onChange={(e) => setScheduledRepairDate(e.target.value)}
-              fullWidth
-              sx={{ marginBottom: 2 }}
-              InputLabelProps={{ shrink: true }}
-            />
+  label="Scheduled Repair Date"
+  type="date"
+  value={scheduledRepairDate}
+  onChange={(e) => setScheduledRepairDate(e.target.value)}
+  fullWidth
+  sx={{ marginBottom: 2 }}
+  InputLabelProps={{ shrink: true }}
+  inputProps={{ min: new Date().toISOString().split('T')[0] }}  // Ensures only present and future dates are allowed
+/>
+
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
               <Button
                 variant="contained"
