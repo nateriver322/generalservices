@@ -12,7 +12,6 @@ import RoleBasedDashboard from './RoleBasedDashboard'; // Import the RoleBasedDa
 import AccountManagement from './pages/AdminDashboard';
 import SuccessTicket from './pages/SuccessTicket';
 import StaffDashboard from './pages/StaffDashboard';
-import TicketsCreated from './pages/ticketsCreated';
 import PersonnelTickets from './pages/personneltickets';
 import TicketsFixed from './pages/ticketsFixed';
 import TicketsHistory from './pages/ticketsHistory';
@@ -33,7 +32,7 @@ function App() {
           <Route path="/AccountManagement" element={<AccountManagement />} />
           <Route path="/SuccessTicket" element={<SuccessTicket />} />
           <Route path="/StaffDashboard" element={<StaffDashboard />} />
-          <Route path="/TicketsCreated" element={<TicketsCreated />} />
+         
           <Route path="/PersonnelTickets" element={<PersonnelTickets />} />
           <Route path="/TicketsFixed" element={<TicketsFixed />} />
           <Route path="/TicketsHistory" element={<TicketsHistory />} />

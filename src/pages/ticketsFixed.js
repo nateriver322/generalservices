@@ -168,7 +168,7 @@ const modalStyle = {
                           color="error"
                           sx={{ width: '120px', height: '60px' }}
                         >
-                          Terminate
+                          Delete
                         </Button>
                     </div>
                   </TableCell>
@@ -183,9 +183,9 @@ const modalStyle = {
         {ticketToDelete && (
   <Modal open={!!ticketToDelete} onClose={closeDeleteModal}>
     <Box sx={{ ...modalStyle }}>
-      <Typography variant="h6">Confirm Termination</Typography>
+      <Typography variant="h6">Confirm Deletion</Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
-        Are you sure you want to terminate this ticket?
+        Are you sure you want to delete this ticket?
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button
@@ -194,7 +194,7 @@ const modalStyle = {
           color="error"
           sx={{ marginRight: 1 }}
         >
-          Yes, Terminate
+          Yes
         </Button>
         <Button
           onClick={closeDeleteModal}
