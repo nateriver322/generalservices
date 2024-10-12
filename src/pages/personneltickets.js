@@ -1,242 +1,207 @@
 import React, { useEffect, useState } from 'react';
-import '../css/personnelTicket.css';
 import { useNavigate } from 'react-router-dom';
-import StaffAppBar from './StaffAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Button,
+  Modal,
+  Typography,
+  Box,
+} from '@mui/material';
+import PersonnelResponsiveAppBar from './PersonnelResponsiveAppBar';
 
 function PersonnelTickets() {
-    const navigate = useNavigate();
-    const [tickets, setTickets] = useState([]);
-    const [selectedTicket, setSelectedTicket] = useState(null);
-    const [feedback, setFeedback] = useState('');
-    const [isTicketDetailsModalOpen, setIsTicketDetailsModalOpen] = useState(false);
-    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-    const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
-    const [feedbackError, setFeedbackError] = useState('');
-    const [successModalOpen, setSuccessModalOpen] = useState(false);
-    
+  const navigate = useNavigate();
+  const [tickets, setTickets] = useState([]);
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
-    useEffect(() => {
-        const username = localStorage.getItem('username');
-        if (!username) {
-            navigate('/');
-        } else {
-            fetchTickets(username);
-        }
-    }, [navigate]);
+  useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      navigate('/');
+    } else {
+      fetchTickets(username); // Pass the username to fetch tickets assigned to that personnel
+    }
+  }, [navigate]);
 
-    useEffect(() => {
-        if (successModalOpen) {
-            const timer = setTimeout(() => {
-                setSuccessModalOpen(false);
-            }, 2000); // Close after 2 seconds
-    
-            return () => clearTimeout(timer); // Clear timeout if the modal is closed earlier
-        }
-    }, [successModalOpen]);
+  const fetchTickets = async (username) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Filter tickets to include those with status "Pending" or "Ongoing"
+        const ongoingAndPendingTickets = data.filter(ticket => 
+          ticket.status === 'Pending' || ticket.status === 'Ongoing'
+        );
+        setTickets(ongoingAndPendingTickets);
+      } else {
+        console.error('Failed to fetch tickets');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
-    
-    useEffect(() => {
-        if (feedbackError) {
-            const timer = setTimeout(() => {
-                setFeedbackError('');
-            }, 2000); // Close after 2 seconds
-    
-            return () => clearTimeout(timer); // Clear timeout if error is resolved earlier
-        }
-    }, [feedbackError]);
-    
+  const handleViewTicket = (ticket) => {
+    setSelectedTicket(ticket);
+    setDetailsModalOpen(true);
+  };
 
-    const fetchTickets = async (username) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
-            if (response.ok) {
-                const data = await response.json();
-                setTickets(data);
-            } else {
-                console.error('Failed to fetch tickets');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+  const closeDetailsModal = () => {
+    setDetailsModalOpen(false);
+    setSelectedTicket(null);
+  };
 
-    const openFeedbackModal = (ticket) => {
-        setFeedbackModalTicket(ticket);
-    };
+  // Function to determine the color based on status
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Resolved':
+        return 'green';
+      case 'Ongoing':
+        return 'orange';
+      case 'Pending':
+        return 'red';
+      case 'Cancelled':
+        return 'red';
+      default:
+        return 'black';
+    }
+  };
 
-    const handleViewTicket = (ticket) => {
-        setSelectedTicket(ticket);
-        setIsTicketDetailsModalOpen(true);
-    };
+  // Modal style for centering and padding
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+  };
 
+  return (
+    <>
+      <PersonnelResponsiveAppBar />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '30px',
+        }}
+      >
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}
+        >
+          <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+          <Typography
+            variant="h4"
+            component="h2"
+          >
+            JobTrack
+          </Typography>
+        </Box>
 
-    const closeTicketDetailsModal = () => {
-        setSelectedTicket(null);
-        setIsTicketDetailsModalOpen(false);
-    };
+        <Box sx={{ width: '100%', maxWidth: 1450 }}>
+          {tickets.length === 0 ? (
+            <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
+              No ongoing or pending tickets assigned
+            </Typography>
+          ) : (
+            <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+              <Table sx={{ margin: 0, padding: 0 }} >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Ticket Number</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Priority</TableCell>
+                    <TableCell>Reported By</TableCell>
+                    <TableCell>Date Created</TableCell>
+                    <TableCell>Scheduled Repair Date</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tickets.map((ticket, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{ticket.id}</TableCell>
+                      <TableCell style={{ color: getStatusColor(ticket.status) }}>
+                        {ticket.status}
+                      </TableCell>
+                      <TableCell>{ticket.priority}</TableCell>
+                      <TableCell>{ticket.username}</TableCell>
+                      <TableCell>{ticket.datetime}</TableCell>
+                      <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                      <TableCell>
+                      <Button
+                          onClick={() => handleViewTicket(ticket)}
+                          variant="outlined"
+                          color="warning"
+                          sx={{ marginRight: 1,  width: '120px', height: '60px' }}
+                        >
+                          View Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          )}
+        </Box>
+      </Box>
 
-    const handleHomeButtonClick = () => {
-        navigate("/dashboard");
-    };
+      {detailsModalOpen && selectedTicket && (
+        <Modal
+          open={detailsModalOpen}
+          onClose={closeDetailsModal}
+          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Box sx={{
+            ...modalStyle,
+            width: '80%',
+            maxWidth: '800px',
+            maxHeight: '800px',
+          }}>
+            <Typography variant="h6">Ticket Details</Typography>
+            <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
+              <Typography variant="body1"><strong>Ticket Number:</strong> {selectedTicket.id}</Typography>
+              <Typography variant="body1"><strong>Date Created:</strong> {selectedTicket.datetime}</Typography>
+              <Typography variant="body1"><strong>Status:</strong> {selectedTicket.status}</Typography>
+              <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
+              <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
+              <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
+              <Typography variant="body1"><strong>Description:</strong> {selectedTicket.description}</Typography>
+              <Typography variant="body1"><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
+              <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
+              <Typography variant="body1"><strong>Location:</strong> {selectedTicket.location}</Typography>
 
-    const handleDoneClick = (ticket) => {
-        setSelectedTicket(ticket);
-        setIsFeedbackModalOpen(true);
-    };
-
-    const closeFeedbackModal = () => {
-        setFeedbackModalTicket(null);
-        setFeedbackError('');
-    };
-
-    const handleFeedbackSubmit = async (ticketId, feedback) => {
-        if (feedback.trim() === '') {
-            setFeedbackError('Feedback is required.');
-            return;
-        }
-    
-        try {
-            const response = await fetch(`http://localhost:8080/api/tickets/${ticketId}/feedback?feedback=${encodeURIComponent(feedback)}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            });
-    
-            if (response.ok) {
-                setFeedback(''); // Clear the feedback field
-                setFeedbackError(''); // Clear any previous errors
-                setSuccessModalOpen(true);
-                setIsFeedbackModalOpen(false);
-                fetchTickets(localStorage.getItem('username')); // Refresh the ticket list
-            } else {
-                console.error('Failed to submit feedback');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-    
-
-    return (
-        <>
-           <StaffAppBar/>
-            <h2 className="h2">General Services Portal</h2>
-            <div className="container">
-                <div className="personnel-view-container">
-                    
-                    <table className="ticket-table">
-                        <thead>
-                            <tr>
-                                <th>Ticket Number</th>
-                                <th>Status</th>
-                                <th>Priority</th>
-                                <th>Reported By</th>
-                                <th>Date Created</th>
-                                <th>Scheduled Repair Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tickets.map((ticket, index) => (
-                                <tr key={index}>
-                                    <td>{ticket.id}</td>
-                                    <td>{ticket.status}</td>
-                                    <td>{ticket.priority}</td>
-                                    <td>{ticket.username}</td>
-                                    <td>{ticket.datetime}</td>
-                                    <td>{ticket.scheduledRepairDate || 'Not scheduled'}</td>
-                                    <td>
-                                    <div className="button-group">
-                                            {ticket.feedback && (
-                                                    <button onClick={() => openFeedbackModal(ticket)} className="view-feedback-button">View Feedback</button>)}
-                                            <button onClick={() => handleViewTicket(ticket)} className="view-details-button">View Details</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    
-                    
-                    {isTicketDetailsModalOpen && selectedTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={closeTicketDetailsModal}>&times;</span>
-                                <h2>Ticket Details</h2>
-                                <p><strong>Description:</strong> {selectedTicket.description}</p>
-                                <p><strong>Priority:</strong> {selectedTicket.priority}</p>
-                                <p><strong>Request Type:</strong> {selectedTicket.requestType}</p>
-                                <p><strong>Work Type:</strong> {selectedTicket.workType}</p>
-                                <p><strong>Location:</strong> {selectedTicket.location}</p>
-                                <p><strong>Date Created:</strong> {selectedTicket.datetime}</p>
-                                <p><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate}</p>
-                                {selectedTicket.imageBase64 && (
-                                    <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Uploaded Ticket" style={{ width: '100%' }} />
-                                )}
-                            </div>
-                        </div>
-                    )}
-                    {successModalOpen && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <h2>Success</h2>
-                                <p>Action completed successfully</p>
-                                <button onClick={() => setSuccessModalOpen(false)} className="personnel-close-button">Close</button>
-                            </div>
-                        </div>
-                    )}
-                   {isFeedbackModalOpen && selectedTicket && (
-    <div className="modal">
-        <div className="modal-content">
-            <span className="close" onClick={() => setIsFeedbackModalOpen(false)}>&times;</span>
-            <h2>Provide Feedback</h2>
-            <textarea
-                className={`personnel-feedback ${feedbackError ? 'error' : ''}`}
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Enter your feedback here..."
-            />
-            {feedbackError && <p className="error-message">{feedbackError}</p>}
-            <button
-                className="perso-confirm-button"
-                onClick={() => handleFeedbackSubmit(selectedTicket.id, feedback)}
-            >
-                Confirm
-            </button>
-        </div>
-    </div>
-)}
-
-                    {feedbackModalTicket && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={closeFeedbackModal}>&times;</span>
-                                <h2>Feedback</h2>
-                                {feedbackModalTicket.feedback && (
-                                    <>
-                                        <p>Personnel/Staff Feedback:</p>
-                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.feedback} />
-                                    </>
-                                )}
-                                {feedbackModalTicket.userFeedback ? (
-                                    <>
-                                        <p>User Feedback:</p>
-                                        <textarea className="textarea-feedback" readOnly value={feedbackModalTicket.userFeedback} />
-                                    </>
-                                ) : (
-                                    <>
-                                    {feedbackError && <p className="error-message">{feedbackError}</p>}
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </>
-    );
+              {selectedTicket.imageBase64 && (
+                <Box sx={{ textAlign: 'center', marginTop: 2, marginBottom: 2 }}>
+                  <img
+                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
+                    alt="Uploaded Ticket"
+                    style={{ maxWidth: '700px', height: 'auto' }}
+                  />
+                </Box>
+              )}
+            </Box>
+            <Button onClick={closeDetailsModal} sx={{ marginTop: 2 }}>Close</Button>
+          </Box>
+        </Modal>
+      )}
+    </>
+  );
 }
 
 export default PersonnelTickets;

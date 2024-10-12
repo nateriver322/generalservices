@@ -21,7 +21,7 @@ function UserManagement() {
         if (error) {
           const timer = setTimeout(() => {
             setError(null);
-          }, 5000); // 5000 milliseconds = 5 seconds
+          }, 1500); // 5000 milliseconds = 5 seconds
           return () => clearTimeout(timer);
         }
       }, [error]);
@@ -31,7 +31,7 @@ function UserManagement() {
         if (successMessage) {
           const timer = setTimeout(() => {
             setSuccessMessage(null);
-          }, 5000);
+          }, 1500);
           return () => clearTimeout(timer);
         }
       }, [successMessage]);
@@ -171,7 +171,6 @@ function UserManagement() {
                             <TableCell>Email</TableCell>
                             <TableCell>Role</TableCell>
                             <TableCell>Subrole</TableCell>
-                            <TableCell>Type</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -182,7 +181,6 @@ function UserManagement() {
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.role}</TableCell>
                                 <TableCell>{user.subrole || '-'}</TableCell>
-                                <TableCell>{user.isPersonnel ? 'Personnel' : 'User'}</TableCell>
                                 <TableCell>
                                     {!user.isPersonnel && (
                                         <Button

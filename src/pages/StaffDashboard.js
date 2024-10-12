@@ -54,7 +54,7 @@ function StaffDashboard() {
                     Welcome Staff, {username}!
                 </Typography>
             </Box>
-            <Box className="container" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+            <Box className="container" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', minHeight: '60vh', mx: { xs: 2, sm: 4, md: 10 },  }}>
                 <Box
                     className="buttoncontainer"
                     sx={{
@@ -63,6 +63,7 @@ function StaffDashboard() {
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: { xs: 2, sm: 4 },
+                        mt: { xs: 20, sm: 20, md: 25 },
                     }}
                 >
                     <Button

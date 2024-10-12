@@ -230,6 +230,7 @@ const modalStyle = {
         <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
         <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'Not assigned'}</Typography>
         <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
+        <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
         <Typography variant="body1" sx={{ marginTop: 2 }}><strong>Description:</strong> {selectedTicket.description}</Typography>
         
         {/* Display image if available */}
