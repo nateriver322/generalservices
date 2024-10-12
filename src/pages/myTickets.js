@@ -239,35 +239,47 @@ function MyTickets() {
                                             <TableCell>{ticket.location}</TableCell>
                                             <TableCell>{ticket.description}</TableCell>
                                             <TableCell>
-                                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                                    <Button 
-                                                        variant="outlined" 
-                                                         color="warning"
-                                                        onClick={() => handleViewTicket(ticket)}
-                                                        sx={{ width: '120px', height: '60px' }}
-                                                    >
-                                                        View Details
-                                                    </Button>
-                                                    {ticket.feedback && (
-                                                        <Button 
-                                                            variant="outlined" 
-                                                             color="success"
-                                                            onClick={() => openFeedbackModal(ticket)}
-                                                            sx={{ width: '120px' }}
-                                                        >
-                                                            View Feedback
-                                                        </Button>
-                                                    )}
-                                                    <Button 
-                                                        variant="contained" 
-                                                        color="error" 
-                                                        onClick={() => openDeleteModal(ticket)}
-                                                        sx={{ width: '120px' }}
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                </Box>
-                                            </TableCell>
+    <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button 
+            variant="outlined" 
+            color="warning"
+            onClick={() => handleViewTicket(ticket)}
+            sx={{ width: '120px', height: '60px' }}
+        >
+            View Details
+        </Button>
+        {ticket.feedback && (
+            <Button 
+                variant="outlined" 
+                color="success"
+                onClick={() => openFeedbackModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                View Feedback
+            </Button>
+        )}
+        {ticket.status === 'Resolved' ? (
+            <Button 
+                variant="contained" 
+                color="error" 
+                onClick={() => openDeleteModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                Delete
+            </Button>
+        ) : (
+            <Button 
+                variant="contained" 
+                color="error" 
+                onClick={() => openDeleteModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                Cancel
+            </Button>
+        )}
+    </Box>
+</TableCell>
+
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -297,15 +309,26 @@ function MyTickets() {
             </Dialog>
             )}
             <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
-                <DialogTitle>Confirm Cancellation</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to cancel this ticket?</Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={confirmDeleteTicket} color="error">Yes</Button>
-                    <Button onClick={() => setTicketToDelete(null)}>No</Button>
-                </DialogActions>
-            </Dialog>
+    <DialogTitle>
+        {ticketToDelete?.status === 'Resolved' ? 'Confirm Deletion' : 'Confirm Cancellation'}
+    </DialogTitle>
+    <DialogContent>
+        <Typography>
+            {ticketToDelete?.status === 'Resolved' 
+                ? 'Are you sure you want to delete this resolved ticket?' 
+                : 'Are you sure you want to cancel this ticket?'}
+        </Typography>
+    </DialogContent>
+    <DialogActions>
+        <Button onClick={confirmDeleteTicket} color="error">
+            Yes
+        </Button>
+        <Button onClick={() => setTicketToDelete(null)}>
+            No
+        </Button>
+    </DialogActions>
+</Dialog>
+
             <Snackbar
                 open={successSnackbarOpen}
                 autoHideDuration={6000}
