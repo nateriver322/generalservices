@@ -276,6 +276,15 @@ function MyTickets() {
             >
                 Delete
             </Button>
+        ) : ticket.status === 'Ongoing' ? (
+            <Button 
+                variant="contained" 
+                color="error" 
+                disabled
+                sx={{ width: '120px' }}
+            >
+                Cancel
+            </Button>
         ) : (
             <Button 
                 variant="contained" 
