@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
     Box,
     Typography,
@@ -18,6 +18,9 @@ import {
     DialogActions,
     TextField,
     Snackbar,
+    Badge,
+    IconButton,
+    Popover,
 } from '@mui/material';
 
 function MyTickets() {
@@ -31,6 +34,7 @@ function MyTickets() {
     const [notifications, setNotifications] = useState([]);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -170,6 +174,17 @@ function MyTickets() {
         }
     };
 
+    const handleNotificationClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleNotificationClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'notification-popover' : undefined;
+
     return (
         <>
             <TicketAppBar />
@@ -179,7 +194,6 @@ function MyTickets() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: '30px',
-                    
                 }}
             >
                 <Box
@@ -191,25 +205,59 @@ function MyTickets() {
                     }}
                 >
                     <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                    <Typography
-                        variant="h4"
-                        component="h2"
-                    >
+                    <Typography variant="h4" component="h2">
                         JobTrack
                     </Typography>
+                    <IconButton 
+                        color="inherit" 
+                        onClick={handleNotificationClick}
+                        sx={{ ml: 2 }}
+                    >
+                        <Badge badgeContent={notifications.length} color="error">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleNotificationClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                    >
+                        <Box sx={{ p: 2, maxWidth: 300, maxHeight: 400, overflowY: 'auto' }}>
+                            {notifications.length === 0 ? (
+                                <Typography>No new notifications</Typography>
+                            ) : (
+                                notifications.map((notification) => (
+                                    <Box key={notification.id} sx={{ mb: 2 }}>
+                                        <Typography>{notification.message}</Typography>
+                                        <Button 
+                                            size="small" 
+                                            onClick={() => markNotificationAsRead(notification.id)}
+                                        >
+                                            Mark as Read
+                                        </Button>
+                                    </Box>
+                                ))
+                            )}
+                        </Box>
+                    </Popover>
                 </Box>
-                    
+                
                 <Box sx={{ width: '100%', maxWidth: 1450 }}>
                     <Box sx={{
                     maxHeight: '100px', // Set the max height of the notification container
                  overflowY: 'auto',  // Enable vertical scrolling when content overflows
   }}>
-                        {notifications.map((notification) => (
-                            <Box key={notification.id} sx={{ p: 1, border: '1px solid gray', mb: 1 }}>
-                                <Typography>{notification.message}</Typography>
-                                <Button onClick={() => markNotificationAsRead(notification.id)}>Mark as Read</Button>
-                            </Box>
-                        ))}
+                       
+                       
                     </Box>
                     {tickets.length === 0 ? (
                         <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
