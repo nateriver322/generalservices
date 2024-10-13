@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,6 +13,10 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import Popover from '@mui/material/Popover';
+
 // Import the logo image
 import citLogo from '../images/cit-logo.png';
 
@@ -20,9 +24,49 @@ const pages = ['Home', 'My Tickets'];
 const settings = ['Logout'];
 
 function TicketAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElNotification, setAnchorElNotification] = useState(null); // New state for notification popover
+  const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      navigate('/');
+    } else {
+      fetchNotifications(username);
+    }
+  }, [navigate]);
+
+  const fetchNotifications = async (username) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/notifications/${username}`);
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        console.error('Failed to fetch notifications');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/notifications/${notificationId}`, {
+        method: 'PUT',
+      });
+      if (response.ok) {
+        setNotifications(notifications.filter(n => n.id !== notificationId));
+      } else {
+        console.error('Failed to mark notification as read');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -30,6 +74,10 @@ function TicketAppBar() {
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleOpenNotificationMenu = (event) => {
+    setAnchorElNotification(event.currentTarget); // Open notifications popover
   };
 
   const handleCloseNavMenu = () => {
@@ -40,12 +88,15 @@ function TicketAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleLogout = (settings) => {
+  const handleCloseNotificationMenu = () => {
+    setAnchorElNotification(null); // Close notifications popover
+  };
+
+  const handleLogout = () => {
     sessionStorage.removeItem('username'); // Clear username from sessionStorage
     navigate('/'); // Redirect to login page
-}
+  };
 
-  // Handle navigation when clicking on menu items
   const handlePageNavigation = (page) => {
     handleCloseNavMenu(); // Close the navigation menu
     if (page === 'Home') {
@@ -56,13 +107,13 @@ function TicketAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>  {/* Maroon color */}
+    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img
             src={citLogo}
             alt="CIT-U Logo"
-            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
+            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }}
           />
           <Typography
             variant="h6"
@@ -80,6 +131,7 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
+            {/* Add the title here */}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -134,8 +186,9 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
-          
+            {/* Add the title here */}
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -147,10 +200,53 @@ function TicketAppBar() {
               </Button>
             ))}
           </Box>
+
+          <IconButton 
+            color="inherit" 
+            onClick={handleOpenNotificationMenu} // Open notification menu
+            sx={{ ml: 2 }}
+          >
+            <Badge badgeContent={notifications.length} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+
+          <Popover
+            open={Boolean(anchorElNotification)} // Use the notification anchor state
+            anchorEl={anchorElNotification}
+            onClose={handleCloseNotificationMenu} // Close notification menu
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <Box sx={{ p: 2, maxWidth: 300, maxHeight: 400, overflowY: 'auto' }}>
+              {notifications.length === 0 ? (
+                <Typography>No new notifications</Typography>
+              ) : (
+                notifications.map((notification) => (
+                  <Box key={notification.id} sx={{ mb: 2 }}>
+                    <Typography>{notification.message}</Typography>
+                    <Button 
+                      size="small" 
+                      onClick={() => markNotificationAsRead(notification.id)}
+                    >
+                      Mark as Read
+                    </Button>
+                  </Box>
+                ))
+              )}
+            </Box>
+          </Popover>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
+                <SettingsTwoToneIcon sx={{ fontSize: 30 }} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -169,12 +265,11 @@ function TicketAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-               {settings.map((setting) => (
+              {settings.map((setting) => (
                 <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); if (setting === 'Logout') handleLogout(); }}>
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}
-            
             </Menu>
           </Box>
         </Toolbar>

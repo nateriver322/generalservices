@@ -208,57 +208,18 @@ function MyTickets() {
                     <Typography variant="h4" component="h2">
                         JobTrack
                     </Typography>
-                    <IconButton 
-                        color="inherit" 
-                        onClick={handleNotificationClick}
-                        sx={{ ml: 2 }}
-                    >
-                        <Badge badgeContent={notifications.length} color="error">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleNotificationClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                    >
-                        <Box sx={{ p: 2, maxWidth: 300, maxHeight: 400, overflowY: 'auto' }}>
-                            {notifications.length === 0 ? (
-                                <Typography>No new notifications</Typography>
-                            ) : (
-                                notifications.map((notification) => (
-                                    <Box key={notification.id} sx={{ mb: 2 }}>
-                                        <Typography>{notification.message}</Typography>
-                                        <Button 
-                                            size="small" 
-                                            onClick={() => markNotificationAsRead(notification.id)}
-                                        >
-                                            Mark as Read
-                                        </Button>
-                                    </Box>
-                                ))
-                            )}
-                        </Box>
-                    </Popover>
+                    
+                   
                 </Box>
                 
                 <Box sx={{ width: '100%', maxWidth: 1450 }}>
                     <Box sx={{
                     maxHeight: '100px', // Set the max height of the notification container
-                 overflowY: 'auto',  // Enable vertical scrolling when content overflows
-  }}>
+                    overflowY: 'auto',  // Enable vertical scrolling when content overflows
+  }}>   
                        
                        
-                    </Box>
+                 </Box>
                     {tickets.length === 0 ? (
                         <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
               No Tickets submitted.
