@@ -193,17 +193,17 @@ function TicketsCreated() {
     try {
       const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/staff-feedback`, {
         feedback: staffFeedback,
-        status: 'Resolved' // Mark the status as Resolved
+        status: 'Resolved'
       });
       if (response.status === 200) {
-        // Update the ticket's status in the local state
-        setTickets (prevTickets => prevTickets.map(ticket =>
+        setTickets(prevTickets => prevTickets.map(ticket =>
           ticket.id === selectedTicket.id
             ? { ...ticket, status: 'Resolved' }
             : ticket
         ));
-        setAssessModalOpen(false); // Close the modal
-        setAssessedModalOpen(true); // Show success modal
+        setAssessModalOpen(false);
+        setAssessedModalOpen(true);
+        setStaffFeedback(''); // Clear the feedback after successful submission
       } else {
         alert('Failed to submit feedback');
       }
@@ -530,10 +530,14 @@ function TicketsCreated() {
         </Modal>
       )}
 
-      {assessModalOpen && selectedTicket && (
+{assessModalOpen && selectedTicket && (
         <Modal
           open={assessModalOpen}
-          onClose={() => setAssessModalOpen(false)}
+          onClose={() => {
+            setAssessModalOpen(false);
+            setStaffFeedback('');
+            setSelectedTicket(null);
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -571,7 +575,7 @@ function TicketsCreated() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleStaffFeedbackSubmit} // Handle the feedback submission
+                onClick={handleStaffFeedbackSubmit}
                 sx={{
                   marginRight: 1,
                   backgroundColor: 'primary.main',
@@ -584,7 +588,11 @@ function TicketsCreated() {
                 Submit Feedback
               </Button>
               <Button
-                onClick={() => setAssessModalOpen(false)} // Cancel button
+                onClick={() => {
+                  setAssessModalOpen(false);
+                  setStaffFeedback('');
+                  setSelectedTicket(null);
+                }}
                 variant="outlined"
                 color="secondary"
               >
