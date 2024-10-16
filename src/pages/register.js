@@ -11,11 +11,13 @@ const Register = () => {
         username: '',
         email: '',
         password: '',
+        confirmPassword: '',
         contactNumber: ''
     });
 
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [emailError, setEmailError] = useState('');
 
     useEffect(() => {
@@ -55,8 +57,12 @@ const Register = () => {
         setShowPassword(!showPassword);
     };
 
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+
     const validateForm = async () => {
-        const newErrors = {};
+        const newErrors = {}; // Define newErrors here
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(userData.email)) {
@@ -77,6 +83,11 @@ const Register = () => {
         const contactNumberPattern = /^\d{11}$/;
         if (!contactNumberPattern.test(userData.contactNumber)) {
             newErrors.contactNumber = "Contact number must be exactly 11 digits.";
+        }
+
+        // Check if passwords match
+        if (userData.password !== userData.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match.";
         }
 
         setErrors(newErrors);
@@ -153,7 +164,7 @@ const Register = () => {
                 }}
             >
                 <Typography variant="h5" component="h3" gutterBottom>Create Account</Typography>
-                {emailError && <Typography color="error" gutterBottom>{emailError}</Typography>}
+                
 
                 <TextField
                     label="Username"
@@ -253,17 +264,55 @@ const Register = () => {
                         },
                     }}
                 />
-                <Typography variant="body2" color="textSecondary">Must be 8 characters with numerical values.</Typography>
+
+                {/* Confirm Password Field */}
+                <TextField
+                    label="Confirm Password"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    error={!!errors.confirmPassword}
+                    helperText={errors.confirmPassword}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
+                                    {showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
+                    }}
+                />
 
                 <TextField
                     label="Contact Number"
-                    type="tel"
                     name="contactNumber"
                     fullWidth
                     required
                     margin="normal"
                     onChange={handleInputChange}
-                    value={userData.contactNumber}
                     error={!!errors.contactNumber}
                     helperText={errors.contactNumber}
                     inputProps={{
@@ -292,7 +341,8 @@ const Register = () => {
                     }}
                 />
 
-                <Box sx={{ mt: 2 }}>
+                
+                    <Box sx={{ mt: 2 }}>
                     <Button
                         type="submit"
                         variant="contained"
@@ -322,6 +372,7 @@ const Register = () => {
                     </Button>
                 </Box>
             </Box>
+
         </div>
     );
 };
