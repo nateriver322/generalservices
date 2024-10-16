@@ -32,10 +32,21 @@ function TicketsHistory() {
 
   const fetchTickets = async (username) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/tickets/resolved/${username}`);
+      const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
-        setTickets(data);
+        
+        // Normalize the username for comparison
+        const normalizedUsername = username.trim().toLowerCase();
+        
+        // Filter tickets to include those with status "Pending" or "Ongoing"
+        // and where the current user is in the list of assigned personnel
+        const ongoingAndPendingTickets = data.filter(ticket => {
+          const personnelList = ticket.assignedPersonnel.split(',').map(personnel => personnel.trim().toLowerCase());
+          return ticket.status === 'Resolved' && personnelList.includes(normalizedUsername);
+        });
+        
+        setTickets(ongoingAndPendingTickets);
       } else {
         console.error('Failed to fetch tickets');
       }
@@ -167,6 +178,7 @@ function TicketsHistory() {
               <Typography variant="body1"><strong>Status:</strong> {selectedTicket.status}</Typography>
               <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
               <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
+              <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel}</Typography>
               <Typography variant="body1"><strong>Date Resolved:</strong> {selectedTicket.dateResolved || 'Not resolved'}</Typography>
               <Typography variant="body1"><strong>Description:</strong> {selectedTicket.description}</Typography>
               <Typography variant="body1"><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>

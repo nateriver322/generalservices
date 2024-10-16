@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import qs from 'qs';
 
 import {
   Table,
@@ -25,6 +26,8 @@ import {
   InputLabel,
   FormControl,
   TextField,
+  Checkbox,
+  ListItemText,
 } from '@mui/material';
 
 function TicketsCreated() {
@@ -35,12 +38,12 @@ function TicketsCreated() {
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [selectedPersonnel, setSelectedPersonnel] = useState('');
+  const [selectedPersonnel, setSelectedPersonnel] = useState([]);
   const [scheduledRepairDate, setScheduledRepairDate] = useState('');
   const [ticketToDelete, setTicketToDelete] = useState(null);
   const [assessModalOpen, setAssessModalOpen] = useState(false);
   const [staffFeedback, setStaffFeedback] = useState('');
-  const [sortBy, setSortBy] = useState('id'); // Sorting criteria
+  const [sortBy, setSortBy] = useState('status');
   const [assessedModalOpen, setAssessedModalOpen] = useState(false);
   const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
   const [feedbackError, setFeedbackError] = useState('');
@@ -153,8 +156,10 @@ function TicketsCreated() {
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
-    const workTypes = ticket.workType.split(','); // Assuming work types are comma-separated
+    const workTypes = ticket.workType.split(',');
     setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
+    setSelectedPersonnel([]); // Reset selected personnel when opening the modal
+    console.log('Selected Ticket:', ticket); // Add this line for debugging
   };
 
   const closeDetailsModal = () => {
@@ -214,14 +219,24 @@ function TicketsCreated() {
   };
 
   const handleAssignPersonnel = async () => {
+    if (!selectedTicket || !selectedTicket.id) {
+      console.error('No ticket selected or invalid ticket ID');
+      alert('Please select a valid ticket before assigning personnel');
+      return;
+    }
+    
     try {
       const response = await axios.post('http://localhost:8080/api/tickets/assign', null, {
         params: {
           ticketId: selectedTicket.id,
-          personnelUsername: selectedPersonnel,
+          personnelUsernames: selectedPersonnel,  // This should already be an array
           scheduledRepairDate: scheduledRepairDate,
         },
+        paramsSerializer: params => {
+          return qs.stringify(params, {arrayFormat: 'repeat'})
+        }
       });
+      
       if (response.status === 200) {
         setAssignModalOpen(false);
         setSuccessModalOpen(true);
@@ -231,13 +246,23 @@ function TicketsCreated() {
       }
     } catch (error) {
       console.error('Error assigning ticket:', error);
-      alert('Error assigning ticket');
+      if (error.response) {
+        console.error('Error data:', error.response.data);
+        console.error('Error status:', error.response.status);
+        console.error('Error headers:', error.response.headers);
+        alert(`Error assigning ticket: ${error.response.data.message || 'Unknown error'}`);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+        alert('No response received from server');
+      } else {
+        console.error('Error message:', error.message);
+        alert('Error setting up the request');
+      }
     }
   };
 
-  const handleSort = (e) => {
-    const selectedColumn = e.target.value;
-    setSortBy(selectedColumn);
+  const handleSort = (event) => {
+    setSortBy(event.target.value);
   };
 
   const sortedTickets = useMemo(() => {
@@ -250,10 +275,8 @@ function TicketsCreated() {
       return defaultSorted.sort((a, b) => (statusOrder[a.status] || 999) - (statusOrder[b.status] || 999));
     } else if (sortBy === 'priority') {
       return defaultSorted.sort((a, b) => a.priority.localeCompare(b.priority));
-    } else if (sortBy === 'dateCreated') {
-      return defaultSorted; // Already sorted by date
     } else {
-      return defaultSorted.sort((a, b) => a.id - b.id); // Sort by ticket number if no sort criteria
+      return defaultSorted; // Default to sorting by date
     }
   }, [tickets, sortBy]);
   
@@ -330,19 +353,18 @@ function TicketsCreated() {
       <>
         {/* Sort By dropdown remains here, now below the Welcome message */}
         <FormControl variant="outlined" sx={{ marginBottom: 2 }}>
-          <InputLabel htmlFor="sortBy">Sort By</InputLabel>
-          <Select
-            id="sortBy"
-            value={sortBy}
-            onChange={handleSort}
-            label="Sort By"
-            sx={{ minWidth: 200 }}
-          >
-            
-            <MenuItem value="status">Status</MenuItem>
-            <MenuItem value="priority">Priority</MenuItem>
-          </Select>
-        </FormControl>
+                <InputLabel htmlFor="sortBy">Sort By</InputLabel>
+                <Select
+                  id="sortBy"
+                  value={sortBy}
+                  onChange={handleSort}
+                  label="Sort By"
+                  sx={{ minWidth: 200 }}
+                >
+                  <MenuItem value="status">Status</MenuItem>
+                  <MenuItem value="priority">Priority</MenuItem>
+                </Select>
+              </FormControl>
 
         <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1 .5px solid #800000', borderRadius: '4px' }}>
           <Table sx={{ margin: 0, padding: 0 }}>
@@ -448,41 +470,44 @@ function TicketsCreated() {
   </Modal>
 )}
 
-      {/* Assign Personnel Modal */}
-      {assignModalOpen && (
+{assignModalOpen && (
         <Modal open={assignModalOpen} onClose={closeAssignModal}>
           <Box sx={{ ...modalStyle, width: '80%', maxWidth: 500 }}>
             <Typography variant="h6">Assign Personnel</Typography>
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
-              <InputLabel htmlFor="personnel">Select Personnel</InputLabel>
+              <InputLabel id="multiple-personnel-label">Select Personnel</InputLabel>
               <Select
+                labelId="multiple-personnel-label"
+                multiple
                 value={selectedPersonnel}
                 onChange={(e) => setSelectedPersonnel(e.target.value)}
+                renderValue={(selected) => selected.join(', ')}
               >
                 {filteredPersonnel.map((personnel) => (
                   <MenuItem key={personnel.id} value={personnel.username}>
-                    {personnel.username}
+                    <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
+                    <ListItemText primary={personnel.username} />
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
             <TextField
-  label="Scheduled Repair Date"
-  type="date"
-  value={scheduledRepairDate}
-  onChange={(e) => setScheduledRepairDate(e.target.value)}
-  fullWidth
-  sx={{ marginBottom: 2 }}
-  InputLabelProps={{ shrink: true }}
-  inputProps={{ min: new Date().toISOString().split('T')[0] }}  // Ensures only present and future dates are allowed
-/>
+              label="Scheduled Repair Date"
+              type="date"
+              value={scheduledRepairDate}
+              onChange={(e) => setScheduledRepairDate(e.target.value)}
+              fullWidth
+              sx={{ marginBottom: 2 }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ min: new Date().toISOString().split('T')[0] }}
+            />
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+<Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleAssignPersonnel}
-                disabled={!scheduledRepairDate}
+                disabled={selectedPersonnel.length === 0 || !scheduledRepairDate}
                 sx={{
                   marginRight: 1,
                   backgroundColor: 'primary.main',

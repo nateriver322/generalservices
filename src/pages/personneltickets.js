@@ -25,7 +25,7 @@ function PersonnelTickets() {
     if (!username) {
       navigate('/');
     } else {
-      fetchTickets(username); // Pass the username to fetch tickets assigned to that personnel
+      fetchTickets(username);
     }
   }, [navigate]);
 
@@ -34,10 +34,18 @@ function PersonnelTickets() {
       const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
+        
+        // Normalize the username for comparison
+        const normalizedUsername = username.trim().toLowerCase();
+        
         // Filter tickets to include those with status "Pending" or "Ongoing"
-        const ongoingAndPendingTickets = data.filter(ticket => 
-          ticket.status === 'Pending' || ticket.status === 'Ongoing'
-        );
+        // and where the current user is in the list of assigned personnel
+        const ongoingAndPendingTickets = data.filter(ticket => {
+          const personnelList = ticket.assignedPersonnel.split(',').map(personnel => personnel.trim().toLowerCase());
+          return (ticket.status === 'Pending' || ticket.status === 'Ongoing') &&
+            personnelList.includes(normalizedUsername);
+        });
+        
         setTickets(ongoingAndPendingTickets);
       } else {
         console.error('Failed to fetch tickets');
@@ -128,6 +136,7 @@ function PersonnelTickets() {
                     <TableCell>Reported By</TableCell>
                     <TableCell>Date Created</TableCell>
                     <TableCell>Scheduled Repair Date</TableCell>
+                    <TableCell>Assigned Personnel</TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -142,8 +151,9 @@ function PersonnelTickets() {
                       <TableCell>{ticket.username}</TableCell>
                       <TableCell>{ticket.datetime}</TableCell>
                       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                      <TableCell>{ticket.assignedPersonnel}</TableCell>
                       <TableCell>
-                      <Button
+                        <Button
                           onClick={() => handleViewTicket(ticket)}
                           variant="outlined"
                           color="warning"
@@ -181,6 +191,7 @@ function PersonnelTickets() {
               <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
               <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
               <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
+              <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel}</Typography>
               <Typography variant="body1"><strong>Description:</strong> {selectedTicket.description}</Typography>
               <Typography variant="body1"><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
               <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
