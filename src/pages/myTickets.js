@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../css/myTickets.css';
 import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
     Box,
     Typography,
@@ -18,6 +18,9 @@ import {
     DialogActions,
     TextField,
     Snackbar,
+    Badge,
+    IconButton,
+    Popover,
 } from '@mui/material';
 
 function MyTickets() {
@@ -31,6 +34,7 @@ function MyTickets() {
     const [notifications, setNotifications] = useState([]);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -170,6 +174,17 @@ function MyTickets() {
         }
     };
 
+    const handleNotificationClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleNotificationClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'notification-popover' : undefined;
+
     return (
         <>
             <TicketAppBar />
@@ -179,7 +194,6 @@ function MyTickets() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: '30px',
-                    
                 }}
             >
                 <Box
@@ -191,26 +205,21 @@ function MyTickets() {
                     }}
                 >
                     <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                    <Typography
-                        variant="h4"
-                        component="h2"
-                    >
+                    <Typography variant="h4" component="h2">
                         JobTrack
                     </Typography>
-                </Box>
                     
+                   
+                </Box>
+                
                 <Box sx={{ width: '100%', maxWidth: 1450 }}>
                     <Box sx={{
                     maxHeight: '100px', // Set the max height of the notification container
-                 overflowY: 'auto',  // Enable vertical scrolling when content overflows
-  }}>
-                        {notifications.map((notification) => (
-                            <Box key={notification.id} sx={{ p: 1, border: '1px solid gray', mb: 1 }}>
-                                <Typography>{notification.message}</Typography>
-                                <Button onClick={() => markNotificationAsRead(notification.id)}>Mark as Read</Button>
-                            </Box>
-                        ))}
-                    </Box>
+                    overflowY: 'auto',  // Enable vertical scrolling when content overflows
+  }}>   
+                       
+                       
+                 </Box>
                     {tickets.length === 0 ? (
                         <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
               No Tickets submitted.
@@ -239,35 +248,56 @@ function MyTickets() {
                                             <TableCell>{ticket.location}</TableCell>
                                             <TableCell>{ticket.description}</TableCell>
                                             <TableCell>
-                                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                                    <Button 
-                                                        variant="outlined" 
-                                                         color="warning"
-                                                        onClick={() => handleViewTicket(ticket)}
-                                                        sx={{ width: '120px', height: '60px' }}
-                                                    >
-                                                        View Details
-                                                    </Button>
-                                                    {ticket.feedback && (
-                                                        <Button 
-                                                            variant="outlined" 
-                                                             color="success"
-                                                            onClick={() => openFeedbackModal(ticket)}
-                                                            sx={{ width: '120px' }}
-                                                        >
-                                                            View Feedback
-                                                        </Button>
-                                                    )}
-                                                    <Button 
-                                                        variant="contained" 
-                                                        color="error" 
-                                                        onClick={() => openDeleteModal(ticket)}
-                                                        sx={{ width: '120px' }}
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                </Box>
-                                            </TableCell>
+    <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button 
+            variant="outlined" 
+            color="warning"
+            onClick={() => handleViewTicket(ticket)}
+            sx={{ width: '120px', height: '60px' }}
+        >
+            View Details
+        </Button>
+        {ticket.feedback && (
+            <Button 
+                variant="outlined" 
+                color="success"
+                onClick={() => openFeedbackModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                View Feedback
+            </Button>
+        )}
+        {ticket.status === 'Resolved' ? (
+            <Button 
+                variant="contained" 
+                color="error" 
+                onClick={() => openDeleteModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                Delete
+            </Button>
+        ) : ticket.status === 'Ongoing' ? (
+            <Button 
+                variant="contained" 
+                color="error" 
+                disabled
+                sx={{ width: '120px' }}
+            >
+                Cancel
+            </Button>
+        ) : (
+            <Button 
+                variant="contained" 
+                color="error" 
+                onClick={() => openDeleteModal(ticket)}
+                sx={{ width: '120px' }}
+            >
+                Cancel
+            </Button>
+        )}
+    </Box>
+</TableCell>
+
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -297,15 +327,26 @@ function MyTickets() {
             </Dialog>
             )}
             <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
-                <DialogTitle>Confirm Cancellation</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to cancel this ticket?</Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={confirmDeleteTicket} color="error">Yes</Button>
-                    <Button onClick={() => setTicketToDelete(null)}>No</Button>
-                </DialogActions>
-            </Dialog>
+    <DialogTitle>
+        {ticketToDelete?.status === 'Resolved' ? 'Confirm Deletion' : 'Confirm Cancellation'}
+    </DialogTitle>
+    <DialogContent>
+        <Typography>
+            {ticketToDelete?.status === 'Resolved' 
+                ? 'Are you sure you want to delete this resolved ticket?' 
+                : 'Are you sure you want to cancel this ticket?'}
+        </Typography>
+    </DialogContent>
+    <DialogActions>
+        <Button onClick={confirmDeleteTicket} color="error">
+            Yes
+        </Button>
+        <Button onClick={() => setTicketToDelete(null)}>
+            No
+        </Button>
+    </DialogActions>
+</Dialog>
+
             <Snackbar
                 open={successSnackbarOpen}
                 autoHideDuration={6000}

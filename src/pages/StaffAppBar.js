@@ -16,7 +16,7 @@ import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 // Import the logo image
 import citLogo from '../images/cit-logo.png';
 
-const pages = ['Home', 'Pending','Resolved','Roles' ];
+const pages = ['Home','Resolved','Roles' ];
 const settings = ['Logout'];
 
 function StaffAppBar() {
@@ -50,8 +50,6 @@ function StaffAppBar() {
     handleCloseNavMenu(); // Close the navigation menu
     if (page === 'Home') {
       navigate('/dashboard'); // Redirect to the dashboard page
-    } else if (page === 'Pending') {
-      navigate('/ticketsCreated'); // Redirect to the tickets created page
     }else if (page === 'Resolved') {
       navigate('/ticketsFixed'); // Redirect to the tickets created page
     }else if (page === 'Roles') {
