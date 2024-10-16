@@ -16,7 +16,9 @@ import PersonnelTickets from './pages/personneltickets';
 import TicketsFixed from './pages/ticketsFixed';
 import TicketsHistory from './pages/ticketsHistory';
 import AssignSubrole from './pages/subrole';
+import ForgotPassword from './pages/ForgotPassword';
 
+import ResetPasswordForm from './pages/ResetPassword';
 function App() {
   console.log('App rendering');
   return (
@@ -37,6 +39,9 @@ function App() {
           <Route path="/TicketsFixed" element={<TicketsFixed />} />
           <Route path="/TicketsHistory" element={<TicketsHistory />} />
           <Route path="/subrole" element={<AssignSubrole />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/reset_password" element={<ResetPasswordForm />} />
+
         </Routes>
       </AuthProvider>
     </MsalProvider>

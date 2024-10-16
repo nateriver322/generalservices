@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
@@ -32,9 +32,8 @@ const Login = React.memo(() => {
         event.preventDefault();
         try {
             const userData = await login(credentials.email, credentials.password);
-            // Store username and other necessary data in sessionStorage
-            sessionStorage.setItem('username', userData.username); // Store username in sessionStorage
-            navigate('/dashboard', { state: { username: userData.username } }); // Pass username via state (optional)
+            sessionStorage.setItem('username', userData.username);
+            navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             setError(error.message);
             setTimeout(() => {
@@ -42,13 +41,13 @@ const Login = React.memo(() => {
             }, 1000);
         }
     };
+
     const handleMicrosoftLogin = async () => {
         try {
             const result = await instance.loginPopup(loginRequest);
             const userData = await microsoftLogin(result.accessToken);
-            // Store username and other necessary data in sessionStorage
-            sessionStorage.setItem('username', userData.username); // Store username in sessionStorage
-            navigate('/dashboard', { state: { username: userData.username } }); // Pass username via state (optional)
+            sessionStorage.setItem('username', userData.username);
+            navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             setError('Microsoft login failed');
             setTimeout(() => {
@@ -59,6 +58,10 @@ const Login = React.memo(() => {
 
     const handleSignUpClick = () => {
         navigate('/register');
+    };
+
+    const handleForgotPasswordClick = () => {
+        navigate('/forgot_password');
     };
 
     const togglePasswordVisibility = () => {
@@ -74,7 +77,7 @@ const Login = React.memo(() => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: '20px',
-                    marginTop: '30px' // Move the form down
+                    marginTop: '30px'
                 }}
             >
                 <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
@@ -93,7 +96,7 @@ const Login = React.memo(() => {
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    mt: 4 // Move the form lower vertically
+                    mt: 4
                 }}
             >
                 <Typography variant="h5" component="h3" gutterBottom>
@@ -124,10 +127,10 @@ const Login = React.memo(() => {
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
@@ -163,10 +166,10 @@ const Login = React.memo(() => {
                             },
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black', // Default label color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black', // Label color when focused
+                            color: 'black',
                         },
                     }}
                 />
@@ -214,6 +217,17 @@ const Login = React.memo(() => {
                         }}
                     >
                         Login with Microsoft
+                    </Button>
+
+                    {/* Forgot Password Button */}
+                    <Button
+                        type="button"
+                        variant="text"
+                        fullWidth
+                        onClick={handleForgotPasswordClick}
+                        sx={{ color: '#800000', mt: 2 }}
+                    >
+                        Forgot Password?
                     </Button>
                 </Box>
             </Box>
