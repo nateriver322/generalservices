@@ -174,62 +174,64 @@ const Login = React.memo(() => {
                     }}
                 />
 
-                <Box sx={{ mt: 2 }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{
-                            bgcolor: '#800000',
-                            '&:hover': {
-                                bgcolor: '#A00000',
-                            },
-                            color: 'white',
-                            mb: 2
-                        }}
-                        fullWidth
-                    >
-                        Log In
-                    </Button>
+<Box sx={{ mt: 2 }}>
+    <Button
+        type="submit"
+        variant="contained"
+        sx={{
+            bgcolor: '#800000',
+            '&:hover': {
+                bgcolor: '#A00000',
+            },
+            color: 'white',
+            mb: 2
+        }}
+        fullWidth
+    >
+        Log In
+    </Button>
 
-                    <Button
-                        type="button"
-                        variant="outlined"
-                        fullWidth
-                        onClick={handleSignUpClick}
-                        sx={{
-                            borderColor: '#800000',
-                            color: '#800000',
-                            mb: 2,
-                        }}
-                    >
-                        Sign Up
-                    </Button>
+    {/* Forgot Password Button */}
+    <Button
+        type="button"
+        variant="text"
+        fullWidth
+        onClick={handleForgotPasswordClick}
+        sx={{ color: '#800000', mb: 1 }}  // Reduced margin-bottom
+    >
+        Forgot Password?
+    </Button>
 
-                    <Button
-                        type="button"
-                        variant="outlined"
-                        fullWidth
-                        onClick={handleMicrosoftLogin}
-                        startIcon={<FaMicrosoft size={20} style={{ marginRight: 10 }} />}
-                        sx={{
-                            borderColor: '#800000',
-                            color: '#800000',
-                        }}
-                    >
-                        Login with Microsoft
-                    </Button>
+    <Button
+        type="button"
+        variant="outlined"
+        fullWidth
+        onClick={handleSignUpClick}
+        sx={{
+            borderColor: '#800000',
+            color: '#800000',
+            mb: 2,  // This margin is kept for spacing between the buttons
+        }}
+    >
+        Sign Up
+    </Button>
 
-                    {/* Forgot Password Button */}
-                    <Button
-                        type="button"
-                        variant="text"
-                        fullWidth
-                        onClick={handleForgotPasswordClick}
-                        sx={{ color: '#800000', mt: 2 }}
-                    >
-                        Forgot Password?
-                    </Button>
-                </Box>
+    <Button
+        type="button"
+        variant="outlined"
+        fullWidth
+        onClick={handleMicrosoftLogin}
+        startIcon={<FaMicrosoft size={20} style={{ marginRight: 10 }} />}
+        sx={{
+            borderColor: '#800000',
+            color: '#800000',
+        }}
+    >
+        Login with Microsoft
+    </Button>
+</Box>
+
+
             </Box>
         </div>
     );

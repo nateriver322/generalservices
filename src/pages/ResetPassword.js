@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography, Alert, Box } from '@mui/material';
+import { Button, TextField, Typography, Alert, Box, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
@@ -10,7 +11,9 @@ const ResetPasswordForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false); // New state to control button disabled state
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Toggle for new password field
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Toggle for confirm password field
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,12 +52,11 @@ const ResetPasswordForm = () => {
       if (response.ok) {
         setSuccess(true);
         setError('');
-        setIsDisabled(true); // Disable the button once the password is reset
+        setIsDisabled(true);
 
-        // Redirect to login page after 3 seconds
         setTimeout(() => {
           navigate('/');
-        }, 3000); // 3 seconds delay for user feedback
+        }, 3000);
       } else {
         const data = await response.json();
         setError(data.message || 'An error occurred while updating your password');
@@ -67,14 +69,13 @@ const ResetPasswordForm = () => {
   return (
     <div>
       <LoginResponsiveAppBar />
-      {/* JobTrack Logo Section */}
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '20px',
-          marginTop: '30px'
+          marginTop: '30px',
         }}
       >
         <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
@@ -91,7 +92,7 @@ const ResetPasswordForm = () => {
           borderRadius: 2,
           boxShadow: 3,
           margin: '0 auto',
-          mt: 4
+          mt: 4,
         }}
         component="form"
         onSubmit={handleSubmit}
@@ -109,12 +110,25 @@ const ResetPasswordForm = () => {
 
         <TextField
           label="New Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           fullWidth
           required
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)} // Toggle only for the new password field
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           sx={{
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -138,12 +152,25 @@ const ResetPasswordForm = () => {
 
         <TextField
           label="Confirm New Password"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'}
           fullWidth
           required
           margin="normal"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle confirm password visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle only for the confirm password field
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           sx={{
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -177,7 +204,7 @@ const ResetPasswordForm = () => {
               },
               color: 'white',
             }}
-            disabled={isDisabled} // Disable button when isDisabled is true
+            disabled={isDisabled}
           >
             Reset Password
           </Button>

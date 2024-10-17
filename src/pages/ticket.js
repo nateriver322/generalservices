@@ -348,7 +348,7 @@ function TicketForm() {
                     margin="normal"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    inputProps={{ maxLength: 80 }} 
+                    inputProps={{ maxLength: 160 }} 
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {

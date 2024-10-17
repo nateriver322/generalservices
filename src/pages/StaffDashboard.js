@@ -49,55 +49,6 @@ function TicketsCreated() {
   const [feedbackError, setFeedbackError] = useState('');
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
   const username = sessionStorage.getItem('username'); // Get username from localStorage
-  const handlePrint = (ticket) => {
-    const printWindow = window.open('', '_blank');
-    
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Print Ticket</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
-            }
-            h1 {
-              text-align: center;
-            }
-            .ticket-details {
-              margin-top: 20px;
-            }
-            .ticket-details img {
-              max-width: 700px;
-              height: auto;
-              display: block;
-              margin: 10px auto;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>General Maintenance Department</h1>
-          <div class="ticket-details">
-            <p><strong>Ticket Number:</strong> ${ticket.id}</p>
-            <p><strong>Work Type:</strong> ${ticket.workType}</p>
-            <p><strong>Priority:</strong> ${ticket.priority}</p>
-            <p><strong>Reported By:</strong> ${ticket.username}</p>
-            <p><strong>Date Created:</strong> ${ticket.datetime}</p>
-            <p><strong>Assigned Personnel:</strong> ${ticket.assignedPersonnel || 'Not assigned'}</p>
-            <p><strong>Scheduled Repair Date:</strong> ${ticket.scheduledRepairDate || 'Not scheduled'}</p>
-                        <p><strong>Description:</strong> ${ticket.description}</p>
-            ${ticket.imageBase64 ? `<img src="data:image/jpeg;base64,${ticket.imageBase64}" alt="Uploaded Ticket" />` : ''}
-            <p><strong>Acknowledge By:</strong> ${ticket.completedBy || ''}</p>
-            <p><strong>Completed By:</strong> ${ticket.completedBy || ''}</p>
-          </div>
-        </body>
-      </html>
-    `);
-  
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-  };
   
  
     
@@ -587,15 +538,23 @@ function TicketsCreated() {
               Submitting feedback will mark the ticket as Resolved.
             </Typography>
             <TextField
-              label="Staff Feedback"
-              multiline
-              rows={4}
-              fullWidth
-              value={staffFeedback}
-              onChange={(e) => setStaffFeedback(e.target.value)}
-              variant="outlined"
-              sx={{ marginBottom: 2 }}
-            />
+  label="Staff Feedback"
+  multiline
+  rows={4}
+  fullWidth
+  value={staffFeedback}
+  onChange={(e) => {
+    const input = e.target.value;
+    const wordCount = input.trim().split(/\s+/).length;
+
+    if (wordCount <= 50) {
+      setStaffFeedback(input);
+    }
+  }}
+  variant="outlined"
+  sx={{ marginBottom: 2 }}
+/>
+
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
               <Button
                 variant="contained"
@@ -656,14 +615,9 @@ function TicketsCreated() {
             />
           </Box>
         )}
-        <Typography variant="body1"><strong>Acknowledge By:</strong> {selectedTicket.completedBy  || ''}</Typography>
-
-        <Typography variant="body1"><strong>Completed By:</strong> {selectedTicket.completedBy  || ''}</Typography>
 
       </DialogContent>
       <DialogActions>
-        {/* Add Print Button */}
-        <Button onClick={() => handlePrint(selectedTicket)}>Print</Button>
         <Button onClick={() => setDetailsModalOpen(false)}>Close</Button>
       </DialogActions>
     </Box>
