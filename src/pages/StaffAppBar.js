@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,6 +15,9 @@ import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 // Import the logo image
 import citLogo from '../images/cit-logo.png';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import Popover from '@mui/material/Popover';
 
 const pages = ['Home','Resolved','Roles' ];
 const settings = ['Logout'];
@@ -22,7 +25,42 @@ const settings = ['Logout'];
 function StaffAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/notifications/staff');
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        console.error('Failed to fetch notifications');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/notifications/${notificationId}`, {
+        method: 'PUT',
+      });
+      if (response.ok) {
+        setNotifications(notifications.filter(n => n.id !== notificationId));
+      } else {
+        console.error('Failed to mark notification as read');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -32,12 +70,20 @@ function StaffAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleOpenNotificationMenu = (event) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleCloseNotificationMenu = () => {
+    setAnchorElNotification(null);
   };
 
   const handleLogout = (settings) => {
@@ -92,6 +138,7 @@ function StaffAppBar() {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              sx={{ ml: -2 }}
             >
               <MenuIcon />
             </IconButton>
@@ -131,6 +178,50 @@ function StaffAppBar() {
               </Button>
             ))}
           </Box>
+
+
+          <IconButton 
+            color="inherit" 
+            onClick={handleOpenNotificationMenu}
+            sx={{ ml: -1.3 }}
+          >
+            <Badge badgeContent={notifications.length} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+
+          <Popover
+            open={Boolean(anchorElNotification)}
+            anchorEl={anchorElNotification}
+            onClose={handleCloseNotificationMenu}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <Box sx={{ p: 2, maxWidth: 300, maxHeight: 400, overflowY: 'auto' }}>
+              {notifications.length === 0 ? (
+                <Typography>No new notifications</Typography>
+              ) : (
+                notifications.map((notification) => (
+                  <Box key={notification.id} sx={{ mb: 2 }}>
+                    <Typography>{notification.message}</Typography>
+                    <Button 
+                      size="small" 
+                      onClick={() => markNotificationAsRead(notification.id)}
+                    >
+                      Mark as Read
+                    </Button>
+                  </Box>
+                ))
+              )}
+            </Box>
+          </Popover>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

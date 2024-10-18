@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { Button, Box, Typography } from '@mui/material'; // Import MUI components
 import '../css/PersonnelDashboard.css';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import PersonnelResponsiveAppBar from './PersonnelResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
 function PersonnelDashboard() {
     const navigate = useNavigate();
-    const username = sessionStorage.getItem('username'); // Get username from localStorage
+    const username = localStorage.getItem('username'); // Get username from localStorage
     const [userDetails, setUserDetails] = useState(null); // State to store user details
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -51,7 +51,7 @@ function PersonnelDashboard() {
 
     return (
         <>
-            <ResponsiveAppBar />
+            <PersonnelResponsiveAppBar />
             <Box
                 sx={{
                     display: 'flex',

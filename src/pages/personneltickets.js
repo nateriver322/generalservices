@@ -11,14 +11,20 @@ import {
   Modal,
   Typography,
   Box,
+  TextField
 } from '@mui/material';
 import PersonnelResponsiveAppBar from './PersonnelResponsiveAppBar';
+import axios from 'axios';
 
 function PersonnelTickets() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -34,18 +40,15 @@ function PersonnelTickets() {
       const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
-        
-        // Normalize the username for comparison
         const normalizedUsername = username.trim().toLowerCase();
-        
-        // Filter tickets to include those with status "Pending" or "Ongoing"
-        // and where the current user is in the list of assigned personnel
+  
+        // Filter tickets for the logged-in personnel and with "Pending" or "Ongoing" statuses
         const ongoingAndPendingTickets = data.filter(ticket => {
           const personnelList = ticket.assignedPersonnel.split(',').map(personnel => personnel.trim().toLowerCase());
           return (ticket.status === 'Pending' || ticket.status === 'Ongoing') &&
             personnelList.includes(normalizedUsername);
         });
-        
+  
         setTickets(ongoingAndPendingTickets);
       } else {
         console.error('Failed to fetch tickets');
@@ -65,7 +68,6 @@ function PersonnelTickets() {
     setSelectedTicket(null);
   };
 
-  // Function to determine the color based on status
   const getStatusColor = (status) => {
     switch (status) {
       case 'Resolved':
@@ -81,7 +83,6 @@ function PersonnelTickets() {
     }
   };
 
-  // Modal style for centering and padding
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -92,6 +93,37 @@ function PersonnelTickets() {
     p: 4,
     borderRadius: 2,
   };
+
+  const handleAssessTicket = (ticket) => {
+    setSelectedTicket(ticket);
+    setFeedbackModalOpen(true);
+  };
+
+  const handleSubmitFeedback = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/personnel-feedback`, 
+        { feedback },
+        { params: { personnelUsername: username } }
+      );
+      if (response.status === 200) {
+        setFeedbackModalOpen(false);
+        setSuccessMessage('Feedback submitted successfully!');
+        setSuccessModalOpen(true);
+        setFeedback('');
+        fetchTickets(username); // Refresh tickets to update the UI
+      }
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
+  };
+
+  const hasSubmittedFeedback = (ticket) => {
+    const username = localStorage.getItem('username');
+    return ticket.feedback && ticket.feedback[username];
+  };
+
+
 
   return (
     <>
@@ -153,11 +185,21 @@ function PersonnelTickets() {
                       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
                       <TableCell>{ticket.assignedPersonnel}</TableCell>
                       <TableCell>
+                        {!hasSubmittedFeedback(ticket) && (
+                          <Button
+                            onClick={() => handleAssessTicket(ticket)}
+                            variant="outlined"
+                            color="success"
+                            sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                          >
+                            Assess
+                          </Button>
+                        )}
                         <Button
                           onClick={() => handleViewTicket(ticket)}
                           variant="outlined"
                           color="warning"
-                          sx={{ marginRight: 1,  width: '120px', height: '60px' }}
+                          sx={{ marginRight: 1, width: '120px', height: '60px' }}
                         >
                           View Details
                         </Button>
@@ -202,15 +244,52 @@ function PersonnelTickets() {
                   <img
                     src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
                     alt="Uploaded Ticket"
-                    style={{ maxWidth: '700px', height: 'auto' }}
+                    style={{ maxWidth: '100%', maxHeight: '300px' }}
                   />
                 </Box>
               )}
             </Box>
-            <Button onClick={closeDetailsModal} sx={{ marginTop: 2 }}>Close</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+              <Button variant="contained" onClick={closeDetailsModal}>Close</Button>
+            </Box>
           </Box>
         </Modal>
       )}
+
+      {feedbackModalOpen && selectedTicket && (
+        <Modal
+          open={feedbackModalOpen}
+          onClose={() => setFeedbackModalOpen(false)}
+          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Box sx={modalStyle}>
+            <Typography variant="h6">Submit Feedback for Ticket #{selectedTicket.id}</Typography>
+            <TextField
+              label="Feedback"
+              multiline
+              rows={4}
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              sx={{ width: '100%', mt: 2 }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+              <Button variant="contained" color="primary" onClick={handleSubmitFeedback}>
+                Submit
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      )}
+
+<Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)}>
+          <Box sx={{ ...modalStyle }}>
+            <Typography variant="h6">Success</Typography>
+            <Typography>The ticket was successfully assessed !</Typography>
+            <Button onClick={() => setSuccessModalOpen(false)} color="primary">
+              Close
+            </Button>
+          </Box>
+        </Modal>
     </>
   );
 }

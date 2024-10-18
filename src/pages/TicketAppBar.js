@@ -68,6 +68,9 @@ function TicketAppBar() {
     }
   };
 
+
+  
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -142,6 +145,7 @@ function TicketAppBar() {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              sx={{ ml: -2 }}
             >
               <MenuIcon />
             </IconButton>
@@ -169,26 +173,6 @@ function TicketAppBar() {
             </Menu>
           </Box>
 
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            onClick={() => navigate('/dashboard')}
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            {/* Add the title here */}
-          </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -204,7 +188,7 @@ function TicketAppBar() {
           <IconButton 
             color="inherit" 
             onClick={handleOpenNotificationMenu} // Open notification menu
-            sx={{ ml: 2 }}
+            sx={{ ml: -1.3 }}
           >
             <Badge badgeContent={notifications.length} color="error">
               <NotificationsIcon />

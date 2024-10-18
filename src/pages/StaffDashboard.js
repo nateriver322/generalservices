@@ -49,6 +49,7 @@ function TicketsCreated() {
   const [feedbackError, setFeedbackError] = useState('');
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
   const username = sessionStorage.getItem('username'); // Get username from localStorage
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   
  
     
@@ -78,6 +79,11 @@ function TicketsCreated() {
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleViewFeedback = (ticket) => {
+    setSelectedTicket(ticket);
+    setFeedbackModalOpen(true);
   };
 
   const fetchPersonnel = async () => {
@@ -283,6 +289,10 @@ function TicketsCreated() {
           padding: '30px',
         }}
       >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+          <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+          <Typography variant="h4" component="h2">JobTrack</Typography>
+        </Box>
         <Box
     sx={{
       display: 'flex',
@@ -290,6 +300,7 @@ function TicketsCreated() {
       marginBottom: '20px',
     }}
   >
+    
     <Typography variant="h3" sx={{ fontSize: '20px', textAlign: 'center' }}>
       Welcome staff, {username}!
     </Typography>
@@ -344,11 +355,12 @@ function TicketsCreated() {
                   <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
                   <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
                   <TableCell>
-                    <div className="button-group">
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
                         <Button
                           onClick={() => handleAssignTicket(ticket)}
                           variant="outlined"
+                          color="secondary"
                           sx={{ marginRight: 1, width: '120px', height: '60px' }}
                         >
                           Assign
@@ -361,9 +373,17 @@ function TicketsCreated() {
                           color="success"
                           sx={{ marginRight: 1, width: '120px', height: '60px' }}
                         >
-                          Assess
+                          Resolve
                         </Button>
                       )}
+
+                <Button 
+                onClick={() => handleViewFeedback(ticket)} 
+                variant="outlined" 
+                color="info" 
+                sx={{ marginRight: 1, width: '120px', height: '60px' }}>
+                  View Feedback
+                </Button>
                       <Button
                         onClick={() => handleViewTicket(ticket)}
                         variant="outlined"
@@ -380,7 +400,7 @@ function TicketsCreated() {
                       >
                         Terminate
                       </Button>
-                    </div>
+                      </Box>
                   </TableCell>
                 </TableRow>
               ))}
@@ -624,6 +644,34 @@ function TicketsCreated() {
   </Modal>
 )}
 
+
+{/* Feedback Modal */}
+<Modal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)}>
+        <Box sx={{ ...modalStyle, width: '400px' }}>
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>Feedback</Typography>
+          {selectedTicket && selectedTicket.feedback && (
+            <Typography sx={{ mb: 2 }}><strong>Staff Feedback:</strong> {selectedTicket.feedback}</Typography>
+          )}
+          
+          {selectedTicket && selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 && (
+      <>
+        <Typography variant="subtitle1" sx={{ mb: 1 }}><strong>Personnel Feedback/s:</strong></Typography>
+        {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
+          <Typography key={personnel} sx={{ mb: 1 }}>
+            <strong>{personnel}:</strong> {feedback}
+          </Typography>
+        ))}
+      </>
+    )}
+
+    {(!selectedTicket?.feedback && (!selectedTicket?.personnelFeedbacks || Object.keys(selectedTicket.personnelFeedbacks).length === 0)) && (
+      <Typography>No feedback available for this ticket.</Typography>
+    )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Button onClick={() => setFeedbackModalOpen(false)} variant="contained" color="primary">Close</Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 }

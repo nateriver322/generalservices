@@ -114,6 +114,7 @@ const Login = React.memo(() => {
                     margin="normal"
                     onChange={handleInputChange}
                     value={credentials.email}
+                    inputProps={{ minLength: 3, maxLength: 80 }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -144,6 +145,7 @@ const Login = React.memo(() => {
                     margin="normal"
                     onChange={handleInputChange}
                     value={credentials.password}
+                    inputProps={{ minLength: 8, maxLength: 80 }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

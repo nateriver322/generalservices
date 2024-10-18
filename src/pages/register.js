@@ -173,6 +173,7 @@ const Register = () => {
                     required
                     margin="normal"
                     onChange={handleInputChange}
+                    inputProps={{ minLength: 3, maxLength: 20 }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -204,6 +205,7 @@ const Register = () => {
                     onChange={handleInputChange}
                     error={!!errors.email}
                     helperText={errors.email}
+                    inputProps={{ minLength: 3, maxLength: 80 }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -235,6 +237,7 @@ const Register = () => {
                     onChange={handleInputChange}
                     error={!!errors.password}
                     helperText={errors.password}
+                    inputProps={{ minLength: 8, maxLength: 80 }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -276,6 +279,7 @@ const Register = () => {
                     onChange={handleInputChange}
                     error={!!errors.confirmPassword}
                     helperText={errors.confirmPassword}
+                    inputProps={{ minLength: 8, maxLength: 80 }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

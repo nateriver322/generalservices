@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../css/dashboard.css';
 import { Button, Box, Typography } from '@mui/material';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
 function Dashboard() {
@@ -27,7 +27,7 @@ function Dashboard() {
 
     return (
         <>
-            <ResponsiveAppBar />
+            <TicketAppBar />
             <Box
                 sx={{
                     display: 'flex',
@@ -102,6 +102,27 @@ function Dashboard() {
                         View Tickets
                     </Button>
                 </Box>
+            </Box>
+
+
+            <Box 
+                sx={{ 
+                    textAlign: 'center', 
+                    marginTop: { xs: -16, sm: -14,lg: -18  },  // Larger marginTop for mobile (xs), smaller for large screens (sm+)
+                    px: { xs: 2, sm: 0 },  // Padding for mobile to avoid cutting off
+                    maxWidth: '100%',  // Ensure it doesn't overflow
+                    
+                }}
+            >
+                <Typography variant="h5" sx={{ mb: 2, color: 'black',  }}>
+                    How to submit a request for a repair/installation?
+                </Typography>
+                <Typography variant="body1" sx={{ maxWidth: '600px', margin: '0 auto', color: 'black',  textAlign: 'justify', padding: { xs: '0 10px', sm: '0' }, fontSize: { xs: '15px', sm: '16px', md: '16px'} }}>
+                    1. Click the "Submit Ticket" button above.<br />
+                    2. Fill in the necessary details, including a description of the issue and relevant attachments if required.<br />
+                    3. Once you've filled out the form, click the "Submit" button.<br />
+                    4. You will receive a confirmation that your ticket has been successfully created, and you can track the status in the "View Tickets" section.
+                </Typography>
             </Box>
         </>
     );

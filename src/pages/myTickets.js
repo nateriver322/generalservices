@@ -364,7 +364,7 @@ function MyTickets() {
                 <DialogTitle>Feedback</DialogTitle>
                 <DialogContent>
                     {feedbackModalTicket.feedback && (
-                        <Typography sx={{ mb: '20px' }}><strong>Personnel/Staff Feedback:</strong> {feedbackModalTicket.feedback}</Typography>
+                        <Typography sx={{ mb: '20px' }}><strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}</Typography>
                     )}
                     {feedbackModalTicket.userFeedback ? (
                         <Typography><strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}</Typography>

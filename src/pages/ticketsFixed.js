@@ -93,6 +93,11 @@ export default function TicketsDone() {
     }
   };
 
+  const handleViewFeedback = (ticket) => {
+    setSelectedTicket(ticket);
+    setFeedbackModalOpen(true);
+  };
+
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -146,13 +151,13 @@ export default function TicketsDone() {
                       <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
                       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
                       <TableCell>
-                        <div className="button-group">
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Button onClick={() => handleViewTicket(ticket)} variant="outlined" color="warning" sx={{ marginRight: 1, width: '120px', height: '60px' }}>View Details</Button>
-                          <Button onClick={() => handleOpenFeedbackModal(ticket)} variant="outlined" color="primary" sx={{ marginRight: 1, width: '120px', height: '60px' }}>
-                            {ticket.userFeedback ? 'View Feedback' : 'Feedback'}
-                          </Button>
+                          <Button onClick={() => handleViewFeedback(ticket)} variant="outlined" color="primary" sx={{ marginRight: 1, width: '120px', height: '60px' }}>
+                  View Feedback
+                </Button>
                           <Button onClick={() => setTicketToDelete(ticket)} variant="contained" color="error" sx={{ width: '120px', height: '60px' }}>Terminate</Button>
-                        </div>
+                          </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -202,24 +207,34 @@ export default function TicketsDone() {
           </Modal>
         )}
 
-        {/* Feedback Modal */}
-        <Modal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)}>
-          <Box sx={{ ...modalStyle, width: '400px' }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>Feedback</Typography>
-            {selectedTicket && selectedTicket.feedback && (
-              <Typography sx={{ mb: 2 }}><strong>Personnel/Staff Feedback:</strong> {selectedTicket.feedback}</Typography>
-            )}
-            {selectedTicket && selectedTicket.userFeedback && (
-              <Typography sx={{ mb: 2 }}><strong>User Feedback:</strong> {selectedTicket.userFeedback}</Typography>
-            )}
-            {(!selectedTicket?.feedback && !selectedTicket?.userFeedback) && (
-              <Typography>No feedback available for this ticket.</Typography>
-            )}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-              <Button onClick={() => setFeedbackModalOpen(false)} variant="contained" color="primary">Close</Button>
-            </Box>
+       {/* Feedback Modal */}
+      <Modal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)}>
+        <Box sx={{ ...modalStyle, width: '400px' }}>
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>Feedback</Typography>
+          {selectedTicket && selectedTicket.feedback && (
+            <Typography sx={{ mb: 2 }}><strong>Staff Feedback:</strong> {selectedTicket.feedback}</Typography>
+          )}
+          {selectedTicket && selectedTicket.userFeedback && (
+            <Typography sx={{ mb: 2 }}><strong>User Feedback:</strong> {selectedTicket.userFeedback}</Typography>
+          )}
+          {selectedTicket && selectedTicket.personnelFeedbacks && (
+            <>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}><strong>Personnel Feedback:</strong></Typography>
+              {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
+                <Typography key={personnel} sx={{ mb: 1 }}>
+                  <strong>{personnel}:</strong> {feedback}
+                </Typography>
+              ))}
+            </>
+          )}
+          {(!selectedTicket?.feedback && !selectedTicket?.userFeedback && (!selectedTicket?.personnelFeedbacks || Object.keys(selectedTicket.personnelFeedbacks).length === 0)) && (
+            <Typography>No feedback available for this ticket.</Typography>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Button onClick={() => setFeedbackModalOpen(false)} variant="contained" color="primary">Close</Button>
           </Box>
-        </Modal>
+        </Box>
+      </Modal>
 
         <Snackbar
           open={successSnackbarOpen}
