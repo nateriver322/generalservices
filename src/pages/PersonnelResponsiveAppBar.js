@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom'; // For navigation
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,17 +11,17 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-// Import the logo image
 import citLogo from '../images/cit-logo.png';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const pages= ['Home', 'ASSIGNED', 'HISTORY'];
+const pages = ['Home', 'ASSIGNED', 'HISTORY'];
 const settings = ['Logout'];
 
 function PersonnelResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -40,32 +40,37 @@ function PersonnelResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
-}
+    sessionStorage.removeItem('username');
+    navigate('/');
+  };
 
   const handlePageNavigation = (page) => {
-    handleCloseNavMenu(); // Close the navigation menu
+    handleCloseNavMenu();
     
-    // Redirect to the dashboard (Home) page only
     if (page === 'Home') {
-      navigate('/dashboard'); // Redirect to the dashboard page
-    }else if (page === 'ASSIGNED') {
-      navigate('/personneltickets'); // Redirect to the tickets created page
-    }else if (page === 'HISTORY') {
-      navigate('/ticketsHistory'); // Redirect to the tickets created page
+      navigate('/dashboard');
+    } else if (page === 'ASSIGNED') {
+      navigate('/personneltickets');
+    } else if (page === 'HISTORY') {
+      navigate('/ticketsHistory');
     }
-};
+  };
 
+  const isActive = (path) => {
+    if (path === 'Home' && location.pathname === '/dashboard') return true;
+    if (path === 'ASSIGNED' && location.pathname === '/personneltickets') return true;
+    if (path === 'HISTORY' && location.pathname === '/ticketsHistory') return true;
+    return false;
+  };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>  {/* Maroon color */}
+    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img
             src={citLogo}
             alt="CIT-U Logo"
-            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
+            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }}
           />
           <Typography
             variant="h6"
@@ -82,9 +87,9 @@ function PersonnelResponsiveAppBar() {
               textDecoration: 'none',
               cursor: 'pointer'
             }}
-          ></Typography>
+          />
 
-<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -113,30 +118,48 @@ function PersonnelResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handlePageNavigation(page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem 
+                  key={page} 
+                  onClick={() => handlePageNavigation(page)}
+                  sx={{
+                    backgroundColor: isActive(page) ? '#800000' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: isActive(page) ? '#800000' : 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
+                >
+                  <Typography sx={{ textAlign: 'center', color: isActive(page) ? 'white' : 'inherit' }}>
+                    {page}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           
-         
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {pages.map((page) => (
+            {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => handlePageNavigation(page)}
-                sx={{ my: 2, color: 'white', display: 'bold' }}
+                sx={{ 
+                  my: 2, 
+                  color: 'white', 
+                  display: 'bold',
+                  backgroundColor: isActive(page) ? '#800000' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: isActive(page) ? '#800000' : 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
               >
                 {page}
               </Button>
             ))}
-</Box>
+          </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
+                <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
               </IconButton>
             </Tooltip>
             <Menu

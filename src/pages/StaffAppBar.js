@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // For navigation
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,26 +8,25 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-// Import the logo image
 import citLogo from '../images/cit-logo.png';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import Popover from '@mui/material/Popover';
 
-const pages = ['Home','Resolved','Roles' ];
+const pages = ['Home', 'Resolved', 'Roles'];
 const settings = ['Logout'];
 
 function StaffAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetchNotifications();
@@ -86,31 +85,37 @@ function StaffAppBar() {
     setAnchorElNotification(null);
   };
 
-  const handleLogout = (settings) => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
-}
+  const handleLogout = () => {
+    sessionStorage.removeItem('username');
+    navigate('/');
+  };
 
-  // Handle navigation when clicking on menu items
   const handlePageNavigation = (page) => {
-    handleCloseNavMenu(); // Close the navigation menu
+    handleCloseNavMenu();
     if (page === 'Home') {
-      navigate('/dashboard'); // Redirect to the dashboard page
-    }else if (page === 'Resolved') {
-      navigate('/ticketsFixed'); // Redirect to the tickets created page
-    }else if (page === 'Roles') {
-      navigate('/subrole'); // Redirect to the tickets created page
+      navigate('/dashboard');
+    } else if (page === 'Resolved') {
+      navigate('/ticketsFixed');
+    } else if (page === 'Roles') {
+      navigate('/subrole');
     }
   };
 
+  const isActive = (path) => {
+    if (path === 'Home' && location.pathname === '/dashboard') return true;
+    if (path === 'Resolved' && location.pathname === '/ticketsFixed') return true;
+    if (path === 'Roles' && location.pathname === '/subrole') return true;
+    return false;
+  };
+
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>  {/* Maroon color */}
+    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img
             src={citLogo}
             alt="CIT-U Logo"
-            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }} // Adjust height as needed
+            style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }}
           />
           <Typography
             variant="h6"
@@ -127,8 +132,7 @@ function StaffAppBar() {
               textDecoration: 'none',
               cursor: 'pointer'
             }}
-          >
-          </Typography>
+          />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -159,26 +163,43 @@ function StaffAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handlePageNavigation(page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem 
+                  key={page} 
+                  onClick={() => handlePageNavigation(page)}
+                  sx={{
+                    backgroundColor: isActive(page) ? '#800000' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: isActive(page) ? '#800000' : 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
+                >
+                  <Typography sx={{ textAlign: 'center', color: isActive(page) ? 'white' : 'inherit' }}>
+                    {page}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
-         
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => handlePageNavigation(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ 
+                  my: 2, 
+                  color: 'white', 
+                  display: 'block',
+                  backgroundColor: isActive(page) ? '#800000' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: isActive(page) ? '#800000' : 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-
 
           <IconButton 
             color="inherit" 
@@ -225,7 +246,7 @@ function StaffAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
+                <SettingsTwoToneIcon sx={{ fontSize: 30 }}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -244,12 +265,11 @@ function StaffAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-               {settings.map((setting) => (
+              {settings.map((setting) => (
                 <MenuItem key={setting} onClick={() => { handleCloseUserMenu(); if (setting === 'Logout') handleLogout(); }}>
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}
-            
             </Menu>
           </Box>
         </Toolbar>
