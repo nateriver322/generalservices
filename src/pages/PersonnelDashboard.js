@@ -52,23 +52,7 @@ function PersonnelDashboard() {
     return (
         <>
             <PersonnelResponsiveAppBar />
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '10px',
-                    marginTop: '30px' // Move the form down
-                }}
-            >
-                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography
-                    variant="h4"
-                    component="h2"
-                >
-                    JobTrack
-                </Typography>
-            </Box>
+           
             <div className="user-info">
                 <Typography variant="h3">Welcome Personnel {username}!</Typography>
                 {userDetails && (

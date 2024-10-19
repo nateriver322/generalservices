@@ -117,10 +117,7 @@ export default function TicketsDone() {
     <>
       <StaffAppBar />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-          <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-          <Typography variant="h4" component="h2">JobTrack</Typography>
-        </Box>
+        
 
         <Box sx={{ width: '100%', maxWidth: 1450 }}>
           {doneTickets.length === 0 ? (
@@ -156,7 +153,7 @@ export default function TicketsDone() {
                           <Button onClick={() => handleViewFeedback(ticket)} variant="outlined" color="primary" sx={{ marginRight: 1, width: '120px', height: '60px' }}>
                   View Feedback
                 </Button>
-                          <Button onClick={() => setTicketToDelete(ticket)} variant="contained" color="error" sx={{ width: '120px', height: '60px' }}>Terminate</Button>
+                          <Button onClick={() => setTicketToDelete(ticket)} variant="contained" color="error" sx={{ width: '120px', height: '60px' }}>Delete</Button>
                           </Box>
                       </TableCell>
                     </TableRow>
@@ -171,10 +168,10 @@ export default function TicketsDone() {
         {ticketToDelete && (
           <Modal open={!!ticketToDelete} onClose={closeDeleteModal}>
             <Box sx={{ ...modalStyle }}>
-              <Typography variant="h6">Confirm Termination</Typography>
-              <Typography variant="body1" sx={{ marginBottom: 2 }}>Are you sure you want to terminate this ticket?</Typography>
+              <Typography variant="h6">Confirm Deletion</Typography>
+              <Typography variant="body1" sx={{ marginBottom: 2 }}>Are you sure you want to delete this ticket?</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button onClick={confirmDeleteTicket} variant="contained" color="error" sx={{ marginRight: 1 }}>Yes, Terminate</Button>
+                <Button onClick={confirmDeleteTicket} variant="contained" color="error" sx={{ marginRight: 1 }}>Yes</Button>
                 <Button onClick={closeDeleteModal} variant="outlined" color="secondary">Cancel</Button>
               </Box>
             </Box>

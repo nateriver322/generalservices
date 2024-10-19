@@ -126,20 +126,7 @@ function UserManagement() {
         padding: { xs: '20px', sm: '30px' },
     }}
 >
-    <Box
-        sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: { xs: '15px', sm: '20px' },
-        }}
-    >
-        <ConstructionIcon sx={{ fontSize: { xs: 40, sm: 60 }, mr: { sm: 2 } }} />
-        <Typography variant="h4" component="h2" textAlign="center">
-            JobTrack
-        </Typography>
-    </Box>
+   
 
     <Box sx={{ width: '100%', maxWidth: 1450 }}>
         <Box 

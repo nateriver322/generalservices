@@ -289,10 +289,7 @@ function TicketsCreated() {
           padding: '30px',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-          <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-          <Typography variant="h4" component="h2">JobTrack</Typography>
-        </Box>
+       
         <Box
     sx={{
       display: 'flex',
