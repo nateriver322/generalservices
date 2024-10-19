@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // For navigation
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -17,18 +16,22 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import Popover from '@mui/material/Popover';
 
-// Import the logo image
 import citLogo from '../images/cit-logo.png';
 
-const pages = ['Home', 'My Tickets'];
+const pages = [
+  { name: 'Home', path: '/dashboard' },
+  { name: 'Submit Tickets', path: '/ticket' },
+  { name: 'My Tickets', path: '/myTickets' }
+];
 const settings = ['Logout'];
 
 function TicketAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [anchorElNotification, setAnchorElNotification] = useState(null); // New state for notification popover
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -68,9 +71,6 @@ function TicketAppBar() {
     }
   };
 
-
-  
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -80,7 +80,7 @@ function TicketAppBar() {
   };
 
   const handleOpenNotificationMenu = (event) => {
-    setAnchorElNotification(event.currentTarget); // Open notifications popover
+    setAnchorElNotification(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -92,21 +92,21 @@ function TicketAppBar() {
   };
 
   const handleCloseNotificationMenu = () => {
-    setAnchorElNotification(null); // Close notifications popover
+    setAnchorElNotification(null);
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
+    localStorage.removeItem('username');
+    navigate('/');
   };
 
   const handlePageNavigation = (page) => {
-    handleCloseNavMenu(); // Close the navigation menu
-    if (page === 'Home') {
-      navigate('/dashboard'); // Redirect to the dashboard page
-    } else if (page === 'My Tickets') {
-      navigate('/myTickets'); // Redirect to the tickets created page
-    }
+    handleCloseNavMenu();
+    navigate(page.path);
+  };
+
+  const isPageActive = (pagePath) => {
+    return location.pathname === pagePath;
   };
 
   return (
@@ -134,7 +134,7 @@ function TicketAppBar() {
               cursor: 'pointer'
             }}
           >
-            {/* Add the title here */}
+            {/* Add the title here if needed */}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -166,8 +166,19 @@ function TicketAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handlePageNavigation(page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem 
+                  key={page.name} 
+                  onClick={() => handlePageNavigation(page)}
+                  sx={{
+                    backgroundColor: isPageActive(page.path) ? 'maroon' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: isPageActive(page.path) ? 'maroon' : 'inherit',
+                    },
+                  }}
+                >
+                  <Typography sx={{ textAlign: 'center', color: isPageActive(page.path) ? 'white' : 'inherit' }}>
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -176,18 +187,26 @@ function TicketAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={() => handlePageNavigation(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ 
+                  my: 2, 
+                  color: 'white', 
+                  display: 'block',
+                  backgroundColor: isPageActive(page.path) ? 'maroon' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: isPageActive(page.path) ? 'maroon' : 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
 
           <IconButton 
             color="inherit" 
-            onClick={handleOpenNotificationMenu} // Open notification menu
+            onClick={handleOpenNotificationMenu}
             sx={{ ml: -1.3 }}
           >
             <Badge badgeContent={notifications.length} color="error">
@@ -196,9 +215,9 @@ function TicketAppBar() {
           </IconButton>
 
           <Popover
-            open={Boolean(anchorElNotification)} // Use the notification anchor state
+            open={Boolean(anchorElNotification)}
             anchorEl={anchorElNotification}
-            onClose={handleCloseNotificationMenu} // Close notification menu
+            onClose={handleCloseNotificationMenu}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
