@@ -50,7 +50,7 @@ function TicketsCreated() {
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
   const username = sessionStorage.getItem('username'); // Get username from localStorage
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
-
+  const [personnelWorkload, setPersonnelWorkload] = useState({});
 
  
     
@@ -61,6 +61,7 @@ function TicketsCreated() {
     } else {
       fetchTickets();
       fetchPersonnel();
+      fetchPersonnelWorkload();
     }
   }, [navigate]);
 
@@ -96,6 +97,8 @@ function TicketsCreated() {
     }
   };
 
+ 
+
   const handleViewTicket = (ticket) => {
     setSelectedTicket(ticket);
     setDetailsModalOpen(true);
@@ -111,15 +114,22 @@ function TicketsCreated() {
     setFeedbackError('');
   };
 
+  const fetchPersonnelWorkload = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/personnel/workload');
+      setPersonnelWorkload(response.data);
+    } catch (error) {
+      console.error('Error fetching personnel workload:', error);
+    }
+  };
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
     const workTypes = ticket.workType.split(',');
     setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
-    setSelectedPersonnel([]); // Reset selected personnel when opening the modal
-    console.log('Selected Ticket:', ticket); // Add this line for debugging
+    setSelectedPersonnel([]);
+    fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
-
   const closeDetailsModal = () => {
     setDetailsModalOpen(false);
     setSelectedTicket(null);
@@ -453,11 +463,31 @@ function TicketsCreated() {
                 renderValue={(selected) => selected.join(', ')}
               >
                 {filteredPersonnel.map((personnel) => (
-                  <MenuItem key={personnel.id} value={personnel.username}>
-                    <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
-                    <ListItemText primary={personnel.username} />
-                  </MenuItem>
-                ))}
+          <MenuItem key={personnel.id} value={personnel.username}>
+            <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
+            <ListItemText 
+              primary={
+                <Box display="flex" alignItems="center">
+                  <Typography>{personnel.username}</Typography>
+                  <Typography
+                    component="span"
+                    sx={{
+                      marginLeft: 1,
+                      fontWeight: 'bold',
+                      color: 'white',
+                      backgroundColor: 'maroon',
+                      padding: '2px 6px',
+                      borderRadius: '12px',
+                      fontSize: '0.80rem'
+                    }}
+                  >
+                    {personnelWorkload[personnel.username] || 0} tickets assigned
+                  </Typography>
+                </Box>
+              }
+            />
+          </MenuItem>
+        ))}
               </Select>
             </FormControl>
             <TextField
@@ -471,7 +501,7 @@ function TicketsCreated() {
               inputProps={{ min: new Date().toISOString().split('T')[0] }}
             />
 
-<Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
               <Button
                 variant="contained"
                 color="primary"
