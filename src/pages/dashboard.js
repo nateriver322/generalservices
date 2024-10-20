@@ -40,10 +40,10 @@ function Dashboard() {
         lineHeight: 1.6 // Adjusted line height for better readability
     }}
 >
-    1. Click the "Submit Ticket" button above.<br />
-    2. Fill in the necessary details, including a description of the issue and relevant attachments if required.<br />
-    3. Once you've filled out the form, click the "Submit" button.<br />
-    4. You will receive a confirmation that your ticket has been successfully created, and you can track the status in the "View Tickets" section.
+    1. Click the "Submit Ticket" button above.<br /><br/>
+    2. Fill in the necessary details, including a description of the issue and relevant attachments if required.<br /><br/>
+    3. Once you've filled out the form, click the "Submit" button.<br /><br/>
+    4. You will receive a confirmation that your ticket has been successfully created, and you can track the status in the "View Tickets" section.<br/>
 </Typography>
                 </Box>
             </Container>
