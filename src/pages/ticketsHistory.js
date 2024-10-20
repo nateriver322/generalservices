@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import PersonnelResponsiveAppBar from './PersonnelResponsiveAppBar';
-import ConstructionIcon from '@mui/icons-material/Construction';
+import ViewDetailsModal from './ViewDetailsModal';
 import {
   Table,
   TableBody,
@@ -19,8 +19,8 @@ function TicketsHistory() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   useEffect(() => {
     const username = localStorage.getItem('username');
     if (!username) {
@@ -151,46 +151,11 @@ function TicketsHistory() {
         </Box>
       </Box>
 
-      {detailsModalOpen && selectedTicket && (
-        <Modal
-          open={detailsModalOpen}
-          onClose={closeDetailsModal}
-          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Box sx={{
-            ...modalStyle,
-            width: '80%',
-            maxWidth: '800px',
-            maxHeight: '800px',
-          }}>
-            <Typography variant="h6">Ticket Details</Typography>
-            <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-              <Typography variant="body1"><strong>Ticket Number:</strong> {selectedTicket.id}</Typography>
-              <Typography variant="body1"><strong>Date Created:</strong> {selectedTicket.datetime}</Typography>
-              <Typography variant="body1"><strong>Status:</strong> {selectedTicket.status}</Typography>
-              <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-              <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
-              <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel}</Typography>
-              <Typography variant="body1"><strong>Date Resolved:</strong> {selectedTicket.dateResolved || 'Not resolved'}</Typography>
-              <Typography variant="body1"><strong>Description:</strong> {selectedTicket.description}</Typography>
-              <Typography variant="body1"><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
-              <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-              <Typography variant="body1"><strong>Location:</strong> {selectedTicket.location}</Typography>
-
-              {selectedTicket.imageBase64 && (
-                <Box sx={{ textAlign: 'center', marginTop: 2, marginBottom: 2 }}>
-                  <img
-                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-                    alt="Uploaded Ticket"
-                    style={{ maxWidth: '700px', height: 'auto' }}
-                  />
-                </Box>
-              )}
-            </Box>
-            <Button onClick={closeDetailsModal} sx={{ marginTop: 2 }}>Close</Button>
-          </Box>
-        </Modal>
-      )}
+      <ViewDetailsModal
+  open={detailsModalOpen}
+  onClose={closeDetailsModal}
+  ticket={selectedTicket}
+/>
     </>
   );
 }

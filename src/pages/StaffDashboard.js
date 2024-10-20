@@ -4,7 +4,7 @@ import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import qs from 'qs';
-
+import ViewDetailsModal from './ViewDetailsModal';
 import {
   Table,
   TableBody,
@@ -50,7 +50,8 @@ function TicketsCreated() {
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
   const username = sessionStorage.getItem('username'); // Get username from localStorage
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
-  
+
+
  
     
   useEffect(() => {
@@ -604,42 +605,11 @@ function TicketsCreated() {
         </Modal>
       )}
 
-{detailsModalOpen && selectedTicket && (
-  <Modal
-    open={detailsModalOpen}
-    onClose={() => setDetailsModalOpen(false)}
-    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} // Centers the modal
-  >
-    <Box sx={{ ...modalStyle, width: '80%', maxWidth: '800px', maxHeight: '800px' }}>
-      <DialogTitle>General Maintenance Department</DialogTitle>
-      <DialogContent sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-        <Typography variant="body1"><strong>Ticket Number:</strong> {selectedTicket.id}</Typography>
-        <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-        <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-        <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
-        <Typography variant="body1"><strong>Date Created:</strong> {selectedTicket.datetime}</Typography>
-        <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'Not assigned'}</Typography>
-        <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
-  
-        <Typography variant="body1" sx={{ marginTop: 2 }}><strong>Description:</strong> {selectedTicket.description}</Typography>
-        {/* Display image if available */}
-        {selectedTicket.imageBase64 && (
-          <Box sx={{ textAlign: 'center', marginTop: 2, marginBottom: 2 }}>
-            <img
-              src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-              alt="Uploaded Ticket"
-              style={{ maxWidth: '700px', height: 'auto' }}
-            />
-          </Box>
-        )}
-
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setDetailsModalOpen(false)}>Close</Button>
-      </DialogActions>
-    </Box>
-  </Modal>
-)}
+<ViewDetailsModal
+  open={detailsModalOpen}
+  onClose={closeDetailsModal}
+  ticket={selectedTicket}
+/>
 
 
 {/* Feedback Modal */}

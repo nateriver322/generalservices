@@ -9,6 +9,7 @@ import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import { Box, Typography, Button, Modal, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from '@mui/material';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import ViewDetailsModal from './ViewDetailsModal';
 
 export default function TicketsDone() {
   const navigate = useNavigate();
@@ -98,6 +99,11 @@ export default function TicketsDone() {
     setFeedbackModalOpen(true);
   };
 
+  const closeDetailsModal = () => {
+    setDetailsModalOpen(false);
+    setSelectedTicket(null);
+  };
+
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -178,31 +184,12 @@ export default function TicketsDone() {
           </Modal>
         )}
 
-        {/* Ticket Details Modal */}
-        {detailsModalOpen && selectedTicket && (
-          <Modal open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ ...modalStyle, width: '80%', maxWidth: '800px', maxHeight: '800px' }}>
-              <DialogTitle>Ticket Details</DialogTitle>
-              <DialogContent sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-                <Typography variant="body1"><strong>Ticket Number:</strong> {selectedTicket.id}</Typography>
-                <Typography variant="body1"><strong>Date Created:</strong> {selectedTicket.datetime}</Typography>
-                <Typography variant="body1"><strong>Status:</strong> {selectedTicket.status}</Typography>
-                <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-                <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
-                <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'Not assigned'}</Typography>
-                <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
-                <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-                <Typography variant="body1" sx={{ marginTop: 2 }}><strong>Description:</strong> {selectedTicket.description}</Typography>
-                {selectedTicket.imageBase64 && (
-                  <img src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`} alt="Ticket" style={{ marginTop: '20px', maxWidth: '100%', height: 'auto' }} />
-                )}
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setDetailsModalOpen(false)} variant="contained" color="secondary">Close</Button>
-              </DialogActions>
-            </Box>
-          </Modal>
-        )}
+<ViewDetailsModal
+  open={detailsModalOpen}
+  onClose={closeDetailsModal}
+  ticket={selectedTicket}
+/>
+
 
        {/* Feedback Modal */}
       <Modal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)}>

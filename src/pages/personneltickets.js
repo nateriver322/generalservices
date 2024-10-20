@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ConstructionIcon from '@mui/icons-material/Construction';
+import ViewDetailsModal from './ViewDetailsModal';
+
 import {
   Table,
   TableBody,
@@ -20,6 +21,7 @@ function PersonnelTickets() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
@@ -62,7 +64,6 @@ function PersonnelTickets() {
     setSelectedTicket(ticket);
     setDetailsModalOpen(true);
   };
-
   const closeDetailsModal = () => {
     setDetailsModalOpen(false);
     setSelectedTicket(null);
@@ -93,7 +94,7 @@ function PersonnelTickets() {
     p: 4,
     borderRadius: 2,
   };
-
+ 
   const handleAssessTicket = (ticket) => {
     setSelectedTicket(ticket);
     setFeedbackModalOpen(true);
@@ -120,9 +121,9 @@ function PersonnelTickets() {
 
   const hasSubmittedFeedback = (ticket) => {
     const username = localStorage.getItem('username');
+    // Check if ticket feedback exists and if the feedback contains an entry for the user
     return ticket.feedback && ticket.feedback[username];
   };
-
 
 
   return (
@@ -159,88 +160,50 @@ function PersonnelTickets() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {tickets.map((ticket, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{ticket.id}</TableCell>
-                      <TableCell style={{ color: getStatusColor(ticket.status) }}>
-                        {ticket.status}
-                      </TableCell>
-                      <TableCell>{ticket.priority}</TableCell>
-                      <TableCell>{ticket.username}</TableCell>
-                      <TableCell>{ticket.datetime}</TableCell>
-                      <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
-                      <TableCell>{ticket.assignedPersonnel}</TableCell>
-                      <TableCell>
-                        {!hasSubmittedFeedback(ticket) && (
-                          <Button
-                            onClick={() => handleAssessTicket(ticket)}
-                            variant="outlined"
-                            color="success"
-                            sx={{ marginRight: 1, width: '120px', height: '60px' }}
-                          >
-                            Assess
-                          </Button>
-                        )}
-                        <Button
-                          onClick={() => handleViewTicket(ticket)}
-                          variant="outlined"
-                          color="warning"
-                          sx={{ marginRight: 1, width: '120px', height: '60px' }}
-                        >
-                          View Details
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+  {tickets.map((ticket, index) => (
+    <TableRow key={index}>
+      <TableCell>{ticket.id}</TableCell>
+      <TableCell style={{ color: getStatusColor(ticket.status) }}>
+        {ticket.status}
+      </TableCell>
+      <TableCell>{ticket.priority}</TableCell>
+      <TableCell>{ticket.username}</TableCell>
+      <TableCell>{ticket.datetime}</TableCell>
+      <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+      <TableCell>{ticket.assignedPersonnel}</TableCell>
+      <TableCell>
+        <Button
+          onClick={() => handleAssessTicket(ticket)}
+          variant="outlined"
+          color="success"
+          sx={{ marginRight: 1, width: '120px', height: '60px' }}
+          disabled={hasSubmittedFeedback(ticket)} // Disable the button if feedback is already submitted
+        >
+          Assess
+        </Button>
+        <Button
+          onClick={() => handleViewTicket(ticket)}
+          variant="outlined"
+          color="warning"
+          sx={{ marginRight: 1, width: '120px', height: '60px' }}
+        >
+          View Details
+        </Button>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
               </Table>
             </Box>
           )}
         </Box>
       </Box>
 
-      {detailsModalOpen && selectedTicket && (
-        <Modal
-          open={detailsModalOpen}
-          onClose={closeDetailsModal}
-          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Box sx={{
-            ...modalStyle,
-            width: '80%',
-            maxWidth: '800px',
-            maxHeight: '800px',
-          }}>
-            <Typography variant="h6">Ticket Details</Typography>
-            <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-              <Typography variant="body1"><strong>Ticket Number:</strong> {selectedTicket.id}</Typography>
-              <Typography variant="body1"><strong>Date Created:</strong> {selectedTicket.datetime}</Typography>
-              <Typography variant="body1"><strong>Status:</strong> {selectedTicket.status}</Typography>
-              <Typography variant="body1"><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-              <Typography variant="body1"><strong>Reported By:</strong> {selectedTicket.username}</Typography>
-              <Typography variant="body1"><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
-              <Typography variant="body1"><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel}</Typography>
-              <Typography variant="body1"><strong>Description:</strong> {selectedTicket.description}</Typography>
-              <Typography variant="body1"><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
-              <Typography variant="body1"><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-              <Typography variant="body1"><strong>Location:</strong> {selectedTicket.location}</Typography>
-
-              {selectedTicket.imageBase64 && (
-                <Box sx={{ textAlign: 'center', marginTop: 2, marginBottom: 2 }}>
-                  <img
-                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-                    alt="Uploaded Ticket"
-                    style={{ maxWidth: '100%', maxHeight: '300px' }}
-                  />
-                </Box>
-              )}
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-              <Button variant="contained" onClick={closeDetailsModal}>Close</Button>
-            </Box>
-          </Box>
-        </Modal>
-      )}
+      <ViewDetailsModal
+  open={detailsModalOpen}
+  onClose={closeDetailsModal}
+  ticket={selectedTicket}
+/>
 
       {feedbackModalOpen && selectedTicket && (
         <Modal
