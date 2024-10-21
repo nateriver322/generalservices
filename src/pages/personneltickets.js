@@ -121,11 +121,8 @@ function PersonnelTickets() {
 
   const hasSubmittedFeedback = (ticket) => {
     const username = localStorage.getItem('username');
-    // Check if ticket feedback exists and if the feedback contains an entry for the user
-    return ticket.feedback && ticket.feedback[username];
+    return ticket.personnelFeedbacks && ticket.personnelFeedbacks[username];
   };
-
-
   return (
     <>
       <PersonnelResponsiveAppBar />
@@ -172,15 +169,15 @@ function PersonnelTickets() {
       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
       <TableCell>{ticket.assignedPersonnel}</TableCell>
       <TableCell>
-        <Button
-          onClick={() => handleAssessTicket(ticket)}
-          variant="outlined"
-          color="success"
-          sx={{ marginRight: 1, width: '120px', height: '60px' }}
-          disabled={hasSubmittedFeedback(ticket)} // Disable the button if feedback is already submitted
-        >
-          Assess
-        </Button>
+      <Button
+  onClick={() => handleAssessTicket(ticket)}
+  variant="outlined"
+  color="success"
+  sx={{ marginRight: 1, width: '120px', height: '60px' }}
+  disabled={hasSubmittedFeedback(ticket)}
+>
+  {hasSubmittedFeedback(ticket) ? 'Assessed' : 'Assess'}
+</Button>
         <Button
           onClick={() => handleViewTicket(ticket)}
           variant="outlined"
