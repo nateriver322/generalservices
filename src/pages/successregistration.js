@@ -1,7 +1,9 @@
 import React from 'react';
 import '../css/successregistration.css'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo.png';
+import { Box, Typography, Button } from '@mui/material';
+import LoginResponsiveAppBar from './LoginResponsiveAppBar';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 const Successregistration = () => {
   const navigate = useNavigate();
@@ -12,21 +14,58 @@ const Successregistration = () => {
 
   return (
     <div>
-      <header>
-        <div className="header-content">
-        <img src={logo} className="logo" alt="CIT-U Logo" />
-          <h1 className="h1">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</h1>
-        </div>
-      </header>
-      <h2 className="h2">General Services Portal</h2>
-      <div className="container">
-        <div className="form-container">
-          <form className="login-form">
-            <h3 className="h3">Account Successfully Created!</h3>
-            <button className="success-button" id="signup-button" onClick={handleLoginClick}>Login</button>
-          </form>
-        </div>
-      </div>
+      <LoginResponsiveAppBar />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+          marginTop: '30px',
+        }}
+      >
+        <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+        <Typography variant="h4" component="h2">
+          JobTrack
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          maxWidth: '400px',
+          width: '100%',
+          bgcolor: 'white',
+          p: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          margin: '0 auto',
+          mt: 4,
+          textAlign: 'center', // Center align content
+        }}
+      >
+        <Typography variant="h5" component="h3" gutterBottom>
+          Account Successfully Created!
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Welcome to the General Services Portal.
+        </Typography>
+
+        <Button
+          variant="contained"
+          sx={{
+            bgcolor: '#800000',
+            '&:hover': {
+              bgcolor: '#A00000',
+            },
+            color: 'white',
+            mt: 2,
+            mb: 2,
+          }}
+          onClick={handleLoginClick}
+          fullWidth
+        >
+          Login
+        </Button>
+      </Box>
     </div>
   );
 };
