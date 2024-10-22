@@ -127,6 +127,25 @@ function UserManagement() {
     }}
 >
    
+   <Box 
+                sx={{ 
+                    width: '100%', 
+                    maxWidth: 850, 
+                    height: '30px', 
+                    marginBottom: '16px',
+                }}
+            >
+                {error && (
+                    <Alert severity="error" sx={{ mb: 1 }}>
+                        {error}
+                    </Alert>
+                )}
+                {successMessage && (
+                    <Alert severity="success" sx={{ mb: 1 }}>
+                        {successMessage}
+                    </Alert>
+                )}
+            </Box>
 
     <Box sx={{ width: '100%', maxWidth: 1450 }}>
         <Box 
@@ -136,8 +155,6 @@ function UserManagement() {
                 mt: { xs: 2, sm: 4 },
                 overflowX: 'auto',  // Allow horizontal scrolling if content overflows
             }}>
-                {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
-                {successMessage && <Alert severity="success" sx={{ mb: 1 }}>{successMessage}</Alert>}
             <Typography variant="h5">
                 Account Management
             </Typography>
@@ -194,17 +211,29 @@ function UserManagement() {
             <Typography variant="h5" gutterBottom sx={{ mt: 2 }} >
                 Assign Subrole to Personnel
             </Typography>
-            <form onSubmit={handleAssignSubrole}>
+        <form onSubmit={handleAssignSubrole}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',  // Stack items vertically
+                    gap: 2,  // Adds space between the elements
+                    alignItems: 'center',  // Aligns items to center
+                    }}
+    >
                 <Select
                     value={selectedUser || ''}
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    fullWidth
-                    sx={{ mb: 2 }}
+                    fullWidth={false}
+                    sx={{ width: '300px'}}
                     displayEmpty
                 >
                     <MenuItem value="" disabled>Select a personnel</MenuItem>
                     {personnel.map(user => (
-                        <MenuItem key={user.id} value={user.id}>
+                        <MenuItem key={user.id} value={user.id}
+                        sx={{
+                            width: '300px',  // Consistent width for options
+                        }}
+                        >
                             {user.username}
                         </MenuItem>
                     ))}
@@ -213,22 +242,23 @@ function UserManagement() {
                 <Select
                     value={subrole}
                     onChange={(e) => setSubrole(e.target.value)}
-                    fullWidth
-                    sx={{ mb: 2 }}
+                    fullWidth={false}
+                    sx={{ width: '300px'}}
                     displayEmpty
                 >
                     <MenuItem value="" disabled>Select a subrole</MenuItem>
-                    <MenuItem value="Plumbing">Plumbing</MenuItem>
-                    <MenuItem value="Carpentry/Masonry/Steel Works">Carpentry/Masonry/Steel Works</MenuItem>
-                    <MenuItem value="Electrical">Electrical</MenuItem>
-                    <MenuItem value="Electro-Mechanical">Electro-Mechanical</MenuItem>
+                    <MenuItem value="Plumbing" sx={{ width: '300px' }}>Plumbing</MenuItem>
+                    <MenuItem value="Carpentry/Masonry/Steel Works" sx={{ width: '300px' }}>Carpentry/Masonry/Steel Works</MenuItem>
+                    <MenuItem value="Electrical" sx={{ width: '300px' }}>Electrical</MenuItem>
+                    <MenuItem value="Electro-Mechanical" sx={{ width: '300px' }}>Electro-Mechanical</MenuItem>
                 </Select>
 
                 <Button type="submit" variant="contained" color="primary" disabled={!selectedUser || !subrole || loading}>
                     Assign Subrole
                 </Button>
-            </form>
-        </Box>
+            </Box>
+        </form>
+    </Box>
      
         </>
     );
