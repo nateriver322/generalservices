@@ -8,6 +8,7 @@ import { useMsal } from "@azure/msal-react";
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
 
 const Login = React.memo(() => {
     const navigate = useNavigate();
@@ -31,21 +32,48 @@ const Login = React.memo(() => {
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
         try {
-            const userData = await login(credentials.email, credentials.password);
+            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+                credentials: 'include' // This is important for cookies
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Login failed');
+            }
+
+            const userData = await response.json();
             sessionStorage.setItem('username', userData.username);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             setError(error.message);
             setTimeout(() => {
                 setError('');
-            }, 1000);
+            }, 3000);
         }
     };
 
     const handleMicrosoftLogin = async () => {
         try {
             const result = await instance.loginPopup(loginRequest);
-            const userData = await microsoftLogin(result.accessToken);
+            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.microsoftLogin}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${result.accessToken}`
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Microsoft login failed');
+            }
+
+            const userData = await response.json();
             sessionStorage.setItem('username', userData.username);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
