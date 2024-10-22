@@ -11,4 +11,6 @@ export const API_ENDPOINTS = {
   register: '/user/register',
   forgotPassword: '/user/forgot_password',
   addUser: '/user/add',
+  checkEmail: '/user/checkEmail',
+  
 };

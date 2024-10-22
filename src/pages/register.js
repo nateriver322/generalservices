@@ -129,7 +129,7 @@ const Register = () => {
 
     const isEmailAlreadyRegistered = async (email) => {
         try {
-            const response = await fetch(`http://localhost:8080/user/checkEmail?email=${encodeURIComponent(email)}`);
+            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`);
             const result = await response.json();
             return result.exists;
         } catch (error) {
