@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment, Container } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
@@ -25,9 +25,9 @@ const Register = () => {
             const timer = setTimeout(() => {
                 setEmailError('');
                 setErrors({});
-            }, 2000); // Clear error after 2 seconds
+            }, 2000);
 
-            return () => clearTimeout(timer); // Clean up timer on unmount
+            return () => clearTimeout(timer);
         }
     }, [emailError, errors]);
 
@@ -62,7 +62,7 @@ const Register = () => {
     };
 
     const validateForm = async () => {
-        const newErrors = {}; // Define newErrors here
+        const newErrors = {};
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(userData.email)) {
@@ -85,7 +85,6 @@ const Register = () => {
             newErrors.contactNumber = "Contact number must be exactly 11 digits.";
         }
 
-        // Check if passwords match
         if (userData.password !== userData.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match.";
         }
@@ -136,248 +135,207 @@ const Register = () => {
         }
     };
 
+    const inputSx = {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': { borderColor: 'black' },
+            '&:hover fieldset': { borderColor: '#922B21' },
+            '&.Mui-focused fieldset': { borderColor: '#800000' },
+        },
+        '& .MuiInputLabel-root': { color: 'black' },
+        '& .MuiInputLabel-root.Mui-focused': { color: 'black' },
+        mb: 2
+    };
+
     return (
-        <div>
+        <Box sx={{ 
+            minHeight: '100vh', 
+            bgcolor:'#FFD700',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
             <LoginResponsiveAppBar />
-            <Box
-                sx={{
+            
+            <Container 
+                maxWidth="sm" 
+                sx={{ 
+                    py: { xs: 2, sm: 4 },
+                    px: { xs: 3, sm: 0 },
+                    flex: 1,
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                    marginTop: '30px'
+                    flexDirection: 'column'
                 }}
             >
-                <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-                <Typography variant="h4" component="h2">JobTrack</Typography>
-            </Box>
-            <Box
-                component="form"
-                onSubmit={handleFormSubmit}
-                sx={{
-                    maxWidth: '400px',
-                    bgcolor: 'white',
-                    p: 4,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    margin: '0 auto'
-                }}
-            >
-                <Typography variant="h5" component="h3" gutterBottom>Create Account</Typography>
-                
-
-                <TextField
-                    label="Username"
-                    name="username"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    inputProps={{ minLength: 3, maxLength: 20 }}
+                {/* Logo and Title */}
+                <Box
                     sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mb: { xs: 2, sm: 4 },
+                        mt: { xs: 1, sm: 2 }
                     }}
-                />
-
-                <TextField
-                    label="Email"
-                    type="email"
-                    name="email"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
-                    inputProps={{ minLength: 3, maxLength: 80 }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                />
-
-                <TextField
-                    label="Password"
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.password}
-                    helperText={errors.password}
-                    inputProps={{ minLength: 8, maxLength: 80 }}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={togglePasswordVisibility} edge="end">
-                                    {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                />
-
-                {/* Confirm Password Field */}
-                <TextField
-                    label="Confirm Password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    name="confirmPassword"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword}
-                    inputProps={{ minLength: 8, maxLength: 80 }}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
-                                    {showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                />
-
-                <TextField
-                    label="Contact Number"
-                    name="contactNumber"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.contactNumber}
-                    helperText={errors.contactNumber}
-                    inputProps={{
-                        maxLength: 11,
-                        inputMode: 'numeric',
-                        pattern: '[0-9]*'
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                />
-
-                
-                    <Box sx={{ mt: 2 }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
+                >
+                    <ConstructionIcon sx={{ 
+                        fontSize: { xs: 40, sm: 60 }, 
+                        mr: 2 
+                    }} />
+                    <Typography 
+                        variant="h4" 
+                        component="h2"
                         sx={{
-                            bgcolor: '#800000',
-                            '&:hover': {
-                                bgcolor: '#A00000',
-                            },
-                            color: 'white',
-                            mb: 2
-                        }}
-                        fullWidth
-                    >
-                        Sign Up
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="outlined"
-                        fullWidth
-                        onClick={handleLoginClick}
-                        sx={{
-                            borderColor: '#800000',
-                            color: '#800000',
+                            fontSize: { xs: '1.75rem', sm: '2.125rem' }
                         }}
                     >
-                        Login
-                    </Button>
+                        JobTrack
+                    </Typography>
                 </Box>
-            </Box>
 
-        </div>
+                {/* Registration Form */}
+                <Box
+                    component="form"
+                    onSubmit={handleFormSubmit}
+                    sx={{
+                        width: '100%',
+                        bgcolor: 'white',
+                        p: { xs: 2, sm: 4 },
+                        px: { xs: 3, sm: 4 },
+                        borderRadius: 2,
+                        boxShadow: 3,
+                        margin: '0 auto'
+                    }}
+                >
+                    <Typography 
+                        variant="h5" 
+                        component="h3" 
+                        gutterBottom
+                        sx={{
+                            fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                            mb: 3
+                        }}
+                    >
+                        Create Account
+                    </Typography>
+
+                    <TextField
+                        label="Username"
+                        name="username"
+                        fullWidth
+                        required
+                        onChange={handleInputChange}
+                        inputProps={{ minLength: 3, maxLength: 20 }}
+                        sx={inputSx}
+                    />
+
+                    <TextField
+                        label="Email"
+                        type="email"
+                        name="email"
+                        fullWidth
+                        required
+                        onChange={handleInputChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        inputProps={{ minLength: 3, maxLength: 80 }}
+                        sx={inputSx}
+                    />
+
+                    <TextField
+                        label="Password"
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        fullWidth
+                        required
+                        onChange={handleInputChange}
+                        error={!!errors.password}
+                        helperText={errors.password}
+                        inputProps={{ minLength: 8, maxLength: 80 }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                                        {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        sx={inputSx}
+                    />
+
+                    <TextField
+                        label="Confirm Password"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        name="confirmPassword"
+                        fullWidth
+                        required
+                        onChange={handleInputChange}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                        inputProps={{ minLength: 8, maxLength: 80 }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
+                                        {showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        sx={inputSx}
+                    />
+
+                    <TextField
+                        label="Contact Number"
+                        name="contactNumber"
+                        fullWidth
+                        required
+                        onChange={handleInputChange}
+                        error={!!errors.contactNumber}
+                        helperText={errors.contactNumber}
+                        value={userData.contactNumber}
+                        inputProps={{
+                            maxLength: 11,
+                            inputMode: 'numeric',
+                            pattern: '[0-9]*'
+                        }}
+                        sx={inputSx}
+                    />
+
+                    <Box sx={{ 
+                        mt: { xs: 2, sm: 3 },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                                bgcolor: '#800000',
+                                '&:hover': { bgcolor: '#A00000' },
+                                color: 'white',
+                                py: 1.5
+                            }}
+                        >
+                            Sign Up
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            fullWidth
+                            onClick={handleLoginClick}
+                            sx={{
+                                borderColor: '#800000',
+                                color: '#800000',
+                                py: 1.5
+                            }}
+                        >
+                            Login
+                        </Button>
+                    </Box>
+                </Box>
+            </Container>
+        </Box>
     );
 };
 
