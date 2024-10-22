@@ -169,11 +169,7 @@ function TicketsCreated() {
         status: 'Resolved'
       });
       if (response.status === 200) {
-        setTickets(prevTickets => prevTickets.map(ticket =>
-          ticket.id === selectedTicket.id
-            ? { ...ticket, status: 'Resolved' }
-            : ticket
-        ));
+        setTickets(prevTickets => prevTickets.filter(ticket => ticket.id !== selectedTicket.id));
         setAssessModalOpen(false);
         setAssessedModalOpen(true);
         setStaffFeedback(''); // Clear the feedback after successful submission
