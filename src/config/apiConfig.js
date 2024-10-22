@@ -6,8 +6,9 @@ export const API_BASE_URL = process.env.NODE_ENV === 'production'
   : DEV_API_URL;
 
 export const API_ENDPOINTS = {
-  login: '/api/auth/login',
-  microsoftLogin: '/api/auth/microsoft-login',
-  register: '/api/auth/register',
-  forgotPassword: '/api/auth/forgot_password',
+  login: '/user/login',
+  microsoftLogin: '/user/microsoft-login',
+  register: '/user/register',
+  forgotPassword: '/user/forgot_password',
+  addUser: '/user/add',
 };

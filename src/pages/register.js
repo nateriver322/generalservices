@@ -4,6 +4,7 @@ import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -96,19 +97,20 @@ const Register = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+    
         if (!await validateForm()) {
             return;
         }
-
+    
         try {
-            const response = await fetch('http://localhost:8080/user/add', {
+            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.addUser}`, { // Use the new dynamic URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(userData)
             });
+            
             if (response.ok) {
                 console.log('Registration successful');
                 navigate('/successregistration');
