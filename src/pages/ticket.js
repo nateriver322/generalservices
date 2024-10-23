@@ -58,8 +58,14 @@ function TicketForm() {
         try {
             const response = await fetch('https://generalservicescontroller.onrender.com/user/tickets', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add this if you're sending form data instead of JSON
+                    // 'Content-Type': 'multipart/form-data',
+                },
                 body: formData,
             });
+            
             if (response.ok) {
                 setSuccessModalOpen(true);
                 resetForm();
@@ -70,8 +76,6 @@ function TicketForm() {
         } catch (error) {
             alert(`Error submitting the ticket: ${error.message}`);
         }
-    };
-
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
