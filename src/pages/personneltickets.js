@@ -39,7 +39,7 @@ function PersonnelTickets() {
 
   const fetchTickets = async (username) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
+      const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
         const normalizedUsername = username.trim().toLowerCase();
@@ -103,7 +103,7 @@ function PersonnelTickets() {
   const handleSubmitFeedback = async () => {
     try {
       const username = localStorage.getItem('username');
-      const response = await axios.post(`http://localhost:8080/api/tickets/${selectedTicket.id}/personnel-feedback`, 
+      const response = await axios.post(`https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/personnel-feedback`, 
         { feedback },
         { params: { personnelUsername: username } }
       );

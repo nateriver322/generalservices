@@ -45,8 +45,8 @@ function UserManagement() {
             setError(null);
 
             const [usersResponse, personnelResponse] = await Promise.all([
-                axios.get('http://localhost:8080/user/users?role=User'),
-                axios.get('http://localhost:8080/user/personnel')
+                axios.get('https://generalservicescontroller.onrender.com/user/users?role=User'),
+                axios.get('https://generalservicescontroller.onrender.com/user/personnel')
             ]);
 
             setUsers(usersResponse.data);
@@ -70,7 +70,7 @@ function UserManagement() {
             setSuccessMessage('');
 
             // Upgrade the user to Personnel
-            await axios.put(`http://localhost:8080/user/${userId}`, { role: 'Personnel' });
+            await axios.put(`https://generalservicescontroller.onrender.com/user/${userId}`, { role: 'Personnel' });
 
             // After upgrading, find the user and move it to the 'personnel' list
             const upgradedUser = users.find(user => user.id === userId);
@@ -94,7 +94,7 @@ function UserManagement() {
             setLoading(true);
             setError(null);
             setSuccessMessage('');
-            await axios.put(`http://localhost:8080/user/${selectedUser}/subrole?subrole=${subrole}`);
+            await axios.put(`https://generalservicescontroller.onrender.com/user/${selectedUser}/subrole?subrole=${subrole}`);
             setSuccessMessage('Subrole assigned successfully');
             setSelectedUser(null);
             setSubrole('');

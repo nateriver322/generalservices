@@ -25,7 +25,7 @@ function PersonnelDashboard() {
 
     const fetchUserDetails = async (username) => {
         try {
-            const response = await fetch(`http://localhost:8080/user/${username}/details`);
+            const response = await fetch(`https://generalservicescontroller.onrender.com/user/${username}/details`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
