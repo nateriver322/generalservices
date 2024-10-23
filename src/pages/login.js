@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { loginRequest } from "../AuthConfig";
 import { useMsal } from "@azure/msal-react";
@@ -18,6 +18,7 @@ const Login = React.memo(() => {
     });
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { instance } = useMsal();
 
     const handleInputChange = (event) => {
@@ -30,6 +31,7 @@ const Login = React.memo(() => {
 
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         try {
             const userData = await login(credentials.email, credentials.password);
             sessionStorage.setItem('username', userData.username);
@@ -40,10 +42,13 @@ const Login = React.memo(() => {
             setTimeout(() => {
                 setError('');
             }, 1000);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
     const handleMicrosoftLogin = async () => {
+        setLoading(true);
         try {
             const result = await instance.loginPopup(loginRequest);
             const userData = await microsoftLogin(result.accessToken);
@@ -55,6 +60,8 @@ const Login = React.memo(() => {
             setTimeout(() => {
                 setError('');
             }, 3000);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
@@ -72,6 +79,19 @@ const Login = React.memo(() => {
 
     return (
         <div>
+              {loading ? (  // Conditional rendering based on loading state
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100vh' // Full viewport height for centering
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
             <LoginResponsiveAppBar />
             <Box
                 sx={{
@@ -237,6 +257,8 @@ const Login = React.memo(() => {
 
 
             </Box>
+            </>
+            )}
         </div>
     );
 });
