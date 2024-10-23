@@ -38,14 +38,7 @@ function App() {
              } 
           />
 
-          <Route 
-             path="/dashboard" 
-             element={
-              <RouteGuard requiredRole="User">
-                <RoleBasedDashboard />
-              </RouteGuard>
-            } 
-         />
+        <Route path="/dashboard" element={<RoleBasedDashboard />} />
 
           <Route 
             path="/myTickets" 
