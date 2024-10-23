@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../css/AccountManagement.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 // ConfirmationModal component
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
@@ -292,6 +294,7 @@ const AccountManagement = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [searchUsername, setSearchUsername] = useState('');
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -305,13 +308,17 @@ const AccountManagement = () => {
 
   useEffect(() => {
     const fetchAccounts = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
         setAccounts(response.data);
       } catch (error) {
         console.error('Error fetching accounts:', error);
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching
       }
     };
+  
 
     fetchAccounts();
   }, []);
@@ -406,40 +413,55 @@ const AccountManagement = () => {
 
   return (
     <div className="account-management">
-      <div className="header1">
-        <h1>Account Management</h1>
-        <div className="search-create">
-          <input
-            type="text"
-            placeholder="Enter username"
-            value={searchUsername}
-            onChange={handleSearchChange}
-          />
-          <button className="search-button" onClick={handleSearchClick}>Search Account</button>
-          <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
-          <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
-        </div>
-      </div>
-      <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
-      {isEditModalOpen && (
-        <EditAccountModal
-          account={currentAccount}
-          onClose={handleCloseEditModal}
-          onSave={handleSaveAccountChanges}
-        />
-      )}
-      {isRegistrationModalOpen && (
-        <RegistrationModal
-          onClose={handleCloseRegistrationModal}
-          onRegister={handleRegisterNewAccount}
-        />
-      )}
-      {isConfirmModalOpen && (
-        <ConfirmationModal
-          message="Are you sure you want to delete this account?"
-          onConfirm={handleConfirmDelete}
-          onCancel={handleCancelDelete}
-        />
+      {isLoading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh', // Adjust this height based on your layout
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <div className="header1">
+            <h1>Account Management</h1>
+            <div className="search-create">
+              <input
+                type="text"
+                placeholder="Enter username"
+                value={searchUsername}
+                onChange={handleSearchChange}
+              />
+              <button className="search-button" onClick={handleSearchClick}>Search Account</button>
+              <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
+              <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
+            </div>
+          </div>
+          <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
+          {isEditModalOpen && (
+            <EditAccountModal
+              account={currentAccount}
+              onClose={handleCloseEditModal}
+              onSave={handleSaveAccountChanges}
+            />
+          )}
+          {isRegistrationModalOpen && (
+            <RegistrationModal
+              onClose={handleCloseRegistrationModal}
+              onRegister={handleRegisterNewAccount}
+            />
+          )}
+          {isConfirmModalOpen && (
+            <ConfirmationModal
+              message="Are you sure you want to delete this account?"
+              onConfirm={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+            />
+          )}
+        </>
       )}
     </div>
   );
