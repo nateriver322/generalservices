@@ -56,28 +56,14 @@ function TicketsCreated() {
     
   useEffect(() => {
     const username = localStorage.getItem('username');
-    
-    // If no username is found, navigate to login or home page
     if (!username) {
       navigate('/');
-      return;  // Return early to prevent further execution
+    } else {
+      fetchTickets();
+      fetchPersonnel();
+      fetchPersonnelWorkload();
     }
-  
-    // Fetch necessary data if user is authenticated
-    const fetchData = async () => {
-      try {
-        await fetchTickets();
-        await fetchPersonnel();
-        await fetchPersonnelWorkload();
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-  
-    fetchData();
-  
-  }, [navigate, fetchTickets, fetchPersonnel, fetchPersonnelWorkload]);
-  
+  }, [navigate]);
 
   const fetchTickets = async () => {
     try {
