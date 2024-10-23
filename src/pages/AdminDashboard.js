@@ -52,7 +52,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
 
   const handleSaveClick = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/user/register', formData);
+      const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
         console.log("User registered successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
@@ -178,7 +178,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
-      const response = await axios.put(`http://localhost:8080/user/${account.id}`, formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
@@ -337,7 +337,7 @@ const AccountManagement = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:8080/user/${currentAccount}`);
+      const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
       if (response.status === 200) {
         setAccounts(accounts.filter(account => account.id !== currentAccount));
       } else {
@@ -363,9 +363,9 @@ const AccountManagement = () => {
     try {
       let response;
       if (searchUsername.trim() === '') {
-        response = await axios.get('http://localhost:8080/user/accounts');
+        response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       } else {
-        response = await axios.get(`http://localhost:8080/user/search?query=${searchUsername}`);
+        response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
       }
       if (response.status === 200) {
         setAccounts(response.data);
@@ -388,7 +388,7 @@ const AccountManagement = () => {
 
   const handleSaveAccountChanges = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/user/accounts');
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error('Error fetching accounts:', error);
@@ -397,7 +397,7 @@ const AccountManagement = () => {
 
   const handleRegisterNewAccount = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/user/accounts');
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error('Error fetching accounts:', error);
