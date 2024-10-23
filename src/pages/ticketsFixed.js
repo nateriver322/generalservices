@@ -7,9 +7,10 @@ import TableRow from '@mui/material/TableRow';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
-import { Box, Typography, Button, Modal, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from '@mui/material';
-import ConstructionIcon from '@mui/icons-material/Construction';
+import { Box, Typography, Button, Modal, Snackbar,  } from '@mui/material';
 import ViewDetailsModal from './ViewDetailsModal';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 export default function TicketsDone() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function TicketsDone() {
   const [feedbackError, setFeedbackError] = useState('');
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const username = sessionStorage.getItem('username');
@@ -33,6 +35,7 @@ export default function TicketsDone() {
   }, [navigate]);
 
   const fetchDoneTickets = async () => {
+    setLoading(true);
     try {
       const response = await axios.get('https://generalservicescontroller.onrender.com/api/tickets');
       if (response.status === 200) {
@@ -43,6 +46,8 @@ export default function TicketsDone() {
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -123,7 +128,9 @@ export default function TicketsDone() {
     <>
       <StaffAppBar />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
-        
+      {loading ? ( // Check if loading
+        <CircularProgress />
+      ) : (
 
         <Box sx={{ width: '100%', maxWidth: 1450 }}>
           {doneTickets.length === 0 ? (
@@ -169,6 +176,7 @@ export default function TicketsDone() {
             </Box>
           )}
         </Box>
+         )}
 
         {/* Delete Confirmation Modal */}
         {ticketToDelete && (
