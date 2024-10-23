@@ -4,49 +4,6 @@ import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
-<<<<<<< HEAD
-=======
-
-const withAuth = (WrappedComponent) => {
-    return function AuthComponent(props) {
-      const navigate = useNavigate();
-      const [isLoading, setIsLoading] = useState(true);
-      const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-      useEffect(() => {
-        checkAuth();
-      }, []);
-  
-      const checkAuth = () => {
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('username');
-        const role = localStorage.getItem('role');
-  
-        if (!token || !username || role !== 'staff') {
-          navigate('/login');
-        } else {
-          setIsAuthenticated(true);
-        }
-        setIsLoading(false);
-      };
-  
-      if (isLoading) {
-        return (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress />
-          </Box>
-        );
-      }
-  
-      if (!isAuthenticated) {
-        return null;
-      }
-  
-      return <WrappedComponent {...props} />;
-    };
-  };
-
->>>>>>> parent of 5f1dfee (REDIRECT)
 function UserManagement() {
     const [users, setUsers] = useState([]);
     const [personnel, setPersonnel] = useState([]);
