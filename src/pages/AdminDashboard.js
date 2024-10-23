@@ -44,6 +44,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     role: 'User'
   });
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +55,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
+    setLoading(true); 
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
@@ -67,6 +69,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     } catch (error) {
       console.error("Error registering user:", error);
       alert("Error registering user");
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
   };
 
@@ -74,6 +78,14 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     setIsSavedModalOpen(false);
     onClose(); // Close the registration modal
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
  
 
@@ -157,6 +169,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const [isFormChanged, setIsFormChanged] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsFormChanged(false); // Reset form change detection
@@ -182,6 +195,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   };
 
   const handleConfirmSave = async () => {
+    setLoading(true);
     try {
       const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
@@ -195,6 +209,8 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     } catch (error) {
       console.error("Error updating user:", error);
       alert("Error updating user");
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
     setIsConfirmModalOpen(false); // Close the confirmation modal
     onClose(); // Close the edit modal
@@ -207,6 +223,14 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const handleSavedModalClose = () => {
     setIsSavedModalOpen(false);
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -297,6 +321,7 @@ const AccountManagement = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [searchUsername, setSearchUsername] = useState('');
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -313,6 +338,7 @@ const AccountManagement = () => {
       try {
         const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
         setAccounts(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching accounts:', error);
       }
