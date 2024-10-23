@@ -50,7 +50,7 @@ function MyTickets() {
 
     const fetchTickets = async (username) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/tickets/user/${username}`);
+            const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/user/${username}`);
             if (response.ok) {
                 const data = await response.json();
                 setTickets(data);
@@ -64,7 +64,7 @@ function MyTickets() {
 
     const fetchNotifications = async (username) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/notifications/${username}`);
+            const response = await fetch(`https://generalservicescontroller.onrender.com/api/notifications/${username}`);
             if (response.ok) {
                 const data = await response.json();
                 setNotifications(data);
@@ -75,10 +75,9 @@ function MyTickets() {
             console.error('Error:', error);
         }
     };
-
     const markNotificationAsRead = async (notificationId) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/notifications/${notificationId}`, {
+            const response = await fetch(`https://generalservicescontroller.onrender.com/api/notifications/${notificationId}`, {
                 method: 'PUT',
             });
             if (response.ok) {
@@ -102,7 +101,7 @@ function MyTickets() {
     const confirmDeleteTicket = async () => {
         if (ticketToDelete) {
             try {
-                const response = await fetch(`http://localhost:8080/api/tickets/${ticketToDelete.id}`, {
+                const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToDelete.id}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
@@ -139,14 +138,14 @@ function MyTickets() {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/tickets/${ticketId}/user-feedback`, {
+            const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketId}/user-feedback`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ feedback: userFeedback }),
             });
-
+    
             if (response.ok) {
                 closeFeedbackModal();
                 setFeedbackSuccessSnackbarOpen(true);

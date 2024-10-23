@@ -32,7 +32,7 @@ function TicketsHistory() {
 
   const fetchTickets = async (username) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/tickets/personnel/${username}`);
+      const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
         
