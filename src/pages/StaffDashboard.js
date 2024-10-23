@@ -2,26 +2,21 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import qs from 'qs';
 import ViewDetailsModal from './ViewDetailsModal';
+import CircularProgress from '@mui/material/CircularProgress';
 import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  
   TableHead,
   TableRow,
-  TableSortLabel,
   Button,
   Modal,
   Typography,
   Box,
   Select,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   MenuItem,
   InputLabel,
   FormControl,
@@ -29,6 +24,47 @@ import {
   Checkbox,
   ListItemText,
 } from '@mui/material';
+
+const withAuth = (WrappedComponent) => {
+  return function AuthComponent(props) {
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+      checkAuth();
+    }, []);
+
+    const checkAuth = () => {
+      // Check for authentication token or session
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      const role = localStorage.getItem('role');
+
+      if (!token || !username || role !== 'staff') {
+        // Redirect to login if not authenticated
+        navigate('/login');
+      } else {
+        setIsAuthenticated(true);
+      }
+      setIsLoading(false);
+    };
+
+    if (isLoading) {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+
+    if (!isAuthenticated) {
+      return null; // Don't render anything while redirecting
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
 
 function TicketsCreated() {
   const navigate = useNavigate();
@@ -64,6 +100,8 @@ function TicketsCreated() {
       fetchPersonnelWorkload();
     }
   }, [navigate]);
+
+ 
 
   const fetchTickets = async () => {
     try {
@@ -669,4 +707,4 @@ function TicketsCreated() {
   );
 }
 
-export default TicketsCreated;
+export default withAuth(TicketsCreated);
