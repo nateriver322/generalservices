@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/AccountManagement.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Box, CircularProgress } from '@mui/material'; // Fixed CircularProgres typo
 
 // ConfirmationModal component
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
@@ -32,15 +33,17 @@ const SavedModal = ({ message, onClose }) => {
   );
 };
 
+// RegistrationModal component
 const RegistrationModal = ({ onClose, onRegister }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     email: '',
     contactNumber: '',
-    role: 'User'
+    role: 'User',
   });
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,19 +54,22 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
+    setLoading(true); // Show loading spinner
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
-        console.log("User registered successfully");
+        console.log('User registered successfully');
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
         onRegister(); // Call onRegister to refresh the account list
       } else {
-        console.error("Failed to register user");
-        alert("Failed to register user");
+        console.error('Failed to register user');
+        alert('Failed to register user');
       }
     } catch (error) {
-      console.error("Error registering user:", error);
-      alert("Error registering user");
+      console.error('Error registering user:', error);
+      alert('Error registering user');
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
   };
 
@@ -71,6 +77,14 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     setIsSavedModalOpen(false);
     onClose(); // Close the registration modal
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -80,50 +94,26 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           <div className="form-row">
             <div className="form-group">
               <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
+              <input type="text" name="username" value={formData.username} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <input type="password" name="password" value={formData.password} onChange={handleChange} />
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
               <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <input type="email" name="email" value={formData.email} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Contact No.</label>
-              <input
-                type="text"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleChange}
-              />
+              <input type="text" name="contactNumber" value={formData.contactNumber} onChange={handleChange} />
             </div>
           </div>
           <div className="form-group">
             <label>Account Type</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
+            <select name="role" value={formData.role} onChange={handleChange}>
               <option value="User">User</option>
               <option value="PCO Staff">PCO Staff</option>
               <option value="Personnel">Repair Personnel</option>
@@ -135,12 +125,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
             <button onClick={onClose}>Cancel</button>
           </div>
         </div>
-        {isSavedModalOpen && (
-          <SavedModal
-            message="Account Registered Successfully"
-            onClose={handleSavedModalClose}
-          />
-        )}
+        {isSavedModalOpen && <SavedModal message="Account Registered Successfully" onClose={handleSavedModalClose} />}
       </div>
     </>
   );
@@ -152,6 +137,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const [isFormChanged, setIsFormChanged] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsFormChanged(false); // Reset form change detection
@@ -171,25 +157,27 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     if (isFormChanged) {
       setIsConfirmModalOpen(true);
     } else {
-      // No changes, close modal
-      onClose();
+      onClose(); // No changes, close modal
     }
   };
 
   const handleConfirmSave = async () => {
+    setLoading(true); // Show loading spinner
     try {
       const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
-        console.log("User updated successfully");
+        console.log('User updated successfully');
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
         onSave(); // Call onSave to refresh the account list
       } else {
-        console.error("Failed to update user");
-        alert("Failed to update user");
+        console.error('Failed to update user');
+        alert('Failed to update user');
       }
     } catch (error) {
-      console.error("Error updating user:", error);
-      alert("Error updating user");
+      console.error('Error updating user:', error);
+      alert('Error updating user');
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
     setIsConfirmModalOpen(false); // Close the confirmation modal
     onClose(); // Close the edit modal
@@ -203,6 +191,14 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     setIsSavedModalOpen(false);
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
       <div className="modal">
@@ -211,50 +207,26 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
           <div className="form-row">
             <div className="form-group">
               <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
+              <input type="text" name="username" value={formData.username} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <input type="password" name="password" value={formData.password} onChange={handleChange} />
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
               <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <input type="email" name="email" value={formData.email} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Contact No.</label>
-              <input
-                type="text"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleChange}
-              />
+              <input type="text" name="contactNumber" value={formData.contactNumber} onChange={handleChange} />
             </div>
           </div>
           <div className="form-group">
             <label>Account Type</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
+            <select name="role" value={formData.role} onChange={handleChange}>
               <option value="Staff">PCO Staff</option>
               <option value="User">User</option>
               <option value="Personnel">Repair Personnel</option>
@@ -267,18 +239,9 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
           </div>
         </div>
         {isConfirmModalOpen && (
-          <ConfirmationModal
-            message="Save Changes?"
-            onConfirm={handleConfirmSave}
-            onCancel={handleCancelConfirm}
-          />
+          <ConfirmationModal message="Save Changes?" onConfirm={handleConfirmSave} onCancel={handleCancelConfirm} />
         )}
-        {isSavedModalOpen && (
-          <SavedModal
-            message="Changes Saved"
-            onClose={handleSavedModalClose}
-          />
-        )}
+        {isSavedModalOpen && <SavedModal message="Changes Saved Successfully" onClose={handleSavedModalClose} />}
       </div>
     </>
   );
@@ -287,201 +250,129 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 // AccountManagement component
 const AccountManagement = () => {
   const [accounts, setAccounts] = useState([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState(null);
-  const [searchUsername, setSearchUsername] = useState('');
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const username = sessionStorage.getItem('username');
-
-    if (!username) {
-      console.log('No user data found, redirecting to login');
-      navigate('/');
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-        setAccounts(response.data);
-      } catch (error) {
-        console.error('Error fetching accounts:', error);
-      }
-    };
-
     fetchAccounts();
   }, []);
 
-  const handleLogoutButtonClick = () => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
-}
+  const fetchAccounts = async () => {
+    try {
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/all');
+      setAccounts(response.data);
+      setIsLoading(false); // Stop the loading spinner
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
+    }
+  };
 
-  const handleCreateAccountButtonClick = () => {
+  const handleRegisterClick = () => {
     setIsRegistrationModalOpen(true);
   };
 
-  const handleEditClick = (account) => {
-    setCurrentAccount(account);
-    setIsEditModalOpen(true);
-  };
-
-  const handleDeleteClick = (accountId) => {
-    setCurrentAccount(accountId); // Store current account ID to be deleted
-    setIsConfirmModalOpen(true); // Open the confirmation modal
-  };
-
-  const handleConfirmDelete = async () => {
-    try {
-      const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
-      if (response.status === 200) {
-        setAccounts(accounts.filter(account => account.id !== currentAccount));
-      } else {
-        console.error('Failed to delete user');
-        alert('Failed to delete user');
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      alert('Error deleting user');
-    }
-    setIsConfirmModalOpen(false); // Close the confirmation modal
-  };
-
-  const handleCancelDelete = () => {
-    setIsConfirmModalOpen(false); // Close the confirmation modal
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchUsername(e.target.value);
-  };
-
-  const handleSearchClick = async () => {
-    try {
-      let response;
-      if (searchUsername.trim() === '') {
-        response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      } else {
-        response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
-      }
-      if (response.status === 200) {
-        setAccounts(response.data);
-      } else {
-        console.error('Failed to fetch accounts');
-      }
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
-    }
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setCurrentAccount(null);
-  };
-
-  const handleCloseRegistrationModal = () => {
+  const handleRegistrationModalClose = () => {
     setIsRegistrationModalOpen(false);
   };
 
-  const handleSaveAccountChanges = async () => {
+  const handleRegister = () => {
+    fetchAccounts(); // Refresh account list after registration
+  };
+
+  const handleEditClick = (account) => {
+    setSelectedAccount(account);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleSave = () => {
+    fetchAccounts(); // Refresh account list after saving changes
+  };
+
+  const handleDeleteClick = async (accountId) => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      setAccounts(response.data);
+      const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${accountId}`);
+      if (response.status === 200) {
+        console.log('User deleted successfully');
+        fetchAccounts(); // Refresh account list after deletion
+      } else {
+        console.error('Failed to delete user');
+      }
     } catch (error) {
-      console.error('Error fetching accounts:', error);
+      console.error('Error deleting user:', error);
     }
   };
 
-  const handleRegisterNewAccount = async () => {
-    try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      setAccounts(response.data);
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
-    }
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
+
+  const filteredAccounts = accounts.filter(
+    (account) =>
+      account.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.contactNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="account-management">
-      <div className="header1">
-        <h1>Account Management</h1>
-        <div className="search-create">
-          <input
-            type="text"
-            placeholder="Enter username"
-            value={searchUsername}
-            onChange={handleSearchChange}
-          />
-          <button className="search-button" onClick={handleSearchClick}>Search Account</button>
-          <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
-          <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
-        </div>
+      <h1>Account Management</h1>
+      <div className="search-bar">
+        <input type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
       </div>
-      <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
-      {isEditModalOpen && (
-        <EditAccountModal
-          account={currentAccount}
-          onClose={handleCloseEditModal}
-          onSave={handleSaveAccountChanges}
-        />
+      <button className="register-btn" onClick={handleRegisterClick}>
+        Register New Account
+      </button>
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Contact No.</th>
+              <th>Account Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAccounts.map((account) => (
+              <tr key={account.id}>
+                <td>{account.username}</td>
+                <td>{account.email}</td>
+                <td>{account.contactNumber}</td>
+                <td>{account.role}</td>
+                <td>
+                  <button className="edit-btn" onClick={() => handleEditClick(account)}>
+                    Edit
+                  </button>
+                  <button className="delete-btn" onClick={() => handleDeleteClick(account.id)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
       {isRegistrationModalOpen && (
-        <RegistrationModal
-          onClose={handleCloseRegistrationModal}
-          onRegister={handleRegisterNewAccount}
-        />
+        <RegistrationModal onClose={handleRegistrationModalClose} onRegister={handleRegister} />
       )}
-      {isConfirmModalOpen && (
-        <ConfirmationModal
-          message="Are you sure you want to delete this account?"
-          onConfirm={handleConfirmDelete}
-          onCancel={handleCancelDelete}
-        />
+      {isEditModalOpen && selectedAccount && (
+        <EditAccountModal account={selectedAccount} onClose={handleEditModalClose} onSave={handleSave} />
       )}
     </div>
-  );
-};
-
-// AccountTable component
-const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Username</th>
-          
-          <th>Email</th>
-          <th>Contact No.</th>
-          <th>Account Type</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {accounts.map(account => (
-          <AccountRow key={account.id} account={account} onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-// AccountRow component
-const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
-  return (
-    <tr>
-      <td>{account.username}</td>
-      
-      <td>{account.email}</td>
-      <td>{account.contactNumber}</td>
-      <td>{account.role}</td>
-      <td>
-        <button className="edit-button" onClick={() => onEditClick(account)}>Edit</button>
-        <button className="delete-button" onClick={() => onDeleteClick(account.id)}>Delete</button>
-      </td>
-    </tr>
   );
 };
 
