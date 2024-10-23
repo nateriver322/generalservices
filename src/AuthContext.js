@@ -37,7 +37,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const username = localStorage.getItem('username');
+      const username = sessionStorage.getItem('username');
+      const userRole = sessionStorage.getItem('userRole');
       if (username) {
         try {
           const response = await fetch(`https://generalservicescontroller.onrender.com/user/${username}`);
@@ -49,6 +50,8 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.error('Error fetching user data:', error);
           setUser(null);
+          sessionStorage.removeItem('username');
+          sessionStorage.removeItem('userRole');
         }
       }
       setLoading(false);
@@ -78,7 +81,8 @@ export const AuthProvider = ({ children }) => {
       
       const userData = await response.json();
       setUser(userData);
-      localStorage.setItem('username', userData.username);
+      sessionStorage.setItem('username', userData.username);
+      sessionStorage.setItem('userRole', userData.role);
       return userData;
     } catch (error) {
       console.error('Login error:', error);
@@ -148,7 +152,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userRole');
   };
 
   return (

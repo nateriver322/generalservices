@@ -33,6 +33,7 @@ const Login = React.memo(() => {
         try {
             const userData = await login(credentials.email, credentials.password);
             sessionStorage.setItem('username', userData.username);
+            sessionStorage.setItem('userRole', userData.role);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             setError(error.message);
@@ -47,6 +48,7 @@ const Login = React.memo(() => {
             const result = await instance.loginPopup(loginRequest);
             const userData = await microsoftLogin(result.accessToken);
             sessionStorage.setItem('username', userData.username);
+            sessionStorage.setItem('userRole', userData.role);
             navigate('/dashboard', { state: { username: userData.username } });
         } catch (error) {
             setError('Microsoft login failed');

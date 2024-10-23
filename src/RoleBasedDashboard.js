@@ -9,6 +9,7 @@ import Login from './pages/login';
 
 const RoleBasedDashboard = () => {
   const { user, loading } = useAuth();
+  const userRole = sessionStorage.getItem('userRole');
 
   console.log('RoleBasedDashboard rendering. User:', user, 'Loading:', loading);
 
@@ -16,7 +17,7 @@ const RoleBasedDashboard = () => {
     return <div>Loading...</div>;
   }
 
-  if (!user) {
+  if (!user || !userRole) {
     console.log('No user, rendering LoginPage from RoleBasedDashboard');
     return <Login />;
   }

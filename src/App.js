@@ -17,6 +17,7 @@ import TicketsFixed from './pages/ticketsFixed';
 import TicketsHistory from './pages/ticketsHistory';
 import AssignSubrole from './pages/subrole';
 import ForgotPassword from './pages/ForgotPassword';
+import RouteGuard from './RouteGuard';
 
 import ResetPasswordForm from './pages/ResetPassword';
 function App() {
@@ -28,17 +29,99 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/successregistration" element={<SuccessRegistration />} />
-          <Route path="/ticket" element={<TicketForm />} />
-          <Route path="/dashboard" element={<RoleBasedDashboard />} /> 
-          <Route path="/myTickets" element={<MyTickets />} />
-          <Route path="/AccountManagement" element={<AccountManagement />} />
+          <Route 
+             path="/ticket" 
+              element={
+                <RouteGuard requiredRole="User">
+              <TicketForm />
+             </RouteGuard>
+             } 
+          />
+
+          <Route 
+             path="/dashboard" 
+             element={
+              <RouteGuard requiredRole="User">
+                <RoleBasedDashboard />
+              </RouteGuard>
+            } 
+         />
+
+          <Route 
+            path="/myTickets" 
+            element={
+              <RouteGuard requiredRole="User">
+                <MyTickets />
+             </RouteGuard>
+             } 
+          />
+
+          <Route 
+            path="/AccountManagement" 
+            element={
+              <RouteGuard requiredRole="Admin">
+                <AccountManagement />
+              </RouteGuard>
+            } 
+          />
+
           <Route path="/SuccessTicket" element={<SuccessTicket />} />
-          <Route path="/StaffDashboard" element={<StaffDashboard />} />
-         
-          <Route path="/PersonnelTickets" element={<PersonnelTickets />} />
-          <Route path="/TicketsFixed" element={<TicketsFixed />} />
-          <Route path="/TicketsHistory" element={<TicketsHistory />} />
-          <Route path="/subrole" element={<AssignSubrole />} />
+
+          <Route 
+            path="/StaffDashboard" 
+            element={
+              <RouteGuard requiredRole="Staff">
+                <StaffDashboard />
+              </RouteGuard>
+            } 
+          />
+
+
+          <Route 
+          path="/PersonnelTickets" 
+          element={
+            <RouteGuard requiredRole="Personnel">
+          <PersonnelTickets />
+        </RouteGuard>
+        } 
+        />
+
+        <Route 
+        path="/TicketsFixed" 
+        element={
+              <RouteGuard requiredRole="Staff">
+        <TicketsFixed />
+      </RouteGuard>
+        } 
+      />
+
+        <Route 
+         path="/TicketsHistory" 
+          element={
+              <RouteGuard requiredRole="Personnel">
+             <TicketsHistory />
+         </RouteGuard>
+        } 
+         />
+
+          <Route 
+          path="/subrole" 
+           element={
+            <RouteGuard requiredRole="Staff">
+            <AssignSubrole />
+          </RouteGuard>
+           } 
+        />
+
+        <Route 
+          path="/PersonnelDashboard" 
+           element={
+            <RouteGuard requiredRole="Personnel">
+            <AssignSubrole />
+          </RouteGuard>
+           } 
+        />
+
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/reset_password" element={<ResetPasswordForm />} />
 
