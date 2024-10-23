@@ -25,13 +25,19 @@ export default function TicketsDone() {
 
   useEffect(() => {
     const username = localStorage.getItem('username');
+    
+    // If no username is found, clear the tickets and navigate to login page
     if (!username) {
-      navigate('/');
-    } else {
-      fetchDoneTickets();
+      setDoneTickets([]); // Clear doneTickets to avoid flickering
+      navigate('/'); // Redirect to login page
+      return; // Prevent further execution
     }
-  }, [navigate]);
-
+  
+    // Fetch done tickets if the user is authenticated
+    fetchDoneTickets();
+  
+  }, [navigate, fetchDoneTickets]); // Dependencies
+  
   const fetchDoneTickets = async () => {
     try {
       const response = await axios.get('https://generalservicescontroller.onrender.com/api/tickets');
