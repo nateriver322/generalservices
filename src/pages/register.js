@@ -4,7 +4,7 @@ import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import { API_BASE_URL, API_ENDPOINTS } from '../apiConfig';
+
 
 const Register = () => {
     const navigate = useNavigate();
@@ -103,7 +103,7 @@ const Register = () => {
         }
     
         try {
-            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.addUser}`, { // Use the new dynamic URL
+            const response = await fetch('https://generalservicescontroller.onrender.com/user/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,7 +129,7 @@ const Register = () => {
 
     const isEmailAlreadyRegistered = async (email) => {
         try {
-            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`);
+            const response = await fetch(`https://generalservicescontroller.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
             const result = await response.json();
             return result.exists;
         } catch (error) {

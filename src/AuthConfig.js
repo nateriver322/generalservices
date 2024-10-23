@@ -4,7 +4,7 @@ export const msalConfig = {
   auth: {
     clientId: "d2a969c7-b63d-4c95-9d1c-2bcaf8b09034",
     authority: "https://login.microsoftonline.com/823cde44-4433-456d-b801-bdf0ab3d41fc",
-    redirectUri: "http://localhost:3000"
+    redirectUri: "https://generalservices.vercel.app/"
   },
   cache: {
     cacheLocation: "sessionStorage",
