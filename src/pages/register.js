@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
+
 const Register = () => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
@@ -96,19 +97,20 @@ const Register = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+    
         if (!await validateForm()) {
             return;
         }
-
+    
         try {
-            const response = await fetch('http://localhost:8080/user/add', {
+            const response = await fetch('https://generalservicescontroller.onrender.com/user/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(userData)
             });
+            
             if (response.ok) {
                 console.log('Registration successful');
                 navigate('/successregistration');
@@ -127,7 +129,7 @@ const Register = () => {
 
     const isEmailAlreadyRegistered = async (email) => {
         try {
-            const response = await fetch(`http://localhost:8080/user/checkEmail?email=${encodeURIComponent(email)}`);
+            const response = await fetch(`https://generalservicescontroller.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
             const result = await response.json();
             return result.exists;
         } catch (error) {
