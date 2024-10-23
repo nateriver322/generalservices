@@ -13,6 +13,7 @@ function TicketForm() {
     const dropdownRef = useRef(null);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     const formRef = useRef(null);
+    const username = sessionStorage.getItem('username');
 
     // New state for form fields
     const [priority, setPriority] = useState('');
@@ -21,11 +22,13 @@ function TicketForm() {
     const [description, setDescription] = useState('');
 
     useEffect(() => {
-        const username = localStorage.getItem('username');
         if (!username) {
+            console.log('No authenticated user found, redirecting to login');
+            sessionStorage.clear();
+            localStorage.clear();
             navigate('/');
         }
-    }, [navigate]);
+    }, [navigate, username]);
 
     const resetForm = () => {
         setPriority('');
