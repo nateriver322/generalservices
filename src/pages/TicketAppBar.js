@@ -34,7 +34,7 @@ function TicketAppBar() {
   const location = useLocation();
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       navigate('/');
     } else {

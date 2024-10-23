@@ -29,7 +29,7 @@ function PersonnelTickets() {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       navigate('/');
     } else {

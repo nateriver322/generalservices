@@ -24,7 +24,7 @@ export default function TicketsDone() {
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       navigate('/');
     } else {

@@ -7,7 +7,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 
 function PersonnelDashboard() {
     const navigate = useNavigate();
-    const username = localStorage.getItem('username'); // Get username from localStorage
+    const username = sessionStorage.getItem('username'); // Get username from localStorage
     const [userDetails, setUserDetails] = useState(null); // State to store user details
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

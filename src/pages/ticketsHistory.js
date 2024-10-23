@@ -22,7 +22,7 @@ function TicketsHistory() {
 
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     if (!username) {
       navigate('/');
     } else {
