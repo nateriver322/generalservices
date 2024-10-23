@@ -3,20 +3,6 @@ import { Box, Typography, Button, Select, MenuItem, CircularProgress, Alert, Tab
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import { useNavigate } from 'react-router-dom';
-
-// Inside your component
-const navigate = useNavigate();
-
-useEffect(() => {
-    const username = localStorage.getItem('username');
-    if (!username) {
-        navigate('/'); // Redirect to login page if not logged in
-    } else {
-        fetchData(); // Fetch the data if logged in
-    }
-}, [navigate]);
-
 
 function UserManagement() {
     const [users, setUsers] = useState([]);
@@ -26,20 +12,11 @@ function UserManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
-    const navigate = useNavigate();
 
     // Combine both users and personnel into one list
     const combinedUsers = [...users, ...personnel.map(person => ({ ...person, isPersonnel: true }))];
 
-   
-    useEffect(() => {
-        const username = localStorage.getItem('username');
-        if (!username) {
-            navigate('/'); // Redirect to login page if not logged in
-        } else {
-            fetchData(); // Fetch the data if logged in
-        }
-    }, [navigate]);
+
     useEffect(() => {
         if (error) {
           const timer = setTimeout(() => {
