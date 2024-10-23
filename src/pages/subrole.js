@@ -4,6 +4,46 @@ import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
+
+const withAuth = (WrappedComponent) => {
+    return function AuthComponent(props) {
+      const navigate = useNavigate();
+      const [isLoading, setIsLoading] = useState(true);
+      const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+      useEffect(() => {
+        checkAuth();
+      }, []);
+  
+      const checkAuth = () => {
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        const role = localStorage.getItem('role');
+  
+        if (!token || !username || role !== 'staff') {
+          navigate('/login');
+        } else {
+          setIsAuthenticated(true);
+        }
+        setIsLoading(false);
+      };
+  
+      if (isLoading) {
+        return (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+          </Box>
+        );
+      }
+  
+      if (!isAuthenticated) {
+        return null;
+      }
+  
+      return <WrappedComponent {...props} />;
+    };
+  };
+
 function UserManagement() {
     const [users, setUsers] = useState([]);
     const [personnel, setPersonnel] = useState([]);
@@ -44,16 +84,27 @@ function UserManagement() {
             setLoading(true);
             setError(null);
 
-            const [usersResponse, personnelResponse] = await Promise.all([
-                axios.get('https://generalservicescontroller.onrender.com/user/users?role=User'),
-                axios.get('https://generalservicescontroller.onrender.com/user/personnel')
-            ]);
+             // Add auth token to requests
+             const token = localStorage.getItem('token');
+             const config = {
+                 headers: { Authorization: `Bearer ${token}` }
+             };
 
+             const [usersResponse, personnelResponse] = await Promise.all([
+                axios.get('https://generalservicescontroller.onrender.com/user/users?role=User', config),
+                axios.get('https://generalservicescontroller.onrender.com/user/personnel', config)
+            ]);
             setUsers(usersResponse.data);
             setPersonnel(personnelResponse.data);
         } catch (error) {
-            console.error('Error fetching data:', error);
-            setError('Failed to fetch users and personnel. Please try again.');
+            if (error.response && error.response.status === 401) {
+                // Handle unauthorized access
+                localStorage.clear();
+                navigate('/login');
+            } else {
+                console.error('Error fetching data:', error);
+                setError('Failed to fetch users and personnel. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -264,4 +315,4 @@ function UserManagement() {
     );
 }
 
-export default UserManagement;
+export default withAuth(UserManagement);
