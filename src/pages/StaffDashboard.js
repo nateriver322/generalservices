@@ -43,7 +43,7 @@ const withAuth = (WrappedComponent) => {
 
       if (!token || !username || role !== 'staff') {
         // Redirect to login if not authenticated
-        navigate('/login');
+        navigate('/');
       } else {
         setIsAuthenticated(true);
       }
