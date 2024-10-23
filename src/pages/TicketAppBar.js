@@ -96,7 +96,8 @@ function TicketAppBar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userRole');
     navigate('/');
   };
 

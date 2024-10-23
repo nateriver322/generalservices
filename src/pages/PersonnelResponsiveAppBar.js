@@ -41,6 +41,7 @@ function PersonnelResponsiveAppBar() {
 
   const handleLogout = () => {
     sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userRole');
     navigate('/');
   };
 

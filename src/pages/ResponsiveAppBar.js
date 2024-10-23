@@ -39,7 +39,8 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userRole'); // Clear username from sessionStorage
     navigate('/'); // Redirect to login page
 }
 
