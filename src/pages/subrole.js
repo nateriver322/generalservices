@@ -3,6 +3,7 @@ import { Box, Typography, Button, Select, MenuItem, CircularProgress, Alert, Tab
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import { useNavigate } from 'react-router-dom';
 
 function UserManagement() {
     const [users, setUsers] = useState([]);
@@ -12,9 +13,21 @@ function UserManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate(); // Add this
+    const username = sessionStorage.getItem('username');
 
     // Combine both users and personnel into one list
     const combinedUsers = [...users, ...personnel.map(person => ({ ...person, isPersonnel: true }))];
+    
+
+    useEffect(() => {
+        if (!username) {
+            console.log('No authenticated user found, redirecting to login');
+            sessionStorage.clear();
+            localStorage.clear();
+            navigate('/');
+        }
+    }, [navigate, username]);
 
 
     useEffect(() => {
