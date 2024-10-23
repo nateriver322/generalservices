@@ -1,27 +1,20 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import qs from 'qs';
 import ViewDetailsModal from './ViewDetailsModal';
 import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  TableSortLabel,
   Button,
   Modal,
   Typography,
   Box,
   Select,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   MenuItem,
   InputLabel,
   FormControl,
@@ -30,28 +23,135 @@ import {
   ListItemText,
 } from '@mui/material';
 
+const TicketRow = React.memo(({ 
+  ticket, 
+  getStatusColor, 
+  onAssign, 
+  onAssess, 
+  onViewFeedback, 
+  onViewDetails, 
+}) => (
+<TableRow>
+  <TableCell>{ticket.id}</TableCell>
+  <TableCell style={{ color: getStatusColor(ticket.status) }}>
+    {ticket.status}
+  </TableCell>
+  <TableCell>{ticket.priority}</TableCell>
+  <TableCell>{ticket.username}</TableCell>
+  <TableCell>{ticket.datetime}</TableCell>
+  <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
+  <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+  <TableCell>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
+        <Button
+          onClick={() => onAssign(ticket)}
+          variant="outlined"
+          color="secondary"
+          sx={{ marginRight: 1, width: '120px', height: '60px' }}
+        >
+          Assign
+        </Button>
+      )}
+      {ticket.status !== 'Resolved' && (
+        <Button
+          onClick={() => onAssess(ticket)}
+          variant="outlined"
+          color="success"
+          sx={{ marginRight: 1, width: '120px', height: '60px' }}
+        >
+          Resolve
+        </Button>
+      )}
+      <Button 
+        onClick={() => onViewFeedback(ticket)} 
+        variant="outlined" 
+        color="info" 
+        sx={{ marginRight: 1, width: '120px', height: '60px' }}>
+        View Feedback
+      </Button>
+      <Button
+        onClick={() => onViewDetails(ticket)}
+        variant="outlined"
+        color="warning"
+        sx={{ marginRight: 1, width: '120px', height: '60px' }}
+      >
+        View Details
+      </Button>
+      <Button
+        onClick={() => onDelete(ticket)}
+        variant="contained"
+        color="error"
+        sx={{ width: '120px', height: '60px' }}
+      >
+        Terminate
+      </Button>
+    </Box>
+  </TableCell>
+</TableRow>
+));
+
+const STATUS_COLORS = {
+  'Resolved': 'green',
+  'Ongoing': 'orange',
+  'Pending': 'red',
+  'Cancelled': 'red'
+};
+
+const MODAL_STYLE = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+};
 function TicketsCreated() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [personnelList, setPersonnelList] = useState([]);
-  const [assignModalOpen, setAssignModalOpen] = useState(false);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [modals, setModals] = useState({
+    assign: false,
+    details: false,
+    success: false,
+    assess: false,
+    assessed: false,
+    feedback: false
+  });
   const [selectedPersonnel, setSelectedPersonnel] = useState([]);
   const [scheduledRepairDate, setScheduledRepairDate] = useState('');
   const [ticketToDelete, setTicketToDelete] = useState(null);
-  const [assessModalOpen, setAssessModalOpen] = useState(false);
   const [staffFeedback, setStaffFeedback] = useState('');
   const [sortBy, setSortBy] = useState('status');
-  const [assessedModalOpen, setAssessedModalOpen] = useState(false);
-  const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
-  const [feedbackError, setFeedbackError] = useState('');
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
-  const username = sessionStorage.getItem('username'); // Get username from localStorage
-  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+  const username = sessionStorage.getItem('username');
   const [personnelWorkload, setPersonnelWorkload] = useState({});
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [ticketsRes, personnelRes, workloadRes] = await Promise.all([
+        fetch('https://generalservicescontroller.onrender.com/api/tickets'),
+        axios.get('https://generalservicescontroller.onrender.com/user/personnel'),
+        axios.get('https://generalservicescontroller.onrender.com/api/personnel/workload')
+      ]);
+
+      if (ticketsRes.ok) {
+        const data = await ticketsRes.json();
+        const filteredTickets = data.filter(ticket =>
+          ticket.status === 'Pending' || ticket.status === 'Ongoing'
+        );
+        setTickets(filteredTickets);
+      }
+
+      setPersonnelList(personnelRes.data);
+      setPersonnelWorkload(workloadRes.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, []);
  
     
   useEffect(() => {
@@ -59,11 +159,10 @@ function TicketsCreated() {
     if (!username) {
       navigate('/');
     } else {
-      fetchTickets();
-      fetchPersonnel();
-      fetchPersonnelWorkload();
+      fetchData();
     }
-  }, [navigate]);
+  }, [navigate, fetchData]);
+
 
   const fetchTickets = async () => {
     try {
@@ -182,85 +281,49 @@ function TicketsCreated() {
     }
   };
 
-  const handleAssignPersonnel = async () => {
-    if (!selectedTicket || !selectedTicket.id) {
-      console.error('No ticket selected or invalid ticket ID');
-      alert('Please select a valid ticket before assigning personnel');
-      return;
-    }
+    const handleAssignPersonnel = useCallback(async () => {
+    if (!selectedTicket?.id) return;
     
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/api/tickets/assign', null, {
         params: {
           ticketId: selectedTicket.id,
-          personnelUsernames: selectedPersonnel,  // This should already be an array
+          personnelUsernames: selectedPersonnel,
           scheduledRepairDate: scheduledRepairDate,
         },
-        paramsSerializer: params => {
-          return qs.stringify(params, {arrayFormat: 'repeat'})
-        }
+        paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
       
       if (response.status === 200) {
-        setAssignModalOpen(false);
-        setSuccessModalOpen(true);
-        fetchTickets();
-      } else {
-        alert('Failed to assign ticket');
+        setModals(prev => ({ ...prev, assign: false, success: true }));
+        fetchData();
       }
     } catch (error) {
       console.error('Error assigning ticket:', error);
-      if (error.response) {
-        console.error('Error data:', error.response.data);
-        console.error('Error status:', error.response.status);
-        console.error('Error headers:', error.response.headers);
-        alert(`Error assigning ticket: ${error.response.data.message || 'Unknown error'}`);
-      } else if (error.request) {
-        console.error('Error request:', error.request);
-        alert('No response received from server');
-      } else {
-        console.error('Error message:', error.message);
-        alert('Error setting up the request');
-      }
     }
-  };
+  }, [selectedTicket, selectedPersonnel, scheduledRepairDate, fetchData]);
+
 
   const handleSort = (event) => {
     setSortBy(event.target.value);
   };
 
   const sortedTickets = useMemo(() => {
-    // First, sort by latest ticket submitted by default
     const defaultSorted = [...tickets].sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
     
-    // Then apply additional sorting based on `sortBy`
     if (sortBy === 'status') {
       const statusOrder = { 'Pending': 1, 'Ongoing': 2, 'Completed': 3 };
       return defaultSorted.sort((a, b) => (statusOrder[a.status] || 999) - (statusOrder[b.status] || 999));
-    } else if (sortBy === 'priority') {
-      return defaultSorted.sort((a, b) => a.priority.localeCompare(b.priority));
-    } else {
-      return defaultSorted; // Default to sorting by date
     }
+    return sortBy === 'priority' 
+      ? defaultSorted.sort((a, b) => a.priority.localeCompare(b.priority))
+      : defaultSorted;
   }, [tickets, sortBy]);
-  
+
+  const getStatusColor = useCallback((status) => STATUS_COLORS[status] || 'black', []);
   
 
-  // Function to determine the color based on status
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Resolved':
-        return 'green';
-      case 'Ongoing':
-        return 'orange';
-      case 'Pending':
-        return 'red';
-      case 'Cancelled':
-        return 'red';
-      default:
-        return 'black';
-    }
-  };
+ 
 
 
 
@@ -669,4 +732,4 @@ function TicketsCreated() {
   );
 }
 
-export default TicketsCreated;
+export default React.memo(TicketsCreated);
