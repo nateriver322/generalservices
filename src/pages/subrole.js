@@ -4,6 +4,8 @@ import axios from 'axios';
 import StaffAppBar from './StaffAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
+<<<<<<< HEAD
+=======
 
 const withAuth = (WrappedComponent) => {
     return function AuthComponent(props) {
@@ -44,6 +46,7 @@ const withAuth = (WrappedComponent) => {
     };
   };
 
+>>>>>>> parent of 5f1dfee (REDIRECT)
 function UserManagement() {
     const [users, setUsers] = useState([]);
     const [personnel, setPersonnel] = useState([]);
@@ -84,27 +87,16 @@ function UserManagement() {
             setLoading(true);
             setError(null);
 
-             // Add auth token to requests
-             const token = localStorage.getItem('token');
-             const config = {
-                 headers: { Authorization: `Bearer ${token}` }
-             };
-
-             const [usersResponse, personnelResponse] = await Promise.all([
-                axios.get('https://generalservicescontroller.onrender.com/user/users?role=User', config),
-                axios.get('https://generalservicescontroller.onrender.com/user/personnel', config)
+            const [usersResponse, personnelResponse] = await Promise.all([
+                axios.get('https://generalservicescontroller.onrender.com/user/users?role=User'),
+                axios.get('https://generalservicescontroller.onrender.com/user/personnel')
             ]);
+
             setUsers(usersResponse.data);
             setPersonnel(personnelResponse.data);
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                // Handle unauthorized access
-                localStorage.clear();
-                navigate('/login');
-            } else {
-                console.error('Error fetching data:', error);
-                setError('Failed to fetch users and personnel. Please try again.');
-            }
+            console.error('Error fetching data:', error);
+            setError('Failed to fetch users and personnel. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -315,4 +307,4 @@ function UserManagement() {
     );
 }
 
-export default withAuth(UserManagement);
+export default UserManagement;
