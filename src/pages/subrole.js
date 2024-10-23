@@ -21,7 +21,7 @@ const withAuth = (WrappedComponent) => {
         const role = localStorage.getItem('role');
   
         if (!token || !username || role !== 'staff') {
-          navigate('/');
+          navigate('/login');
         } else {
           setIsAuthenticated(true);
         }
