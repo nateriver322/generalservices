@@ -56,7 +56,7 @@ function TicketForm() {
         formData.append("workType", selectedWorkTypes.join(","));
 
         try {
-            const response = await fetch('http://localhost:8080/api/tickets', {
+            const response = await fetch('https://generalservicescontroller.onrender.com/user/tickets', {
                 method: 'POST',
                 body: formData,
             });
