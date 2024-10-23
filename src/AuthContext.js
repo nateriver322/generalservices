@@ -6,7 +6,7 @@ const msalConfig = {
   auth: {
     clientId: "d2a969c7-b63d-4c95-9d1c-2bcaf8b09034", // from Azure
     authority: "https://login.microsoftonline.com/823cde44-4433-456d-b801-bdf0ab3d41fc", // or "common" if multitenant
-    redirectUri: "http://localhost:3000", // Ensure this matches Azure setup
+    redirectUri: "https://generalservices.vercel.app/", // Ensure this matches Azure setup
   },
   cache: {
     cacheLocation: "sessionStorage", // You can use localStorage or sessionStorage
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
       const username = localStorage.getItem('username');
       if (username) {
         try {
-          const response = await fetch(`http://localhost:8080/user/${username}`);
+          const response = await fetch(`https://generalservicescontroller.onrender.com/user/${username}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
