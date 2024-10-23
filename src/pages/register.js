@@ -4,7 +4,7 @@ import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
+import { API_BASE_URL, API_ENDPOINTS } from '../apiConfig';
 
 const Register = () => {
     const navigate = useNavigate();

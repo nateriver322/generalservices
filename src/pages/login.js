@@ -8,7 +8,7 @@ import { useMsal } from "@azure/msal-react";
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
+import { API_BASE_URL, API_ENDPOINTS } from '../apiConfig';
 
 const Login = React.memo(() => {
     const navigate = useNavigate();
