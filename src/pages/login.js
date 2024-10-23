@@ -32,7 +32,7 @@ const Login = React.memo(() => {
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
+            const response = await fetch('https://generalservicescontroller.onrender.com/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
