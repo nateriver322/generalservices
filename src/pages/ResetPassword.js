@@ -41,7 +41,7 @@ const ResetPasswordForm = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/reset_password', {
+      const response = await fetch('https://generalservicescontroller.onrender.com/api/reset_password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
