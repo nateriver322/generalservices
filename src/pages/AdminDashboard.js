@@ -274,7 +274,7 @@ const AccountManagement = () => {
   };
 
   return (
-    <div className="account-management">
+    <div>
       <h1>Account Management</h1>
       <Button variant="contained" color="primary" onClick={handleCreateAccountButtonClick}>
         Create Account
