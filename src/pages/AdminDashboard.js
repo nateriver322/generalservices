@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../css/AccountManagement.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -412,8 +413,7 @@ const AccountManagement = () => {
   };
 
   return (
-    <div>
-      <LoginResponsiveAppBar /> {/* Add the staff bar at the top */}
+    <div className="account-management">
       {isLoading ? (
         <Box
           sx={{
@@ -427,33 +427,8 @@ const AccountManagement = () => {
         </Box>
       ) : (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '20px',
-              marginTop: '30px',
-            }}
-          >
-            <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-            <Typography variant="h4" component="h2">
-              Account Management
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              maxWidth: '600px', // Adjust the width as needed
-              width: '100%',
-              bgcolor: 'white',
-              p: 4,
-              borderRadius: 2,
-              boxShadow: 3,
-              margin: '0 auto',
-              mt: 4,
-              textAlign: 'center', // Center align content
-            }}
-          >
+          <div className="header1">
+            <h1>Account Management</h1>
             <div className="search-create">
               <input
                 type="text"
@@ -465,7 +440,7 @@ const AccountManagement = () => {
               <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
               <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
             </div>
-          </Box>
+          </div>
           <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
           {isEditModalOpen && (
             <EditAccountModal
