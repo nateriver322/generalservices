@@ -180,7 +180,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
-      const response = await axios.put('https://generalservicescontroller.onrender.com/user/${account.id}', formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
@@ -324,8 +324,7 @@ const AccountManagement = () => {
   }, []);
 
   const handleLogoutButtonClick = () => {
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('userRole'); // Clear username from sessionStorage
+    sessionStorage.removeItem('username'); // Clear username from sessionStorage
     navigate('/'); // Redirect to login page
 }
 
@@ -345,7 +344,7 @@ const AccountManagement = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete('https://generalservicescontroller.onrender.com/user/${currentAccount}');
+      const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
       if (response.status === 200) {
         setAccounts(accounts.filter(account => account.id !== currentAccount));
       } else {
@@ -373,7 +372,7 @@ const AccountManagement = () => {
       if (searchUsername.trim() === '') {
         response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       } else {
-        response = await axios.get('https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}');
+        response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
       }
       if (response.status === 200) {
         setAccounts(response.data);
@@ -414,7 +413,7 @@ const AccountManagement = () => {
 
   return (
     <div className="account-management">
-      {isLoading ? (
+{isLoading ? (
         <Box
           sx={{
             display: 'flex',
