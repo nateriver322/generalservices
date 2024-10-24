@@ -412,7 +412,7 @@ const AccountManagement = () => {
   };
 
   return (
-    <div className="account-management">
+    <div>
       <LoginResponsiveAppBar /> {/* Add the staff bar at the top */}
       {isLoading ? (
         <Box
