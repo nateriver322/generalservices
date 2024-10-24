@@ -374,7 +374,7 @@ const Register = () => {
                             color: '#800000',
                         }}
                     >
-                        Login
+                        Back to Login
                     </Button>
                 </Box>
             </Box>
