@@ -4,10 +4,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
 // ConfirmationModal component
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
@@ -418,16 +414,7 @@ const AccountManagement = () => {
 
   return (
     <div className="account-management">
-      {/* App Bar */}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Admin Dashboard
-          </Typography>
-          <Button color="inherit" onClick={handleLogoutButtonClick}>Logout</Button>
-        </Toolbar>
-      </AppBar>
-
+      <LoginResponsiveAppBar /> {/* Add the staff bar at the top */}
       {isLoading ? (
         <Box
           sx={{
@@ -441,8 +428,33 @@ const AccountManagement = () => {
         </Box>
       ) : (
         <>
-          <div className="header1">
-            <h1>Account Management</h1>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '20px',
+              marginTop: '30px',
+            }}
+          >
+            <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+            <Typography variant="h4" component="h2">
+              Account Management
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              maxWidth: '600px', // Adjust the width as needed
+              width: '100%',
+              bgcolor: 'white',
+              p: 4,
+              borderRadius: 2,
+              boxShadow: 3,
+              margin: '0 auto',
+              mt: 4,
+              textAlign: 'center', // Center align content
+            }}
+          >
             <div className="search-create">
               <input
                 type="text"
@@ -452,8 +464,9 @@ const AccountManagement = () => {
               />
               <button className="search-button" onClick={handleSearchClick}>Search Account</button>
               <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
+              <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
             </div>
-          </div>
+          </Box>
           <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
           {isEditModalOpen && (
             <EditAccountModal
