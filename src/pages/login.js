@@ -9,6 +9,7 @@ import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
+
 const Login = React.memo(() => {
     const navigate = useNavigate();
     const { login, microsoftLogin } = useAuth();
@@ -78,7 +79,16 @@ const Login = React.memo(() => {
     };
 
     return (
-        <div>
+        <div
+            style={{
+                backgroundImage: `url(${logo})`,
+                backgroundSize: 'cover', // Cover the entire background
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                height: '100vh',
+                width: '100vw'
+            }}
+        >
               {loading ? (  // Conditional rendering based on loading state
                 <Box
                     sx={{
