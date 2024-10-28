@@ -81,15 +81,26 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                backgroundImage: `url('/logo.png')`,
-                backgroundSize: 'cover', // Cover the entire background
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundAttachment: 'fixed',
+                position: 'relative', 
                 height: '100vh',
-                width: '100vw'
+                width: '100vw',
             }}
         >
+            {/* Blurry and semi-transparent background logo */}
+                <img
+                src="/logo.png"
+                alt="Background Logo"
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)', 
+                    opacity: 0.3, 
+                    width: '800px',
+                    height: 'auto',
+                    zIndex: -1, 
+            }}
+        />
               {loading ? (  // Conditional rendering based on loading state
                 <Box
                     sx={{
