@@ -81,10 +81,11 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                backgroundImage: `url(${logo})`,
+                backgroundImage: `url('/logo.png')`,
                 backgroundSize: 'cover', // Cover the entire background
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
                 height: '100vh',
                 width: '100vw'
             }}
