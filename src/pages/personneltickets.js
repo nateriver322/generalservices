@@ -103,9 +103,10 @@ function PersonnelTickets() {
   const handleSubmitFeedback = async () => {
     try {
       const username = localStorage.getItem('username');
-      const response = await axios.post(`https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/personnel-feedback`, 
-        { feedback },
-        { params: { personnelUsername: username } }
+      const response = await axios.post(
+        `https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/personnel-feedback`,
+        { feedback: feedback }, // Payload as expected by API
+        { params: { personnelUsername: username } } // Set personnelUsername in query
       );
       if (response.status === 200) {
         setFeedbackModalOpen(false);
@@ -118,6 +119,7 @@ function PersonnelTickets() {
       console.error('Error submitting feedback:', error);
     }
   };
+  
 
   const hasSubmittedFeedback = (ticket) => {
     const username = localStorage.getItem('username');
