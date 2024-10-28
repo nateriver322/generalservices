@@ -4,6 +4,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "./AuthConfig";
 import { AuthProvider } from './AuthContext';
 import Login from './pages/login';
+import PersonnelLogin from './pages/loginPersonnel';
 import Register from './pages/register';
 import SuccessRegistration from './pages/successregistration'; // Ensure this path is correct
 import TicketForm from './pages/ticket';
@@ -27,6 +28,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/personnellogin" element={<PersonnelLogin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/successregistration" element={<SuccessRegistration />} />
           <Route 
