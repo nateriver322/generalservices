@@ -29,8 +29,8 @@ const Successregistration = () => {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)', 
-                    opacity: 0.3, 
-                    width: '800px',
+                    opacity: 0.5, 
+                    width: '1000px',
                     height: 'auto',
                     zIndex: -1, 
             }}
@@ -45,10 +45,6 @@ const Successregistration = () => {
           marginTop: '30px',
         }}
       >
-        <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-        <Typography variant="h4" component="h2">
-          JobTrack
-        </Typography>
       </Box>
       <Box
         sx={{
@@ -63,6 +59,20 @@ const Successregistration = () => {
           textAlign: 'center', // Center align content
         }}
       >
+        <Box 
+                    display="flex" 
+                    flexDirection="row" 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    textAlign="center" 
+                    mb={4}
+                >
+                    <ConstructionIcon sx={{ fontSize: 60, mb: 2, mr: 2 }} />
+                    <Typography variant="h4" component="h2" gutterBottom>
+                        JobTrack
+                    </Typography>
+                            
+                </Box>
         <Typography variant="h5" component="h3" gutterBottom>
           Account Successfully Created!
         </Typography>
