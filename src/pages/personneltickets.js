@@ -102,7 +102,7 @@ function PersonnelTickets() {
 
   const handleSubmitFeedback = async () => {
     try {
-      const username = localStorage.getItem('username')?.trim();  // Trim whitespace just in case
+      const username = sessionStorage.getItem('username')?.trim();  // Trim whitespace just in case
       console.log(`Submitting feedback for ticket ${selectedTicket.id} by user: ${username}`);
 
       const response = await axios.post(
@@ -124,7 +124,7 @@ function PersonnelTickets() {
 };
 
   const hasSubmittedFeedback = (ticket) => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     return ticket.personnelFeedbacks && ticket.personnelFeedbacks[username];
   };
   return (
