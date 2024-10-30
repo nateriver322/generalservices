@@ -28,6 +28,7 @@ import {
   TextField,
   Checkbox,
   ListItemText,
+  CircularProgress,
 } from '@mui/material';
 
 function TicketsCreated() {
@@ -51,7 +52,7 @@ function TicketsCreated() {
   const username = sessionStorage.getItem('username'); // Get username from localStorage
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [personnelWorkload, setPersonnelWorkload] = useState({});
-
+  const [loading, setLoading] = useState(true);
  
     
   useEffect(() => {
@@ -66,6 +67,7 @@ function TicketsCreated() {
   }, [navigate]);
 
   const fetchTickets = async () => {
+    setLoading(true);
     try {
       const response = await fetch('https://generalservicescontroller.onrender.com/api/tickets');
       if (response.ok) {
@@ -80,6 +82,8 @@ function TicketsCreated() {
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -284,6 +288,14 @@ function TicketsCreated() {
     p: 4,
     borderRadius: 2,
   };
+
+  if (loading) {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+}
 
   return (
     <>
