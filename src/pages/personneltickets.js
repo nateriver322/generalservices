@@ -102,22 +102,26 @@ function PersonnelTickets() {
 
   const handleSubmitFeedback = async () => {
     try {
-      const username = sessionStorage.getItem('username');
-      const response = await axios.post(`https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/personnel-feedback`, 
+      const username = localStorage.getItem('username')?.trim();  // Trim whitespace just in case
+      console.log(`Submitting feedback for ticket ${selectedTicket.id} by user: ${username}`);
+
+      const response = await axios.post(
+        `https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/personnel-feedback`,
         { feedback },
         { params: { personnelUsername: username } }
       );
+
       if (response.status === 200) {
         setFeedbackModalOpen(false);
         setSuccessMessage('Feedback submitted successfully!');
         setSuccessModalOpen(true);
         setFeedback('');
-        fetchTickets(username); // Refresh tickets to update the UI
+        fetchTickets(username);  // Refresh tickets to update the UI
       }
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
-  };
+};
 
   const hasSubmittedFeedback = (ticket) => {
     const username = localStorage.getItem('username');
