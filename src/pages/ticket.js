@@ -45,6 +45,8 @@ function TicketForm() {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
 
+        
+
         if (selectedWorkTypes.length === 0) {
             alert("Please select at least one work type.");
             return;
@@ -54,7 +56,7 @@ function TicketForm() {
         const now = new Date();
         const currentDateTime = now.toISOString();
         formData.append('datetime', currentDateTime);
-        formData.append('username', localStorage.getItem('username'));
+        formData.append('username', sessionStorage.getItem('username'));
         
         formData.append("workType", selectedWorkTypes.join(","));
 
