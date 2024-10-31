@@ -127,13 +127,7 @@ export default function TicketsDone() {
   return (
     <>
       <StaffAppBar />
-      <Box sx={{ 
-    position: 'fixed',  // This ensures it's positioned relative to the viewport
-    top: '50%',         // Center vertically
-    left: '50%',        // Center horizontally
-    transform: 'translate(-50%, -50%)', // Offset the element by half its size
-    zIndex: 1000        // Ensure it appears above other content
-  }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
       {loading ? ( // Check if loading
         <CircularProgress />
       ) : (
