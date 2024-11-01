@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import '../css/AccountManagement.css';
-import Box from '@mui/material/Box';
+import { Box, Button, Modal, CircularProgress } from '@mui/material';
 
 
 // ConfirmationModal component
@@ -344,6 +343,7 @@ const AccountManagement = () => {
     setIsRegistrationModalOpen(true);
   };
 
+  
   const handleEditClick = (account) => {
     setCurrentAccount(account);
     setIsEditModalOpen(true);
@@ -354,11 +354,17 @@ const AccountManagement = () => {
     setIsConfirmModalOpen(true); // Open the confirmation modal
   };
 
+  const DeleteAccountComponent = ({ currentAccount, accounts, setAccounts }) => {
+    const [loading, setLoading] = useState(false);
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
+
   const handleConfirmDelete = async () => {
+    setLoading(true);
     try {
       const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
       if (response.status === 200) {
         setAccounts(accounts.filter(account => account.id !== currentAccount));
+        setSuccessModalOpen(true);
       } else {
         console.error('Failed to delete user');
         alert('Failed to delete user');
@@ -366,7 +372,17 @@ const AccountManagement = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
       alert('Error deleting user');
+    } finally {
+      setLoading(false); // Set loading to false after processing
+      setIsConfirmModalOpen(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setSuccessModalOpen(false);
+    // Optionally, perform another action, like redirecting or refreshing the account list
+};
+
     setIsConfirmModalOpen(false); // Close the confirmation modal
   };
 
@@ -478,6 +494,26 @@ const AccountManagement = () => {
         )}
       </>
     )}
+    {/* Loading and Success Modal for Deletion */}
+    <div>
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Button onClick={handleConfirmDelete} color="error">
+            Delete Account
+          </Button>
+        )}
+
+        {/* Success Modal */}
+        <Modal open={successModalOpen} onClose={handleCloseModal}>
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <h2>Account Successfully Deleted</h2>
+            <Button onClick={handleCloseModal} color="primary">Close</Button>
+          </div>
+        </Modal>
+      </div>
   </div>
 );
 };
