@@ -411,87 +411,78 @@ const AccountManagement = () => {
   };
 
   return (
-    <div> 
-      {isLoading ? (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh', // Adjust this height based on your layout
-          }}
-        >
-          {/* Blurry and semi-transparent background logo */}
-          <img
-                src="/logo.png"
-                alt="Background Logo"
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)', 
-                    opacity: 0.5, 
-                    width: '1000px',
-                    height: 'auto',
-                    zIndex: -1, 
-            }}
-        />
-          <LoginResponsiveAppBar />
+  <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
+    {/* Always show the AppBar */}
+    <LoginResponsiveAppBar />
+
+    {/* Background Logo */}
+    <img
+      src="/logo.png"
+      alt="Background Logo"
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)', 
+        opacity: 0.3, 
+        width: '1000px',
+        height: 'auto',
+        zIndex: -1,
+      }}
+    />
+
+    {isLoading ? (
       <Box
         sx={{
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: '20px',
-          marginTop: '30px',
+          alignItems: 'center',
+          height: '100vh',
         }}
       >
+        <CircularProgress />
       </Box>
-          <CircularProgress />
-        </Box>
-        
-        
-      ) : (
-        <>
-          <div className="header1">
-            <h1>Account Management</h1>
-            <div className="search-create">
-              <input
-                type="text"
-                placeholder="Enter username"
-                value={searchUsername}
-                onChange={handleSearchChange}
-              />
-              <button className="search-button" onClick={handleSearchClick}>Search Account</button>
-              <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
-              <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
-            </div>
+    ) : (
+      <>
+        <div className="header1">
+          <h1>Account Management</h1>
+          <div className="search-create">
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={searchUsername}
+              onChange={handleSearchChange}
+            />
+            <button className="search-button" onClick={handleSearchClick}>Search Account</button>
+            <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
+            <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
           </div>
-          <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
-          {isEditModalOpen && (
-            <EditAccountModal
-              account={currentAccount}
-              onClose={handleCloseEditModal}
-              onSave={handleSaveAccountChanges}
-            />
-          )}
-          {isRegistrationModalOpen && (
-            <RegistrationModal
-              onClose={handleCloseRegistrationModal}
-              onRegister={handleRegisterNewAccount}
-            />
-          )}
-          {isConfirmModalOpen && (
-            <ConfirmationModal
-              message="Are you sure you want to delete this account?"
-              onConfirm={handleConfirmDelete}
-              onCancel={handleCancelDelete}
-            />
-          )}
-        </>
-      )}
-    </div>
-  );
+        </div>
+        <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
+        {isEditModalOpen && (
+          <EditAccountModal
+            account={currentAccount}
+            onClose={handleCloseEditModal}
+            onSave={handleSaveAccountChanges}
+          />
+        )}
+        {isRegistrationModalOpen && (
+          <RegistrationModal
+            onClose={handleCloseRegistrationModal}
+            onRegister={handleRegisterNewAccount}
+          />
+        )}
+        {isConfirmModalOpen && (
+          <ConfirmationModal
+            message="Are you sure you want to delete this account?"
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          />
+        )}
+      </>
+    )}
+  </div>
+);
 };
 
 // AccountTable component
@@ -501,7 +492,6 @@ const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
       <thead>
         <tr>
           <th>Username</th>
-          
           <th>Email</th>
           <th>Contact No.</th>
           <th>Account Type</th>
@@ -522,7 +512,6 @@ const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
   return (
     <tr>
       <td>{account.username}</td>
-      
       <td>{account.email}</td>
       <td>{account.contactNumber}</td>
       <td>{account.role}</td>
