@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
+import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import Box from '@mui/material/Box';
 
 // ConfirmationModal component
@@ -193,7 +194,6 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       alert("Error updating user");
     }
     setIsConfirmModalOpen(false); // Close the confirmation modal
-    onClose(); // Close the edit modal
   };
 
   const handleCancelConfirm = () => {
@@ -202,6 +202,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleSavedModalClose = () => {
     setIsSavedModalOpen(false);
+    onClose();
   };
 
   return (
@@ -300,7 +301,6 @@ const AccountManagement = () => {
     const username = sessionStorage.getItem('username');
 
     if (!username) {
-      console.log('No user data found, redirecting to login');
       navigate('/');
     }
   }, [navigate]);
@@ -392,13 +392,9 @@ const AccountManagement = () => {
     setIsRegistrationModalOpen(false);
   };
 
-  const handleSaveAccountChanges = async () => {
-    try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      setAccounts(response.data);
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
-    }
+  const handleSaveAccountChanges = (updatedAccount) => {
+    setAccounts(accounts.map((acc) => (acc.id === updatedAccount.id ? updatedAccount : acc)));
+    setIsEditModalOpen(false);
   };
 
   const handleRegisterNewAccount = async () => {
@@ -462,7 +458,7 @@ const AccountManagement = () => {
         {isEditModalOpen && (
           <EditAccountModal
             account={currentAccount}
-            onClose={handleCloseEditModal}
+            onClose={() => setIsEditModalOpen(false)}
             onSave={handleSaveAccountChanges}
           />
         )}
