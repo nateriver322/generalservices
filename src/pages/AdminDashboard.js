@@ -56,6 +56,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
+    setLoading(true); 
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
@@ -426,22 +427,6 @@ const AccountManagement = () => {
   <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
     {/* Always show the AppBar */}
     <LoginResponsiveAppBar />
-
-    {/* Background Logo */}
-    <img
-      src="/logo.png"
-      alt="Background Logo"
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)', 
-        opacity: 0.3, 
-        width: '1000px',
-        height: 'auto',
-        zIndex: -1,
-      }}
-    />
 
     {isLoading ? (
       <Box
