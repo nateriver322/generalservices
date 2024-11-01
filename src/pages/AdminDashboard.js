@@ -422,8 +422,21 @@ const AccountManagement = () => {
             height: '100vh', // Adjust this height based on your layout
           }}
         >
+          <LoginResponsiveAppBar />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+          marginTop: '30px',
+        }}
+      >
+      </Box>
           <CircularProgress />
         </Box>
+        
+        
       ) : (
         <>
           <div className="header1">
