@@ -6,6 +6,7 @@ import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import '../css/AccountManagement.css';
 import Box from '@mui/material/Box';
 
+
 // ConfirmationModal component
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
   return (
@@ -44,6 +45,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     role: 'User'
   });
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,6 +69,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     } catch (error) {
       console.error("Error registering user:", error);
       alert("Error registering user");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -80,6 +84,12 @@ const RegistrationModal = ({ onClose, onRegister }) => {
       <div className="modal">
         <div className="modal-content">
           <h2>Register Account</h2>
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
           <div className="form-row">
             <div className="form-group">
               <label>Username</label>
@@ -137,6 +147,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
             <button onClick={handleSaveClick}>Register</button>
             <button onClick={onClose}>Cancel</button>
           </div>
+          </>
+           )}
         </div>
         {isSavedModalOpen && (
           <SavedModal
