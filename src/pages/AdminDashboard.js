@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
+import '../css/AccountManagement.css';
 import Box from '@mui/material/Box';
 
 // ConfirmationModal component
@@ -184,7 +185,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       if (response.status === 200) {
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onSave(); // Call onSave to refresh the account list
+        onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
       } else {
         console.error("Failed to update user");
         alert("Failed to update user");
@@ -299,7 +300,6 @@ const AccountManagement = () => {
 
   useEffect(() => {
     const username = sessionStorage.getItem('username');
-
     if (!username) {
       navigate('/');
     }
@@ -393,6 +393,10 @@ const AccountManagement = () => {
   };
 
   const handleSaveAccountChanges = (updatedAccount) => {
+    if (!updatedAccount.id) {
+      console.error("Error: updatedAccount.id is undefined");
+      return;
+    }
     setAccounts(accounts.map((acc) => (acc.id === updatedAccount.id ? updatedAccount : acc)));
     setIsEditModalOpen(false);
   };
