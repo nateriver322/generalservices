@@ -308,6 +308,8 @@ const AccountManagement = () => {
   const [searchUsername, setSearchUsername] = useState('');
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSearching, setIsSearching] = useState(false); // New loading state for searching
+  const [searchError, setSearchError] = useState(''); // New state for search error message
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -392,9 +394,12 @@ const AccountManagement = () => {
 
   const handleSearchChange = (e) => {
     setSearchUsername(e.target.value);
+    setSearchError('');
   };
 
   const handleSearchClick = async () => {
+    setIsSearching(true); 
+    setSearchError(''); 
     try {
       let response;
       if (searchUsername.trim() === '') {
@@ -403,12 +408,19 @@ const AccountManagement = () => {
         response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
       }
       if (response.status === 200) {
+        if (response.data.length === 0) {
+          setSearchError('Account does not exist.'); // Set error if no accounts found
+        } else {
         setAccounts(response.data);
+        }
       } else {
         console.error('Failed to fetch accounts');
       }
     } catch (error) {
       console.error('Error fetching accounts:', error);
+      setSearchError('Error fetching accounts.')
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -443,6 +455,8 @@ const AccountManagement = () => {
   <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
     {/* Always show the AppBar */}
     <LoginResponsiveAppBar />
+
+    {/* Background Logo */}
     <img
       src="/logo.png"
       alt="Background Logo"
@@ -457,6 +471,7 @@ const AccountManagement = () => {
         zIndex: -1,
       }}
     />
+
     {isLoading ? (
       <Box
         sx={{
@@ -479,10 +494,11 @@ const AccountManagement = () => {
               value={searchUsername}
               onChange={handleSearchChange}
             />
-            <button className="search-button" onClick={handleSearchClick}>Search Account</button>
+            <button className="search-button" onClick={handleSearchClick} disabled={isSearching}> {isSearching ? <CircularProgress size={24} /> : 'Search Account'}</button>
             <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
             <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
           </div>
+          {searchError && <p style={{ color: 'red' }}>{searchError}</p>} {/* Display error message */}
         </div>
         <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
         {isEditModalOpen && (
