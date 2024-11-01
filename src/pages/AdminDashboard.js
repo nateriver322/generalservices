@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../css/AccountManagement.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -412,8 +411,8 @@ const AccountManagement = () => {
   };
 
   return (
-    <div className="account-management">
-{isLoading ? (
+    <div> 
+      {isLoading ? (
         <Box
           sx={{
             display: 'flex',
