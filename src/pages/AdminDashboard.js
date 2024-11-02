@@ -454,6 +454,7 @@ const AccountManagement = () => {
   return (
   <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
     {/* Always show the AppBar */}
+    <LoginResponsiveAppBar />
 
     {/* Background Logo */}
     <img
