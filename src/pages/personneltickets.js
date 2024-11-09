@@ -11,6 +11,7 @@ import {
   Button,
   Modal,
   Typography,
+  CircularProgress,
   Box,
   TextField
 } from '@mui/material';
@@ -27,6 +28,7 @@ function PersonnelTickets() {
   const [feedback, setFeedback] = useState('');
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const username = sessionStorage.getItem('username');
@@ -38,6 +40,7 @@ function PersonnelTickets() {
   }, [navigate]);
 
   const fetchTickets = async (username) => {
+    setLoading(true);
     try {
       const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/personnel/${username}`);
       if (response.ok) {
@@ -57,6 +60,8 @@ function PersonnelTickets() {
       }
     } catch (error) {
       console.error('Error:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -138,7 +143,17 @@ function PersonnelTickets() {
           padding: '30px',
         }}
       >
-      
+      {loading ? (
+      <Box sx={{ 
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1000
+      }}>
+      <CircularProgress />
+      </Box>
+      ) : (
 
         <Box sx={{ width: '100%', maxWidth: 1450 }}>
           {tickets.length === 0 ? (
@@ -196,9 +211,10 @@ function PersonnelTickets() {
 </TableBody>
               </Table>
             </Box>
-          )}
-        </Box>
-      </Box>
+         )}
+         </Box>
+       )}
+     </Box>
 
       <ViewDetailsModal
   open={detailsModalOpen}
