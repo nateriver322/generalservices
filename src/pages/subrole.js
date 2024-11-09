@@ -120,25 +120,22 @@ function UserManagement() {
         }
     };
 
-    if (loading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
     return (
         <>
-      <StaffAppBar />
-<Box
-    sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: { xs: '20px', sm: '30px' },
-    }}
->
+            <StaffAppBar />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: '20px', sm: '30px' } }}>
+                {loading ? (
+                    <Box sx={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 1000
+                    }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <>
    
    <Box 
                 sx={{ 
@@ -271,6 +268,8 @@ function UserManagement() {
                 </Button>
             </Box>
         </form>
+        </>
+           )}
     </Box>
      
         </>
