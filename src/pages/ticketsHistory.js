@@ -12,6 +12,7 @@ import {
   Button,
   Modal,
   Typography,
+  CircularProgress,
   Box,
 } from '@mui/material';
 
@@ -19,6 +20,7 @@ function TicketsHistory() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   useEffect(() => {
@@ -31,6 +33,7 @@ function TicketsHistory() {
   }, [navigate]);
 
   const fetchTickets = async (username) => {
+    setLoading(true);
     try {
       const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/personnel/${username}`);
       if (response.ok) {
@@ -52,6 +55,8 @@ function TicketsHistory() {
       }
     } catch (error) {
       console.error('Error:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +107,18 @@ function TicketsHistory() {
           padding: '30px',
         }}
       >
+
+{loading ? (
+      <Box sx={{ 
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1000
+      }}>
+      <CircularProgress />
+      </Box>
+      ) : (
        
 
         <Box sx={{ width: '100%', maxWidth: 1450 }}>
@@ -149,7 +166,8 @@ function TicketsHistory() {
             </Box>
           )}
         </Box>
-      </Box>
+    )}
+     </Box>
 
       <ViewDetailsModal
   open={detailsModalOpen}
