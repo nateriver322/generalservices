@@ -310,6 +310,8 @@ const AccountManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false); // New loading state for searching
   const [searchError, setSearchError] = useState(''); // New state for search error message
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -356,37 +358,30 @@ const AccountManagement = () => {
     setIsConfirmModalOpen(true); // Open the confirmation modal
   };
 
-  const DeleteAccountComponent = ({ currentAccount, accounts, setAccounts }) => {
-    const [loading, setLoading] = useState(false);
-    const [successModalOpen, setSuccessModalOpen] = useState(false);
-
-  const handleConfirmDelete = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
-      if (response.status === 200) {
-        setAccounts(accounts.filter(account => account.id !== currentAccount));
-        setSuccessModalOpen(true);
-      } else {
-        console.error('Failed to delete user');
-        alert('Failed to delete user');
+    const handleConfirmDelete = async () => {
+      setDeleteLoading(true);
+      try {
+        const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
+        if (response.status === 200) {
+          setAccounts(accounts.filter(account => account.id !== currentAccount));
+          setDeleteSuccessModalOpen(true);
+        } else {
+          console.error('Failed to delete user');
+          alert('Failed to delete user');
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Error deleting user');
+      } finally {
+        setDeleteLoading(false);
+        setIsConfirmModalOpen(false);
       }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      alert('Error deleting user');
-    } finally {
-      setLoading(false); // Set loading to false after processing
-      setIsConfirmModalOpen(false);
-    }
-  };
+    };
 
-  const handleCloseModal = () => {
-    setSuccessModalOpen(false);
-    // Optionally, perform another action, like redirecting or refreshing the account list
-};
+    const handleCloseDeleteSuccessModal = () => {
+      setDeleteSuccessModalOpen(false);
+    };
 
-    setIsConfirmModalOpen(false); // Close the confirmation modal
-  };
 
   const handleCancelDelete = () => {
     setIsConfirmModalOpen(false); // Close the confirmation modal
@@ -514,37 +509,63 @@ const AccountManagement = () => {
             onRegister={handleRegisterNewAccount}
           />
         )}
-        {isConfirmModalOpen && (
-          <ConfirmationModal
-            message="Are you sure you want to delete this account?"
-            onConfirm={handleConfirmDelete}
-            onCancel={handleCancelDelete}
-          />
-        )}
-      </>
-    )}
-    {/* Loading and Success Modal for Deletion */}
-    <div>
-        {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Button onClick={handleConfirmDelete} color="error">
-            Delete Account
-          </Button>
-        )}
+         {isConfirmModalOpen && (
+            <ConfirmationModal
+              message="Are you sure you want to delete this account?"
+              onConfirm={handleConfirmDelete}
+              onCancel={() => setIsConfirmModalOpen(false)}
+            />
+          )}
+     
+    {/* Delete Success Modal */}
+    <Modal 
+            open={deleteSuccessModalOpen} 
+            onClose={handleCloseDeleteSuccessModal}
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}>
+              <h2>Account Successfully Deleted</h2>
+              <Button 
+                onClick={handleCloseDeleteSuccessModal}
+                variant="contained"
+                color="primary"
+              >
+                Close
+              </Button>
+            </Box>
+          </Modal>
 
-        {/* Success Modal */}
-        <Modal open={successModalOpen} onClose={handleCloseModal}>
-          <div style={{ padding: '20px', textAlign: 'center' }}>
-            <h2>Account Successfully Deleted</h2>
-            <Button onClick={handleCloseModal} color="primary">Close</Button>
-          </div>
-        </Modal>
-      </div>
-  </div>
-);
+          {/* Loading overlay for delete operation */}
+          {deleteLoading && (
+            <Box
+              sx={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 9999,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
+        </>
+      )}
+    </div>
+  );
 };
 
 // AccountTable component
