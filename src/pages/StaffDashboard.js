@@ -289,145 +289,147 @@ function TicketsCreated() {
     borderRadius: 2,
   };
 
-  if (loading) {
-    return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress />
-        </Box>
-    );
-}
-
   return (
-    <>
+    <Box>
       <StaffAppBar />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '30px',
-        }}
-      >
-       
-        <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: '20px',
-    }}
-  >
-    
-    <Typography variant="h3" sx={{ fontSize: '20px', textAlign: 'center' }}>
-      Welcome staff, {username}!
-    </Typography>
-  </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
+        
+        {loading ? (
+          <Box sx={{ 
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1000
+          }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <Typography variant="h3" sx={{ fontSize: '20px', textAlign: 'center' }}>
+                Welcome staff, {username}!
+              </Typography>
+            </Box>
 
-  <Box sx={{ width: '100%', maxWidth: 1450 }}>
-    {sortedTickets.length === 0 ? (
-      <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
-        No tickets submitted
-      </Typography>
-    ) : (
-      <>
-        {/* Sort By dropdown remains here, now below the Welcome message */}
-        <FormControl variant="outlined" sx={{ marginBottom: 2 }}>
-                <InputLabel htmlFor="sortBy">Sort By</InputLabel>
-                <Select
-                  id="sortBy"
-                  value={sortBy}
-                  onChange={handleSort}
-                  label="Sort By"
-                  sx={{ minWidth: 200 }}
-                >
-                  <MenuItem value="status">Status</MenuItem>
-                  <MenuItem value="priority">Priority</MenuItem>
-                </Select>
-              </FormControl>
+            <Box sx={{ width: '100%', maxWidth: 1450 }}>
+              {sortedTickets.length === 0 ? (
+                <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
+                  No tickets submitted
+                </Typography>
+              ) : (
+                <>
+                  <FormControl variant="outlined" sx={{ marginBottom: 2 }}>
+                    <InputLabel htmlFor="sortBy">Sort By</InputLabel>
+                    <Select
+                      id="sortBy"
+                      value={sortBy}
+                      onChange={handleSort}
+                      label="Sort By"
+                      sx={{ minWidth: 200 }}
+                    >
+                      <MenuItem value="status">Status</MenuItem>
+                      <MenuItem value="priority">Priority</MenuItem>
+                    </Select>
+                  </FormControl>
 
-        <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1 .5px solid #800000', borderRadius: '4px' }}>
-          <Table sx={{ margin: 0, padding: 0 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Ticket Number</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Priority</TableCell>
-                <TableCell>Reported By</TableCell>
-                <TableCell>Date Created</TableCell>
-                <TableCell>Personnel Assigned</TableCell>
-                <TableCell>Scheduled Repair Date</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {sortedTickets.map((ticket, index) => (
-                <TableRow key={index}>
-                  <TableCell>{ticket.id}</TableCell>
-                  <TableCell style={{ color: getStatusColor(ticket.status) }}>
-                    {ticket.status}
-                  </TableCell>
-                  <TableCell>{ticket.priority}</TableCell>
-                  <TableCell>{ticket.username}</TableCell>
-                  <TableCell>{ticket.datetime}</TableCell>
-                  <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
-                  <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
-                  <TableCell>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
-                        <Button
-                          onClick={() => handleAssignTicket(ticket)}
-                          variant="outlined"
-                          color="secondary"
-                          sx={{ marginRight: 1, width: '120px', height: '60px' }}
-                        >
-                          Assign
-                        </Button>
-                      )}
-                      {ticket.status !== 'Resolved' && (
-                        <Button
-                          onClick={() => handleAssessTicket(ticket)}
-                          variant="outlined"
-                          color="success"
-                          sx={{ marginRight: 1, width: '120px', height: '60px' }}
-                        >
-                          Resolve
-                        </Button>
-                      )}
-
-                <Button 
-                onClick={() => handleViewFeedback(ticket)} 
-                variant="outlined" 
-                color="info" 
-                sx={{ marginRight: 1, width: '120px', height: '60px' }}>
-                  View Feedback
-                </Button>
-                      <Button
-                        onClick={() => handleViewTicket(ticket)}
-                        variant="outlined"
-                        color="warning"
-                        sx={{ marginRight: 1, width: '120px', height: '60px' }}
-                      >
-                        View Details
-                      </Button>
-                      <Button
-                        onClick={() => setTicketToDelete(ticket)}
-                        variant="contained"
-                        color="error"
-                        sx={{ width: '120px', height: '60px' }}
-                      >
-                        Terminate
-                      </Button>
-                      </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </>
-    )}
-  </Box>
-</Box>
-
+                  <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                    <Table sx={{ margin: 0, padding: 0 }}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Ticket Number</TableCell>
+                          <TableCell>Status</TableCell>
+                          <TableCell>Priority</TableCell>
+                          <TableCell>Reported By</TableCell>
+                          <TableCell>Date Created</TableCell>
+                          <TableCell>Personnel Assigned</TableCell>
+                          <TableCell>Scheduled Repair Date</TableCell>
+                          <TableCell>Actions</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {sortedTickets.map((ticket, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{ticket.id}</TableCell>
+                            <TableCell style={{ color: getStatusColor(ticket.status) }}>
+                              {ticket.status}
+                            </TableCell>
+                            <TableCell>{ticket.priority}</TableCell>
+                            <TableCell>{ticket.username}</TableCell>
+                            <TableCell>{ticket.datetime}</TableCell>
+                            <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
+                            <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
+                                  <Button
+                                    onClick={() => handleAssignTicket(ticket)}
+                                    variant="outlined"
+                                    color="secondary"
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                  >
+                                    Assign
+                                  </Button>
+                                )}
+                                {ticket.status !== 'Resolved' && (
+                                  <Button
+                                    onClick={() => handleAssessTicket(ticket)}
+                                    variant="outlined"
+                                    color="success"
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                  >
+                                    Resolve
+                                  </Button>
+                                )}
+                                <Button 
+                                  onClick={() => handleViewFeedback(ticket)} 
+                                  variant="outlined" 
+                                  color="info" 
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                >
+                                  View Feedback
+                                </Button>
+                                <Button
+                                  onClick={() => handleViewTicket(ticket)}
+                                  variant="outlined"
+                                  color="warning"
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                >
+                                  View Details
+                                </Button>
+                                <Button
+                                  onClick={() => setTicketToDelete(ticket)}
+                                  variant="contained"
+                                  color="error"
+                                  sx={{ width: '120px', height: '60px' }}
+                                >
+                                  Terminate
+                                </Button>
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </Box>
+        )}
 
       {ticketToDelete && (
   <Modal open={!!ticketToDelete} onClose={closeDeleteModal}>
@@ -677,7 +679,8 @@ function TicketsCreated() {
           </Box>
         </Box>
       </Modal>
-    </>
+    </Box>
+    </Box>
   );
 }
 
