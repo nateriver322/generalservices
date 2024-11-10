@@ -451,22 +451,6 @@ const AccountManagement = () => {
     {/* Always show the AppBar */}
     <LoginResponsiveAppBar />
 
-    {/* Background Logo */}
-    <img
-      src="/logo.png"
-      alt="Background Logo"
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)', 
-        opacity: 0.3, 
-        width: '1000px',
-        height: 'auto',
-        zIndex: -1,
-      }}
-    />
-
     {isLoading ? (
       <Box
         sx={{
