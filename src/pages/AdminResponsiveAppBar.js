@@ -36,14 +36,32 @@ const AdminResponsiveAppBar = ({
                 onChange={handleSearchChange}
                 variant="outlined"
                 size="small"
-                sx={{ marginRight: 2 }}
+                sx={{ backgroundColor: 'white', 
+                      borderRadius: 1,
+                      marginRight: 2,
+                    '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                    borderColor: '#5dade2', 
+                    },
+                '&:hover fieldset': {
+                  borderColor: '#5499c7', 
+                },
+              },
+                }}
               />
               
               <Button
                 color="inherit"
                 onClick={handleSearchClick}
                 disabled={isSearching}
-                sx={{ color: 'white', borderColor: 'white', marginRight: 2 }}
+                sx={{ color: 'white', 
+                    backgroundColor: '#5dade2',
+                    borderColor: 'white', 
+                    marginRight: 2,
+                '&:hover': {
+                backgroundColor: '#5499c7',
+              },
+             }}
               >
                 {isSearching ? <CircularProgress size={20} /> : 'Search'}
               </Button>
@@ -51,7 +69,14 @@ const AdminResponsiveAppBar = ({
               <Button
                 color="inherit"
                 onClick={handleCreateAccountButtonClick}
-                sx={{ color: 'white', borderColor: 'white', marginRight: 2 }}
+                sx={{ color: 'white', 
+                    backgroundColor: '#58d68d',
+                    borderColor: 'white', 
+                    marginRight: 2,
+                '&:hover': {
+                backgroundColor: '#52be80', 
+              },
+             }}
               >
                 Create Account
               </Button>
@@ -59,7 +84,13 @@ const AdminResponsiveAppBar = ({
               <Button
                 color="inherit"
                 onClick={handleLogoutButtonClick}
-                sx={{ color: 'white', borderColor: 'white' }}
+                sx={{ color: 'white', 
+                    backgroundColor: '#e74c3c',
+                    borderColor: 'white',
+                '&:hover': {
+                backgroundColor: '#c0392b', 
+              }, }}
+
               >
                 Logout
               </Button>
