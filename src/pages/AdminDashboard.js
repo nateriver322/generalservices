@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import '../css/AccountManagement.css';
 import { Box, Button, Modal, CircularProgress } from '@mui/material';
+import AdminResponsiveAppBar from './AdminResponsiveAppBar';
 
 
 // ConfirmationModal component
@@ -449,7 +450,7 @@ const AccountManagement = () => {
   return (
   <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
     {/* Always show the AppBar */}
-    <LoginResponsiveAppBar />
+    <AdminResponsiveAppBar />
 
     {isLoading ? (
       <Box
