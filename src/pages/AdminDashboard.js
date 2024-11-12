@@ -450,7 +450,14 @@ const AccountManagement = () => {
   return (
   <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}> 
     {/* Always show the AppBar */}
-    <AdminResponsiveAppBar />
+    <AdminResponsiveAppBar 
+      searchUsername={searchUsername}
+      handleSearchChange={handleSearchChange}
+      handleSearchClick={handleSearchClick}
+      handleCreateAccountButtonClick={handleCreateAccountButtonClick}
+      handleLogoutButtonClick={handleLogoutButtonClick}
+      isSearching={isSearching}
+    />
 
     {isLoading ? (
       <Box

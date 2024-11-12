@@ -9,56 +9,52 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function AdminResponsiveAppBar({ searchUsername, handleSearchChange, handleSearchClick, handleCreateAccountButtonClick, handleLogoutButtonClick, isSearching }) {
-  const navigate = useNavigate();
-
-  return (
-    <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Account Management
+const AdminResponsiveAppBar = ({
+    searchUsername,
+    handleSearchChange,
+    handleSearchClick,
+    handleCreateAccountButtonClick,
+    handleLogoutButtonClick,
+    isSearching
+  }) => {
+    return (
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Admin Dashboard
           </Typography>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <TextField
-              variant="outlined"
-              placeholder="Enter username"
-              value={searchUsername}
-              onChange={handleSearchChange}
-              size="small"
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSearchClick}
-              disabled={isSearching}
-            >
-              {isSearching ? <CircularProgress size={24} /> : 'Search Account'}
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleCreateAccountButtonClick}>
-              Create Account
-            </Button>
-            <Button variant="outlined" color="error" onClick={handleLogoutButtonClick}>
-              Logout
-            </Button>
-          </Box>
+          <TextField
+            label="Search Username"
+            value={searchUsername}
+            onChange={handleSearchChange}
+            variant="outlined"
+            size="small"
+            sx={{ marginRight: 2 }}
+          />
+          <Button
+            color="inherit"
+            onClick={handleSearchClick}
+            disabled={isSearching}
+          >
+            {isSearching ? <CircularProgress size={20} /> : 'Search'}
+          </Button>
+          <Button
+            color="inherit"
+            onClick={handleCreateAccountButtonClick}
+            sx={{ marginLeft: 2 }}
+          >
+            Create Account
+          </Button>
+          <Button
+            color="inherit"
+            onClick={handleLogoutButtonClick}
+            sx={{ marginLeft: 2 }}
+          >
+            Logout
+          </Button>
         </Toolbar>
-      </Container>
-    </AppBar>
-  );
-}
-
+      </AppBar>
+    );
+  };
+  
 export default AdminResponsiveAppBar;
