@@ -70,11 +70,11 @@ const AdminResponsiveAppBar = ({
                 color="inherit"
                 onClick={handleCreateAccountButtonClick}
                 sx={{ color: 'white', 
-                    backgroundColor: '#58d68d',
+                    backgroundColor: '#4caf50',
                     borderColor: 'white', 
                     marginRight: 2,
                 '&:hover': {
-                backgroundColor: '#52be80', 
+                backgroundColor: '#45a049', 
               },
              }}
               >
@@ -85,10 +85,10 @@ const AdminResponsiveAppBar = ({
                 color="inherit"
                 onClick={handleLogoutButtonClick}
                 sx={{ color: 'white', 
-                    backgroundColor: '#e74c3c',
+                    backgroundColor: '#f44336',
                     borderColor: 'white',
                 '&:hover': {
-                backgroundColor: '#c0392b', 
+                backgroundColor: '#e53935', 
               }, }}
 
               >
