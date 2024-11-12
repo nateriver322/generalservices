@@ -27,7 +27,7 @@ const AdminResponsiveAppBar = ({
                 style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }}
               />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-                Admin Dashboard
+                Account Management
               </Typography>
     
               <TextField
