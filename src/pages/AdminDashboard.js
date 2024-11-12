@@ -472,21 +472,6 @@ const AccountManagement = () => {
       </Box>
     ) : (
       <>
-        <div className="header1">
-          <h1>Account Management</h1>
-          <div className="search-create">
-            <input
-              type="text"
-              placeholder="Enter username"
-              value={searchUsername}
-              onChange={handleSearchChange}
-            />
-            <button className="search-button" onClick={handleSearchClick} disabled={isSearching}> {isSearching ? <CircularProgress size={24} /> : 'Search Account'}</button>
-            <button className="search-button" onClick={handleCreateAccountButtonClick}>Create Account</button>
-            <button className="create-button" onClick={handleLogoutButtonClick}>Logout</button>
-          </div>
-          {searchError && <p style={{ color: 'red' }}>{searchError}</p>} {/* Display error message */}
-        </div>
         <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
         {isEditModalOpen && (
           <EditAccountModal

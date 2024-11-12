@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import citLogo from '../images/cit-logo.png';
+
 
 const AdminResponsiveAppBar = ({
     searchUsername,
@@ -18,43 +18,55 @@ const AdminResponsiveAppBar = ({
     isSearching
   }) => {
     return (
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Admin Dashboard
-          </Typography>
-          <TextField
-            label="Search Username"
-            value={searchUsername}
-            onChange={handleSearchChange}
-            variant="outlined"
-            size="small"
-            sx={{ marginRight: 2 }}
-          />
-          <Button
-            color="inherit"
-            onClick={handleSearchClick}
-            disabled={isSearching}
-          >
-            {isSearching ? <CircularProgress size={20} /> : 'Search'}
-          </Button>
-          <Button
-            color="inherit"
-            onClick={handleCreateAccountButtonClick}
-            sx={{ marginLeft: 2 }}
-          >
-            Create Account
-          </Button>
-          <Button
-            color="inherit"
-            onClick={handleLogoutButtonClick}
-            sx={{ marginLeft: 2 }}
-          >
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-    );
-  };
-  
-export default AdminResponsiveAppBar;
+        <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <img
+                src={citLogo}
+                alt="CIT-U Logo"
+                style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: 80 }}
+              />
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+                Admin Dashboard
+              </Typography>
+    
+              <TextField
+                label="Search Username"
+                value={searchUsername}
+                onChange={handleSearchChange}
+                variant="outlined"
+                size="small"
+                sx={{ marginRight: 2 }}
+              />
+              
+              <Button
+                color="inherit"
+                onClick={handleSearchClick}
+                disabled={isSearching}
+                sx={{ color: 'white', borderColor: 'white', marginRight: 2 }}
+              >
+                {isSearching ? <CircularProgress size={20} /> : 'Search'}
+              </Button>
+              
+              <Button
+                color="inherit"
+                onClick={handleCreateAccountButtonClick}
+                sx={{ color: 'white', borderColor: 'white', marginRight: 2 }}
+              >
+                Create Account
+              </Button>
+    
+              <Button
+                color="inherit"
+                onClick={handleLogoutButtonClick}
+                sx={{ color: 'white', borderColor: 'white' }}
+              >
+                Logout
+              </Button>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      );
+    };
+    
+    export default AdminResponsiveAppBar;
