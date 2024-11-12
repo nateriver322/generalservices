@@ -44,7 +44,7 @@ header h1 {
 }
 
 .table-container {
-  max-height: 400px;  /* Adjust this height to suit your design */
+  max-height: 800px;  /* Adjust this height to suit your design */
   overflow-y: auto;   /* Enable vertical scrolling */
   display: block;
   margin-top: 20px;
