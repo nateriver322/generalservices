@@ -1,98 +1,104 @@
 .account-management {
-    background-color: #ffd700;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-.header1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #800000;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  header h1 {
-    margin: 0;
-  }
-  
-  .search-create {
-    display: flex;
-    align-items: center;
-  }
-  
-  .search-create input {
-    margin-right: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .search-create button {
-    margin-right: 10px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  .search-create button:hover {
-    background-color: #e0e0e0;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  
-  th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f0f0f0;
-  }
-  
-  .edit-button {
-    margin-right: 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4caf50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .edit-button:hover {
-    background-color: #45a049;
-  }
-  
-  .delete-button {
-    margin-right: 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f44336;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .delete-button:hover {
-    background-color: #e53935;
-  }
+  background-color: #ffd700;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
 
-  /* Modal styles */
+.header1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #800000;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+header h1 {
+  margin: 0;
+}
+
+.search-create {
+  display: flex;
+  align-items: center;
+}
+
+.search-create input {
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-create button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.search-create button:hover {
+  background-color: #e0e0e0;
+}
+
+.table-container {
+  max-height: 400px;  /* Adjust this height to suit your design */
+  overflow-y: auto;   /* Enable vertical scrolling */
+  display: block;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+.edit-button {
+  margin-right: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button {
+  margin-right: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f44336;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
+}
+
+/* Modal styles */
 .modal {
   position: fixed;
   top: 0;
@@ -172,5 +178,3 @@
 .modal-buttons button:last-child:hover {
   background-color: #333;
 }
-
-  

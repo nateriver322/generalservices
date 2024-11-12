@@ -548,6 +548,7 @@ const AccountManagement = () => {
 // AccountTable component
 const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
   return (
+    <div className="table-container">
     <table>
       <thead>
         <tr>
@@ -564,6 +565,7 @@ const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
         ))}
       </tbody>
     </table>
+    </div>
   );
 };
 
