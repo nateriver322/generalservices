@@ -102,7 +102,7 @@ function TicketAppBar() {
     handleCloseUserMenu(); // Close the menu
 
     // Simulate a small delay for the animation (you can remove this in production)
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     // Clear session storage
     sessionStorage.removeItem('username');
@@ -305,7 +305,7 @@ function TicketAppBar() {
         open={isLoggingOut}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color="info" />
           <Typography variant="h6" component="div">
             Logging out...
           </Typography>
