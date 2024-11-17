@@ -103,9 +103,11 @@ const MyTickets = () => {
   const [feedbackError, setFeedbackError] = useState('');
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Memoized API calls
   const fetchTickets = useCallback(async (username) => {
+    setLoading(true);
     try {
       const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/user/${username}`);
       if (response.ok) {
@@ -114,6 +116,8 @@ const MyTickets = () => {
       }
     } catch (error) {
       console.error('Error fetching tickets:', error);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -178,6 +182,17 @@ const MyTickets = () => {
               JobTrack
             </Typography>
           </Box>
+          {loading ? (
+            <Box sx={{ 
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1000
+            }}>
+              <CircularProgress />
+            </Box>
+          ) : (
 
           <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
             {tickets.length === 0 ? (
@@ -212,6 +227,7 @@ const MyTickets = () => {
               </Box>
             )}
           </Paper>
+           )}
         </Box>
 
         {/* Details Dialog */}
