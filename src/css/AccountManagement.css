@@ -46,14 +46,12 @@ header h1 {
 .table-container {
   max-height: 800px;  
   overflow-y: auto;   
-  display: flex;
-  align-items: center;
+  display: block;
   margin-top: 20px;
-  justify-content: center;
 }
 
 table {
-  width: 80%;
+  width: 70%;
   border-collapse: collapse;
   background-color: #f9f9f9;
   border-radius: 5px;
