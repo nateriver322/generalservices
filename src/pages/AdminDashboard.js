@@ -47,6 +47,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +55,9 @@ const RegistrationModal = ({ onClose, onRegister }) => {
       ...formData,
       [name]: value,
     });
+    if (name === 'email') {
+      setEmailError(''); // Reset email error when the user modifies the email
+    }
   };
 
   const handleSaveClick = async () => {
@@ -62,21 +66,21 @@ const RegistrationModal = ({ onClose, onRegister }) => {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
         console.log("User registered successfully");
-        setIsSavedModalOpen(true); // Open the success modal
-        onRegister(); // Refresh the account list
+        setIsSavedModalOpen(true);
+        onRegister();
       } else {
         console.error("Failed to register user");
         setErrorMessage('Failed to register user');
-        setIsErrorModalOpen(true); // Open the error modal
+        setIsErrorModalOpen(true);
       }
     } catch (error) {
       console.error("Error registering user:", error);
       if (error.response && error.response.status === 409) {
-        setErrorMessage('The email is already registered.');
+        setEmailError('The email is already registered.'); // Set email error message
       } else {
         setErrorMessage('An unexpected error occurred. Please try again.');
+        setIsErrorModalOpen(true);
       }
-      setIsErrorModalOpen(true); // Open the error modal
     } finally {
       setLoading(false);
     }
@@ -84,7 +88,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
 
   const handleSavedModalClose = () => {
     setIsSavedModalOpen(false);
-    onClose(); // Close the registration modal
+    onClose();
   };
 
   const handleErrorModalClose = () => {
@@ -130,7 +134,9 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    style={{ borderColor: emailError ? 'red' : '' }} // Highlight email field if there's an error
                   />
+                  {emailError && <p style={{ color: 'red' }}>{emailError}</p>} {/* Show error message */}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
