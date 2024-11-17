@@ -102,7 +102,7 @@ function TicketAppBar() {
     handleCloseUserMenu(); // Close the menu
 
     // Simulate a small delay for the animation (you can remove this in production)
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Clear session storage
     sessionStorage.removeItem('username');
