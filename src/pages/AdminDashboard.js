@@ -44,6 +44,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     role: 'User',
   });
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -55,7 +57,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
@@ -64,19 +66,29 @@ const RegistrationModal = ({ onClose, onRegister }) => {
         onRegister(); // Refresh the account list
       } else {
         console.error("Failed to register user");
-        alert("Failed to register user");
+        setErrorMessage('Failed to register user');
+        setIsErrorModalOpen(true); // Open the error modal
       }
     } catch (error) {
       console.error("Error registering user:", error);
-      alert("Error registering user");
+      if (error.response && error.response.status === 409) {
+        setErrorMessage('The email is already registered.');
+      } else {
+        setErrorMessage('An unexpected error occurred. Please try again.');
+      }
+      setIsErrorModalOpen(true); // Open the error modal
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const handleSavedModalClose = () => {
     setIsSavedModalOpen(false);
     onClose(); // Close the registration modal
+  };
+
+  const handleErrorModalClose = () => {
+    setIsErrorModalOpen(false);
   };
 
   return (
@@ -152,7 +164,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
         </div>
       </div>
 
-      {/* Saved Success Modal */}
+      {/* Success Modal */}
       <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
         <Box
           sx={{
@@ -171,6 +183,32 @@ const RegistrationModal = ({ onClose, onRegister }) => {
             onClick={handleSavedModalClose}
             variant="contained"
             color="primary"
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
+
+      {/* Error Modal */}
+      <Modal open={isErrorModalOpen} onClose={handleErrorModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <h2>Error</h2>
+          <p>{errorMessage}</p>
+          <Button
+            onClick={handleErrorModalClose}
+            variant="contained"
+            color="secondary"
           >
             Close
           </Button>
