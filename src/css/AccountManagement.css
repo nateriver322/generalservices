@@ -44,9 +44,9 @@ header h1 {
 }
 
 .table-container {
-  max-height: 800px;  
+  max-height: 700px;  
   overflow-y: auto;   
-  display: block;
+  display: flex;
   align-items: center;
   margin-top: 20px;
   justify-content: center;
