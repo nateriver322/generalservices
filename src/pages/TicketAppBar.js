@@ -15,8 +15,9 @@ import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import Popover from '@mui/material/Popover';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import citLogo from '../images/cit-logo.png';
+import Backdrop from '@mui/material/Backdrop';
 
 const pages = [
   { name: 'Home', path: '/dashboard' },
@@ -30,6 +31,7 @@ function TicketAppBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -95,10 +97,20 @@ function TicketAppBar() {
     setAnchorElNotification(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    setIsLoggingOut(true); // Start loading animation
+    handleCloseUserMenu(); // Close the menu
+
+    // Simulate a small delay for the animation (you can remove this in production)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Clear session storage
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('userRole');
+    
+    // Navigate to login page
     navigate('/');
+    setIsLoggingOut(false); // Stop loading animation (though component will unmount)
   };
 
   const handlePageNavigation = (page) => {
@@ -111,6 +123,7 @@ function TicketAppBar() {
   };
 
   return (
+    <>
     <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -279,6 +292,26 @@ function TicketAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
+
+
+
+
+<Backdrop
+        sx={{ 
+          color: '#fff', 
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)' 
+        }}
+        open={isLoggingOut}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <CircularProgress color="inherit" />
+          <Typography variant="h6" component="div">
+            Logging out...
+          </Typography>
+        </Box>
+      </Backdrop>
+    </>
   );
 }
 
