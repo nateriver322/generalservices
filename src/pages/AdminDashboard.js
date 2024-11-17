@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import '../css/AccountManagement.css';
 import { Box, Button, Modal, CircularProgress } from '@mui/material';
 import AdminResponsiveAppBar from './AdminResponsiveAppBar';
@@ -151,12 +150,32 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           </>
            )}
         </div>
-        {isSavedModalOpen && (
-          <SavedModal
-            message="Account Registered Successfully"
-            onClose={handleSavedModalClose}
-          />
-        )}
+        <modal
+          open={isSavedModalOpen}
+          onClose={handleSavedModalClose}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+            >
+              <h2>Account Registered Successfully</h2>
+              <Button
+                onClick={handleSavedModalClose}
+                variant="contained"
+                color="primary"
+                >
+                  Close
+                </Button>
+            </Box>
+            </modal>
       </div>
     </>
   );
