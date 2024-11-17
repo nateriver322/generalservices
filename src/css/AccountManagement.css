@@ -44,14 +44,14 @@ header h1 {
 }
 
 .table-container {
-  max-height: 800px;  /* Adjust this height to suit your design */
-  overflow-y: auto;   /* Enable vertical scrolling */
+  max-height: 700px;  
+  overflow-y: auto;   
   display: block;
   margin-top: 20px;
 }
 
 table {
-  width: 100%;
+  width: 80%;
   border-collapse: collapse;
   background-color: #f9f9f9;
   border-radius: 5px;
