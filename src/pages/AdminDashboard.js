@@ -472,7 +472,7 @@ const AccountManagement = () => {
       </Box>
     ) : (
       <>
-        <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
+        <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} searchError={searchError}/>
         {isEditModalOpen && (
           <EditAccountModal
             account={currentAccount}
@@ -578,7 +578,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
           ) : (
             <tr>
               <td colSpan="5" style={{ textAlign: 'center' }}>
-                No accounts available.
+                Username does not exists.
               </td>
             </tr>
           )}
