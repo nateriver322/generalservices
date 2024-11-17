@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { TextField, Button, Box, Typography, IconButton, InputAdornment, CircularProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment, CircularProgress, Backdrop } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { loginRequest } from "../AuthConfig";
 import { useMsal } from "@azure/msal-react";
@@ -89,19 +89,8 @@ const Login = React.memo(() => {
                 width: '100vw',
             }}
         >
-              {loading ? (  // Conditional rendering based on loading state
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100vh' // Full viewport height for centering
-                    }}
-                >
-                    <CircularProgress />
-                </Box>
-            ) : (
-                <>
+           
+              
             <LoginResponsiveAppBar />
             <Box
                 sx={{
@@ -287,11 +276,22 @@ const Login = React.memo(() => {
         Log In as Personnel
     </Button>
 </Box>
-
-
             </Box>
-            </>
-            )}
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+                }}
+                open={loading}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                    <CircularProgress color="info" />
+                    <Typography variant="h6" component="div">
+                        Logging in...
+                    </Typography>
+                </Box>
+            </Backdrop>
         </div>
     );
 });
