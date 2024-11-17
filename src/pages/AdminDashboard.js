@@ -41,7 +41,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     password: '',
     email: '',
     contactNumber: '',
-    role: 'User'
+    role: 'User',
   });
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,8 +60,8 @@ const RegistrationModal = ({ onClose, onRegister }) => {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
         console.log("User registered successfully");
-        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onRegister(); // Call onRegister to refresh the account list
+        setIsSavedModalOpen(true); // Open the success modal
+        onRegister(); // Refresh the account list
       } else {
         console.error("Failed to register user");
         alert("Failed to register user");
@@ -90,96 +90,96 @@ const RegistrationModal = ({ onClose, onRegister }) => {
             </Box>
           ) : (
             <>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Contact No.</label>
-              <input
-                type="text"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Account Type</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
-              <option value="User">User</option>
-              <option value="PCO Staff">PCO Staff</option>
-              <option value="Personnel">Repair Personnel</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </div>
-          <div className="modal-buttons">
-            <button onClick={handleSaveClick}>Register</button>
-            <button onClick={onClose}>Cancel</button>
-          </div>
-          </>
-           )}
-        </div>
-        <modal
-          open={isSavedModalOpen}
-          onClose={handleSavedModalClose}
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-            }}
-            >
-              <h2>Account Registered Successfully</h2>
-              <Button
-                onClick={handleSavedModalClose}
-                variant="contained"
-                color="primary"
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Contact No.</label>
+                  <input
+                    type="text"
+                    name="contactNumber"
+                    value={formData.contactNumber}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Account Type</label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
                 >
-                  Close
-                </Button>
-            </Box>
-            </modal>
+                  <option value="User">User</option>
+                  <option value="PCO Staff">PCO Staff</option>
+                  <option value="Personnel">Repair Personnel</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+              <div className="modal-buttons">
+                <button onClick={handleSaveClick}>Register</button>
+                <button onClick={onClose}>Cancel</button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* Saved Success Modal */}
+      <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <h2>Account Registered Successfully</h2>
+          <Button
+            onClick={handleSavedModalClose}
+            variant="contained"
+            color="primary"
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 };
+
 
 // EditAccountModal component
 const EditAccountModal = ({ account, onClose, onSave }) => {

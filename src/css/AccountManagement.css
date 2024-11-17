@@ -44,14 +44,16 @@ header h1 {
 }
 
 .table-container {
-  max-height: 600px;  
+  max-height: 700px;  
   overflow-y: auto;   
-  display: block;
+  display: flex;
+  align-items: center;
   margin-top: 20px;
+  justify-content: center;
 }
 
 table {
-  width: 70%;
+  width: 80%;
   border-collapse: collapse;
   background-color: #f9f9f9;
   border-radius: 5px;
