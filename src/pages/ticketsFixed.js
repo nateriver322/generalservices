@@ -155,6 +155,7 @@ export default function TicketsDone() {
                     <TableCell>Date Created</TableCell>
                     <TableCell>Personnel Assigned</TableCell>
                     <TableCell>Scheduled Repair Date</TableCell>
+                    <TableCell>Resolved Date</TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -168,6 +169,7 @@ export default function TicketsDone() {
                       <TableCell>{ticket.datetime}</TableCell>
                       <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
                       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                      <TableCell>{ticket.resolvedDatetime || 'Not available'}</TableCell> 
                       <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Button onClick={() => handleViewTicket(ticket)} variant="outlined" color="warning" sx={{ marginRight: 1, width: '120px', height: '60px' }}>View Details</Button>
