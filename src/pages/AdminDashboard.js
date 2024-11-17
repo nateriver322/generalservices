@@ -546,7 +546,7 @@ const AccountManagement = () => {
 };
 
 // AccountTable component
-const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
+const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => {
   return (
     <div className="table-container">
     <table>
@@ -560,9 +560,28 @@ const AccountTable = ({ accounts, onEditClick, onDeleteClick }) => {
         </tr>
       </thead>
       <tbody>
-        {accounts.map(account => (
-          <AccountRow key={account.id} account={account} onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
-        ))}
+        {searchError ? (
+          <tr>
+            <td colSpan="5" style={{textAlign: 'center', color: 'red'}}>
+              {searchError}
+            </td>
+          </tr>
+        ) : accounts.length > 0 ? (
+            accounts.map((account) => (
+              <AccountRow
+                key={account.id}
+                account={account}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+              />
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" style={{ textAlign: 'center' }}>
+                No accounts available.
+              </td>
+            </tr>
+          )}
       </tbody>
     </table>
     </div>
