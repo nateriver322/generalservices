@@ -74,7 +74,7 @@ const Login = React.memo(() => {
         navigate('/forgot_password');
     };
     const handleLogInAsPersonnelClick = () => {
-        navigate('/personnellogin');
+        navigate('/personnel-login');
     };
 
     const togglePasswordVisibility = () => {
