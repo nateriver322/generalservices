@@ -24,12 +24,15 @@ const PersonnelLogin = () => {
       
       
   
-          if (response.ok) {
-              const { message, id, username, role, subrole } = await response.json();
-              // Store user data in localStorage or context
-              localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
-              navigate('/PersonnelTickets');
-          } else {
+        if (response.ok) {
+    const { message, id, username, role, subrole } = await response.json();
+    // Store user data in localStorage or context
+    localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+    
+    // Redirect to PersonnelDashboard page
+    navigate('/PersonnelDashboard');
+}
+else {
               const errorMessage = await response.text();
               setError(errorMessage || 'An error occurred during login');
           }
