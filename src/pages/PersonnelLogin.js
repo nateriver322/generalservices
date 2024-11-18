@@ -14,13 +14,14 @@ const PersonnelLogin = () => {
       setError('');
   
       try {
-          const response = await fetch('/api/personnel-login', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ personnelId }),
-          });
+        const response = await fetch('https://generalservicescontroller.onrender.com/api/personnel-login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ personnelId }),
+      });
+      
   
           if (response.ok) {
               const { message, id, username, role, subrole } = await response.json();
