@@ -67,11 +67,10 @@ const Register = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         // Personnel ID validation
-        const personnelIdPattern = /^\d{11}$/;
+        const personnelIdPattern = /^\d{3,11}$/; // Allows between 3 and 11 digits
         if (!personnelIdPattern.test(userData.personnelId)) {
-            newErrors.personnelId = "Personnel ID must be exactly 11 digits.";
+            newErrors.personnelId = "Personnel ID must be between 3 and 11 digits.";
         }
-
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
         } else {
@@ -179,39 +178,40 @@ const Register = () => {
 
                 {/* Personnel ID Field */}
                 <TextField
-                    label="Personnel ID"
-                    name="personnelId"
-                    fullWidth
-                    required
-                    margin="normal"
-                    onChange={handleInputChange}
-                    error={!!errors.personnelId}
-                    helperText={errors.personnelId}
-                    inputProps={{
-                        maxLength: 11,
-                        inputMode: 'numeric',
-                        pattern: '[0-9]*'
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'black',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#922B21',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#800000',
-                            },
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'black',
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',
-                        },
-                    }}
-                />
+    label="Personnel ID"
+    name="personnelId"
+    fullWidth
+    required
+    margin="normal"
+    onChange={handleInputChange}
+    error={!!errors.personnelId}
+    helperText={errors.personnelId}
+    inputProps={{
+        maxLength: 11,
+        inputMode: 'numeric',
+        pattern: '[0-9]{3,11}'
+    }}
+    sx={{
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'black',
+            },
+            '&:hover fieldset': {
+                borderColor: '#922B21',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#800000',
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'black',
+        },
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: 'black',
+        },
+    }}
+/>
+
 
                 <TextField
                     label="Username"
