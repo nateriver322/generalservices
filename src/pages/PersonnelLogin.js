@@ -10,45 +10,32 @@ const PersonnelLogin = () => {
     const [error, setError] = useState('');
 
     const handleLogin = async (event) => {
-        event.preventDefault();
-        setError('');
-
-        try {
-          const response = await fetch('https://generalservicescontroller.onrender.com/api/personnel-login', { // Add /api if necessary
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ personnelId }),
-        });
-        
-
-            if (response.ok) {
-                const userData = await response.json();
-                
-                // Store user data in localStorage
-                localStorage.setItem('user', JSON.stringify(userData));
-
-                // Navigate based on role
-                switch(userData.role) {
-                    case 'Personnel':
-                        navigate('/PersonnelTickets');
-                        break;
-                    case 'Staff':
-                        navigate('/StaffDashboard');
-                        break;
-                    default:
-                        navigate('/dashboard');
-                }
-            } else {
-                const errorMessage = await response.text();
-                setError(errorMessage || 'Invalid Personnel ID');
-            }
-        } catch (err) {
-            console.error('Login error:', err);
-            setError('An error occurred during login');
-        }
-    };
+      event.preventDefault();
+      setError('');
+  
+      try {
+          const response = await fetch('/api/personnel-login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ personnelId }),
+          });
+  
+          if (response.ok) {
+              const { message, id, username, role, subrole } = await response.json();
+              // Store user data in localStorage or context
+              localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+              navigate('/PersonnelTickets');
+          } else {
+              const errorMessage = await response.text();
+              setError(errorMessage || 'An error occurred during login');
+          }
+      } catch (err) {
+          console.error('Login error:', err);
+          setError('An error occurred during login');
+      }
+  };
 
     const handleRegisterClick = () => {
         navigate('/register');
