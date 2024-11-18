@@ -29,10 +29,14 @@ const PersonnelLogin = () => {
           console.log('Response Data:', data);  // Log the response data
   
           if (response.ok) {
-              const { message, id, username, role, subrole } = data;
-              localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
-              navigate('/PersonnelDashboard');
-          } else {
+            const { message, id, username, role, subrole } = data;
+            localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+        
+            console.log('About to navigate to PersonnelDashboard'); // Debug log
+            navigate('/PersonnelDashboard');
+            console.log('Navigation triggered'); // This may not appear if navigation is successful
+        }
+        else {
               const errorMessage = data || 'An error occurred during login';
               setError(errorMessage);
           }
