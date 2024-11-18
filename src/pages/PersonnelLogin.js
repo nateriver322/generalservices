@@ -12,9 +12,9 @@ const PersonnelLogin = () => {
     const handleLogin = async (event) => {
       event.preventDefault();
       setError('');
-  
+      
       console.log('Personnel ID:', personnelId);  // Check the value of personnelId
-  
+      
       try {
           const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
               method: 'POST',
@@ -23,21 +23,24 @@ const PersonnelLogin = () => {
               },
               body: JSON.stringify({ personnelId }),
           });
+          
+          console.log('Response Status:', response.status);  // Log response status
+          const data = await response.json();
+          console.log('Response Data:', data);  // Log the response data
   
           if (response.ok) {
-              const { message, id, username, role, subrole } = await response.json();
+              const { message, id, username, role, subrole } = data;
               localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
               navigate('/PersonnelDashboard');
           } else {
-              const errorMessage = await response.text();
-              setError(errorMessage || 'An error occurred during login');
+              const errorMessage = data || 'An error occurred during login';
+              setError(errorMessage);
           }
       } catch (err) {
           console.error('Login error:', err);
           setError('An error occurred during login');
       }
   };
-
     const handleRegisterClick = () => {
         navigate('/register');
     };
