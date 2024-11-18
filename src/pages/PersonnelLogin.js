@@ -13,26 +13,22 @@ const PersonnelLogin = () => {
       event.preventDefault();
       setError('');
   
-      try {
-        const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ personnelId }),
-      });
-      
-      
+      console.log('Personnel ID:', personnelId);  // Check the value of personnelId
   
-        if (response.ok) {
-    const { message, id, username, role, subrole } = await response.json();
-    // Store user data in localStorage or context
-    localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
-    
-    // Redirect to PersonnelDashboard page
-    navigate('/PersonnelDashboard');
-}
-else {
+      try {
+          const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ personnelId }),
+          });
+  
+          if (response.ok) {
+              const { message, id, username, role, subrole } = await response.json();
+              localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+              navigate('/PersonnelDashboard');
+          } else {
               const errorMessage = await response.text();
               setError(errorMessage || 'An error occurred during login');
           }
