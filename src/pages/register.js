@@ -5,10 +5,10 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
-
 const Register = () => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
+        personnelId: '',
         username: '',
         email: '',
         password: '',
@@ -26,16 +26,16 @@ const Register = () => {
             const timer = setTimeout(() => {
                 setEmailError('');
                 setErrors({});
-            }, 2000); // Clear error after 2 seconds
+            }, 2000);
 
-            return () => clearTimeout(timer); // Clean up timer on unmount
+            return () => clearTimeout(timer);
         }
     }, [emailError, errors]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         
-        if (name === 'contactNumber') {
+        if (name === 'contactNumber' || name === 'personnelId') {
             const onlyNumbers = value.replace(/\D/g, '');
             const limitedToElevenDigits = onlyNumbers.slice(0, 11);
             setUserData({
@@ -63,8 +63,14 @@ const Register = () => {
     };
 
     const validateForm = async () => {
-        const newErrors = {}; // Define newErrors here
+        const newErrors = {};
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Personnel ID validation
+        const personnelIdPattern = /^\d{11}$/;
+        if (!personnelIdPattern.test(userData.personnelId)) {
+            newErrors.personnelId = "Personnel ID must be exactly 11 digits.";
+        }
 
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
@@ -86,7 +92,6 @@ const Register = () => {
             newErrors.contactNumber = "Contact number must be exactly 11 digits.";
         }
 
-        // Check if passwords match
         if (userData.password !== userData.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match.";
         }
@@ -139,24 +144,12 @@ const Register = () => {
     };
 
     return (
-        <div
-            style={{
-                position: 'relative', 
-                height: '100vh',
-                width: '100vw',
-            }}
-        >
+        <div style={{
+            position: 'relative', 
+            height: '100vh',
+            width: '100vw',
+        }}>
             <LoginResponsiveAppBar />
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                    marginTop: '30px'
-                }}
-            >
-            </Box>
             <Box
                 component="form"
                 onSubmit={handleFormSubmit}
@@ -181,10 +174,44 @@ const Register = () => {
                     <Typography variant="h4" component="h2" gutterBottom>
                         JobTrack
                     </Typography>
-                            
                 </Box>
                 <Typography variant="h5" component="h3" gutterBottom>Create Account</Typography>
-                
+
+                {/* Personnel ID Field */}
+                <TextField
+                    label="Personnel ID"
+                    name="personnelId"
+                    fullWidth
+                    required
+                    margin="normal"
+                    onChange={handleInputChange}
+                    error={!!errors.personnelId}
+                    helperText={errors.personnelId}
+                    inputProps={{
+                        maxLength: 11,
+                        inputMode: 'numeric',
+                        pattern: '[0-9]*'
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
+                    }}
+                />
 
                 <TextField
                     label="Username"
@@ -288,7 +315,6 @@ const Register = () => {
                     }}
                 />
 
-                {/* Confirm Password Field */}
                 <TextField
                     label="Confirm Password"
                     type={showConfirmPassword ? 'text' : 'password'}
@@ -365,8 +391,7 @@ const Register = () => {
                     }}
                 />
 
-                
-                    <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 2 }}>
                     <Button
                         type="submit"
                         variant="contained"
@@ -396,7 +421,6 @@ const Register = () => {
                     </Button>
                 </Box>
             </Box>
-
         </div>
     );
 };

@@ -4,7 +4,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "./AuthConfig";
 import { AuthProvider } from './AuthContext';
 import Login from './pages/login';
-import PersonnelLogin from './pages/loginPersonnel';
+import PersonnelLogin from './pages/PersonnelLogin';
 import Register from './pages/register';
 import SuccessRegistration from './pages/successregistration'; // Ensure this path is correct
 import TicketForm from './pages/ticket';
