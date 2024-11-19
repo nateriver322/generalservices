@@ -136,7 +136,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     onChange={handleChange}
                     style={{ borderColor: emailError ? 'red' : '' }}
                   />
-                  {emailError && <p style={{ color: '#000000' }}>{emailError}</p>} {/* Show error message */}
+                  {emailError &&  (<div className="error-popup">{emailError}</div>)} {/* Show error message */}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
@@ -639,7 +639,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
       <tbody>
         {searchError ? (
           <tr>
-            <td colSpan="5" style={{textAlign: 'center', color: 'red'}}>
+            <td colSpan="5" style={{textAlign: 'center', color: 'black'}}>
               {searchError}
             </td>
           </tr>

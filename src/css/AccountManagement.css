@@ -127,8 +127,7 @@ th {
 
 .form-group {
   margin-bottom: 15px;
-  display: flex;
-  align-items: center;
+  position: relative;
 }
 
 .form-group label {
@@ -177,4 +176,18 @@ th {
 
 .modal-buttons button:last-child:hover {
   background-color: #333;
+}
+
+.error-popup {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  position: absolute;
+  top: -25px; /* Adjust this to position the bubble above the input */
+  left: 0;
+  z-index: 10;
+  width: auto;
+  white-space: nowrap;
 }
