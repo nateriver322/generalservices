@@ -183,13 +183,14 @@ th {
 .error-popup {
   background-color: red;
   color: white;
-  padding: 5px 10px;
+  padding: 3px 8px;  
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 10px;  
   position: absolute;
-  top: -25px; /* Adjust this to position the bubble above the input */
-  left: 0;
+  top: -25px; 
+  right: 10px; 
   z-index: 10;
   width: auto;
   white-space: nowrap;
 }
+
