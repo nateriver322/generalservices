@@ -61,6 +61,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
+    if (!formData.username || !formData.password || !formData.email) {
+      setErrorMessage('Please fill out all required fields.');
+      setIsErrorModalOpen(true);
+      setLoading(false);
+      return; 
+    }
+
     setLoading(true);
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
