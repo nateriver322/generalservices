@@ -19,6 +19,7 @@ import TicketsHistory from './pages/ticketsHistory';
 import AssignSubrole from './pages/subrole';
 import ForgotPassword from './pages/ForgotPassword';
 import RouteGuard from './RouteGuard';
+import ArchivedTickets from './pages/ArchivedTickets';
 
 import ResetPasswordForm from './pages/ResetPassword';
 function App() {
@@ -52,7 +53,7 @@ function App() {
           />
 
             <Route
-            path="/tickets/archived" 
+            path="/archived" 
             element={
               <RouteGuard requiredRole="User">
             <ArchivedTickets /> 
