@@ -142,11 +142,11 @@ const MyTickets = () => {
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
-
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-    navigate(newValue === 0 ? '/tickets' : '/archived');
+    navigate(newValue === 0 ? '/tickets' : '/archived'); // Changed the URL for the Archived tab
   };
+  
 
   const fetchTickets = useCallback(async (username) => {
     setLoading(true);
