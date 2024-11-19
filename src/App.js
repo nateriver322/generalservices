@@ -52,7 +52,7 @@ function App() {
           />
 
             <Route
-            path="/tickets/archived" 
+            path="/archived" 
             element={
               <RouteGuard requiredRole="User">
             <ArchivedTickets /> 

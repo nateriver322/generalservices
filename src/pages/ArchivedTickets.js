@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback, memo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import CircularProgress from '@mui/material/CircularProgress';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
     Box,
     Typography,
@@ -18,22 +17,13 @@ import {
     DialogContent,
     DialogActions,
     Paper,
-    IconButton,
 } from '@mui/material';
 
-const ArchivedTicketRow = memo(({ ticket, onViewDetails, onViewFeedback }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Archived': return 'gray';
-      case 'Cancelled': return 'red';
-      default: return 'black';
-    }
-  };
-
+const TicketRow = ({ ticket, onViewDetails, onViewFeedback }) => {
   return (
     <TableRow>
       <TableCell>{ticket.id}</TableCell>
-      <TableCell sx={{ color: getStatusColor(ticket.status) }}>{ticket.status}</TableCell>
+      <TableCell sx={{ color: 'gray' }}>{ticket.status}</TableCell>
       <TableCell>{ticket.priority}</TableCell>
       <TableCell>{ticket.location}</TableCell>
       <TableCell>{ticket.description}</TableCell>
@@ -61,7 +51,7 @@ const ArchivedTicketRow = memo(({ ticket, onViewDetails, onViewFeedback }) => {
       </TableCell>
     </TableRow>
   );
-});
+};
 
 const ArchivedTickets = () => {
   const navigate = useNavigate();
@@ -77,10 +67,7 @@ const ArchivedTickets = () => {
       if (response.ok) {
         const data = await response.json();
         // Filter only archived tickets
-        const archivedTickets = data.filter(ticket => 
-          ticket.status === 'Archived' || ticket.status === 'Cancelled'
-        );
-        setTickets(archivedTickets);
+        setTickets(data.filter(ticket => ticket.status === 'Archived'));
       }
     } catch (error) {
       console.error('Error fetching archived tickets:', error);
@@ -98,38 +85,16 @@ const ArchivedTickets = () => {
     }
   }, [navigate, fetchArchivedTickets]);
 
-  const handleBack = () => {
-    navigate('/tickets');
-  };
-
   return (
     <>
       <TicketAppBar />
       <Box sx={{ p: 4 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Header with back button */}
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            mb: 3, 
-            width: '100%',
-            maxWidth: 1450,
-            justifyContent: 'space-between'
-          }}>
-            <IconButton 
-              onClick={handleBack}
-              sx={{ mr: 2 }}
-              aria-label="back to active tickets"
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-              <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
-              <Typography variant="h4" component="h2">
-                Archived Tickets
-              </Typography>
-            </Box>
-            <Box sx={{ width: 48 }} /> {/* Spacer to balance the back button */}
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <ConstructionIcon sx={{ fontSize: 60, mr: 2 }} />
+            <Typography variant="h4" component="h2">
+              Archived Tickets
+            </Typography>
           </Box>
 
           {loading ? (
@@ -145,9 +110,7 @@ const ArchivedTickets = () => {
           ) : (
             <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
               {tickets.length === 0 ? (
-                <Typography variant="h6" align="center">
-                  No archived tickets found.
-                </Typography>
+                <Typography variant="h6" align="center">No archived tickets found.</Typography>
               ) : (
                 <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
                   <Table stickyHeader>
@@ -163,7 +126,7 @@ const ArchivedTickets = () => {
                     </TableHead>
                     <TableBody>
                       {tickets.map((ticket) => (
-                        <ArchivedTicketRow
+                        <TicketRow
                           key={ticket.id}
                           ticket={ticket}
                           onViewDetails={setSelectedTicket}
@@ -180,7 +143,7 @@ const ArchivedTickets = () => {
 
         {/* Details Dialog */}
         <Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
-          <DialogTitle>Archived Ticket Details</DialogTitle>
+          <DialogTitle>Ticket Details</DialogTitle>
           <DialogContent>
             {selectedTicket && (
               <Box sx={{ mt: 2 }}>
@@ -207,7 +170,7 @@ const ArchivedTickets = () => {
 
         {/* Feedback Dialog */}
         <Dialog open={Boolean(feedbackModalTicket)} onClose={() => setFeedbackModalTicket(null)} maxWidth="md" fullWidth>
-          <DialogTitle>Ticket Feedback</DialogTitle>
+          <DialogTitle>Feedback</DialogTitle>
           <DialogContent>
             {feedbackModalTicket?.feedback && (
               <Typography sx={{ mb: 2 }}><strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}</Typography>

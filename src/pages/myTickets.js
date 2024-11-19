@@ -145,7 +145,7 @@ const MyTickets = () => {
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-    navigate(newValue === 0 ? '/tickets' : '/tickets/archived');
+    navigate(newValue === 0 ? '/tickets' : '/archived');
   };
 
   const fetchTickets = useCallback(async (username) => {
