@@ -178,7 +178,7 @@ const Register = () => {
 
                 {/* Personnel ID Field */}
                 <TextField
-    label="Personnel ID"
+    label="ID Number"
     name="personnelId"
     fullWidth
     required
