@@ -30,7 +30,10 @@ const PersonnelLogin = () => {
   
           if (response.ok) {
             const { message, id, username, role, subrole } = data;
-            localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+            sessionStorage.setItem('username', username);
+                sessionStorage.setItem('userRole', role);
+                sessionStorage.setItem('userSubrole', subrole);
+                sessionStorage.setItem('userId', id);
         
             console.log('About to navigate to PersonnelDashboard'); // Debug log
             navigate('/PersonnelDashboard');
