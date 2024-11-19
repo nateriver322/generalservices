@@ -114,6 +114,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -123,6 +124,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -134,6 +136,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                     style={{ borderColor: emailError ? 'red' : '' }}
                   />
                   {emailError &&  (<div className="error-popup">{emailError}</div>)} {/* Show error message */}
