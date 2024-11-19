@@ -76,7 +76,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     } catch (error) {
       console.error("Error registering user:", error);
       if (error.response && error.response.status === 409) {
-        setEmailError('The email is already registered.'); // Set email error message
+        setEmailError('This email is already registered.'); 
       } else {
         setErrorMessage('An unexpected error occurred. Please try again.');
         setIsErrorModalOpen(true);
@@ -134,9 +134,9 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    style={{ borderColor: emailError ? 'red' : '' }} // Highlight email field if there's an error
+                    style={{ borderColor: emailError ? 'red' : '' }}
                   />
-                  {emailError && <p style={{ color: 'red' }}>{emailError}</p>} {/* Show error message */}
+                  {emailError && <p style={{ color: '#000000' }}>{emailError}</p>} {/* Show error message */}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
@@ -250,7 +250,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     if (isFormChanged) {
       setIsConfirmModalOpen(true);
     } else {
-      // No changes, close modal
+      onSave(formData);
       onClose();
     }
   };
@@ -462,18 +462,14 @@ const AccountManagement = () => {
     try {
       let response;
       if (searchUsername.trim() === '') {
-        response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+        await fetchAccounts();
       } else {
         response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
-      }
-      if (response.status === 200) {
         if (response.data.length === 0) {
           setSearchError('Account does not exist.'); // Set error if no accounts found
         } else {
         setAccounts(response.data);
         }
-      } else {
-        console.error('Failed to fetch accounts');
       }
     } catch (error) {
       console.error('Error fetching accounts:', error);
@@ -482,6 +478,19 @@ const AccountManagement = () => {
       setIsSearching(false);
     }
   };
+
+  const fetchAccounts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+      setAccounts(response.data); // Assuming setAccounts is in scope
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
@@ -497,8 +506,13 @@ const AccountManagement = () => {
       console.error("Error: updatedAccount.id is undefined");
       return;
     }
-    setAccounts(accounts.map((acc) => (acc.id === updatedAccount.id ? updatedAccount : acc)));
+    setAccounts((prevAccounts) =>
+      prevAccounts.map((acc) =>
+        acc.id === updatedAccount.id ? updatedAccount : acc
+      )
+    );
     setIsEditModalOpen(false);
+    fetchAccounts(); 
   };
 
   const handleRegisterNewAccount = async () => {
