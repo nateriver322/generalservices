@@ -150,6 +150,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const personnelLogin = async (personnelId) => {
+    try {
+      const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ personnelId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || `HTTP error! status: ${response.status}`);
+      }
+
+      const userData = await response.json();
+      setUser(userData); // Set the user in context
+      sessionStorage.setItem('username', userData.username);
+      sessionStorage.setItem('userRole', userData.role);
+      return userData;
+    } catch (error) {
+      console.error('Personnel login error:', error);
+      throw error;
+    }
+  };
+
   const logout = () => {
     setUser(null);
     sessionStorage.removeItem('username');
@@ -157,7 +183,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, microsoftLogin, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, microsoftLogin, personnelLogin, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

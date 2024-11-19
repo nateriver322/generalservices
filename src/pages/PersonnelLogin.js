@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Backdrop, CircularProgress } from '@mui/material';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import { useAuth } from '../AuthContext';
 
 const PersonnelLogin = () => {
     const navigate = useNavigate();
+    const { personnelLogin } = useAuth();
     const [personnelId, setPersonnelId] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -16,27 +18,12 @@ const PersonnelLogin = () => {
         setError('');
         
         try {
-            const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ personnelId }),
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Store user data in sessionStorage only
-                sessionStorage.setItem('username', data.username);
-                sessionStorage.setItem('userRole', data.role);
-                navigate('/dashboard');
-            } else {
-                setError(data.message || 'Invalid personnel ID');
-            }
+            const userData = await personnelLogin(personnelId);
+            // After successful login, navigate to dashboard
+            navigate('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            setError('An error occurred during login');
+            setError(err.message || 'Invalid personnel ID');
         } finally {
             setLoading(false);
         }
