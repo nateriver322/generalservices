@@ -62,7 +62,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
 
   const handleSaveClick = async () => {
     if (!formData.username || !formData.password || !formData.email) {
-      setErrorMessage('Please fill out all required fields.');
+      setErrorMessage('Please fill out all the required fields.');
       setIsErrorModalOpen(true);
       setLoading(false);
       return; 
@@ -198,7 +198,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           <Button
             onClick={handleSavedModalClose}
             variant="contained"
-            color="primary"
+            sx={{
+              backgroundColor: 'red',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'darkred',
+              },
+            }}
           >
             Close
           </Button>
@@ -224,7 +230,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           <Button
             onClick={handleErrorModalClose}
             variant="contained"
-            color="secondary"
+            sx={{
+              backgroundColor: 'red',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'darkred',
+              },
+            }}
           >
             Close
           </Button>
@@ -600,7 +612,13 @@ const AccountManagement = () => {
               <Button 
                 onClick={handleCloseDeleteSuccessModal}
                 variant="contained"
-                color="primary"
+                sx={{
+                  backgroundColor: 'red',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkred',
+                  },
+                }}
               >
                 Close
               </Button>
