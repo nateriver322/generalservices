@@ -257,10 +257,8 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
-      console.log("Sending data to backend:", formData);
       const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
-        console.log("Response from backend:", response.data);
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
         onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
@@ -482,29 +480,14 @@ const AccountManagement = () => {
   };
 
   const fetchAccounts = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("https://generalservicescontroller.onrender.com/users");
-      if (response.status === 200) {
-        setAccounts(response.data);
-      } else {
-        setSearchError("Failed to fetch accounts");
-      }
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+      setAccounts(response.data); // Assuming setAccounts is in scope
     } catch (error) {
-      console.error("Error fetching accounts:", error);
-      setSearchError("Error fetching accounts");
-    }
-  };
-
-  // Call fetchAccounts when the component mounts
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
-
-  const onSave = async (updatedAccount) => {
-    try {
-      await fetchAccounts(); // Refresh the accounts list
-    } catch (error) {
-      console.error("Error fetching accounts after update:", error);
+      console.error('Error fetching accounts:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -570,8 +553,8 @@ const AccountManagement = () => {
         {isEditModalOpen && (
           <EditAccountModal
             account={currentAccount}
-            onClose={handleCloseEditModal}
-            onSave={onSave}
+            onClose={() => setIsEditModalOpen(false)}
+            onSave={handleSaveAccountChanges}
           />
         )}
         {isRegistrationModalOpen && (
