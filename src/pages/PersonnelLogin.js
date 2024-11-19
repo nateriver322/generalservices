@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Backdrop, CircularProgress } from '@mui/material';
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
@@ -8,45 +8,46 @@ const PersonnelLogin = () => {
     const navigate = useNavigate();
     const [personnelId, setPersonnelId] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (event) => {
-      event.preventDefault();
-      setError('');
-      
-      console.log('Personnel ID:', personnelId);  // Check the value of personnelId
-      
-      try {
-          const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ personnelId }),
-          });
-          
-          console.log('Response Status:', response.status);  // Log response status
-          const data = await response.json();
-          console.log('Response Data:', data);  // Log the response data
-  
-          if (response.ok) {
-            const { message, id, username, role, subrole } = data;
-            localStorage.setItem('user', JSON.stringify({ id, username, role, subrole }));
+        event.preventDefault();
+        setLoading(true);
+        setError('');
         
-            console.log('About to navigate to PersonnelDashboard'); // Debug log
-            navigate('/PersonnelDashboard');
-            console.log('Navigation triggered'); // This may not appear if navigation is successful
+        try {
+            const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ personnelId }),
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Store user data in sessionStorage only
+                sessionStorage.setItem('username', data.username);
+                sessionStorage.setItem('userRole', data.role);
+                navigate('/PersonnelDashboard');
+            } else {
+                setError(data.message || 'Invalid personnel ID');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('An error occurred during login');
+        } finally {
+            setLoading(false);
         }
-        else {
-              const errorMessage = data || 'An error occurred during login';
-              setError(errorMessage);
-          }
-      } catch (err) {
-          console.error('Login error:', err);
-          setError('An error occurred during login');
-      }
-  };
+    };
+
     const handleRegisterClick = () => {
         navigate('/register');
+    };
+
+    const handleBackToLogin = () => {
+        navigate('/login');
     };
 
     return (
@@ -85,6 +86,12 @@ const PersonnelLogin = () => {
                 <Typography variant="h5" component="h3" gutterBottom>
                     Personnel Login
                 </Typography>
+
+                {error && (
+                    <Typography color="error" sx={{ mb: 2 }}>
+                        {error}
+                    </Typography>
+                )}
 
                 <TextField
                     label="Personnel ID"
@@ -149,8 +156,38 @@ const PersonnelLogin = () => {
                     >
                         Register
                     </Button>
+
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        onClick={handleBackToLogin}
+                        sx={{
+                            borderColor: '#800000',
+                            color: '#800000'
+                        }}
+                        fullWidth
+                    >
+                        Back to Login
+                    </Button>
                 </Box>
             </Box>
+
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+                }}
+                open={loading}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                    <CircularProgress color="info" />
+                    <Typography variant="h6" component="div">
+                        Logging in...
+                    </Typography>
+                </Box>
+            </Backdrop>
+
         </div>
     );
 };
