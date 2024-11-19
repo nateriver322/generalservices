@@ -30,7 +30,7 @@ const PersonnelLogin = () => {
                 // Store user data in sessionStorage only
                 sessionStorage.setItem('username', data.username);
                 sessionStorage.setItem('userRole', data.role);
-                navigate('/PersonnelDashboard');
+                navigate('/dashboard');
             } else {
                 setError(data.message || 'Invalid personnel ID');
             }
@@ -47,7 +47,7 @@ const PersonnelLogin = () => {
     };
 
     const handleBackToLogin = () => {
-        navigate('/login');
+        navigate('/');
     };
 
     return (
