@@ -9,19 +9,20 @@ function PersonnelDashboard() {
     const navigate = useNavigate();
     const username = sessionStorage.getItem('username'); // Get username from localStorage
     const [userDetails, setUserDetails] = useState(null); // State to store user details
+    const userRole = sessionStorage.getItem('userRole');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
 
     useEffect(() => {
-        if (!username) {
+        if (!username || !userRole) {
             console.log('No user data found, redirecting to login');
             navigate('/'); // Adjust this if your login route is different
         } else {
             // Fetch user details
             fetchUserDetails(username);
         }
-    }, [navigate, username]);
+    }, [navigate]);
 
     const fetchUserDetails = async (username) => {
         try {
