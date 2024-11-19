@@ -136,7 +136,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     onChange={handleChange}
                     style={{ borderColor: emailError ? 'red' : '' }}
                   />
-                  {emailError && <p style={{ color: '#000000' }}>{emailError}</p>} {/* Show error message */}
+                  {emailError && <p style={{ color: 'red' }}>{emailError}</p>} {/* Show error message */}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
@@ -512,8 +512,8 @@ const AccountManagement = () => {
       )
     );
     setIsEditModalOpen(false);
-    fetchAccounts(); 
   };
+  
 
   const handleRegisterNewAccount = async () => {
     try {
@@ -549,7 +549,7 @@ const AccountManagement = () => {
       </Box>
     ) : (
       <>
-        <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} searchError={searchError}/>
+        <AccountTable accounts={accounts} searchError={searchError} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
         {isEditModalOpen && (
           <EditAccountModal
             account={currentAccount}
@@ -639,7 +639,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
       <tbody>
         {searchError ? (
           <tr>
-            <td colSpan="5" style={{textAlign: 'center', color: 'red'}}>
+            <td colSpan="5" style={{textAlign: 'center', color: 'black'}}>
               {searchError}
             </td>
           </tr>
@@ -655,7 +655,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
           ) : (
             <tr>
               <td colSpan="5" style={{ textAlign: 'center' }}>
-                Username does not exists.
+                No accounts available.
               </td>
             </tr>
           )}
@@ -667,6 +667,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
 
 // AccountRow component
 const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
+  console.log('Rendering AccountRow:', account);
   return (
     <tr>
       <td>{account.username}</td>
