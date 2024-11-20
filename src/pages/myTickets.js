@@ -21,20 +21,20 @@ import {
     Paper,
 } from '@mui/material';
 
-const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) => {
+// Memoized TableRow component for better performance
+const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onDelete }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Resolved': return 'green';
       case 'Ongoing': return 'orange';
       case 'Pending': return 'red';
       case 'Cancelled': return 'red';
-      case 'Archived': return 'gray';
       default: return 'black';
     }
   };
 
   return (
-    <TableRow sx={{ opacity: ticket.status === 'Archived' ? 0.7 : 1 }}>
+    <TableRow>
       <TableCell>{ticket.id}</TableCell>
       <TableCell sx={{ color: getStatusColor(ticket.status) }}>{ticket.status}</TableCell>
       <TableCell>{ticket.priority}</TableCell>
@@ -60,14 +60,14 @@ const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) =>
               View Feedback
             </Button>
           )}
-          {ticket.status === 'Resolved' && !ticket.archived ? (
+          {ticket.status === 'Resolved' ? (
             <Button
               variant="contained"
-              color="info"
-              onClick={() => onArchive(ticket)}
+              color="error"
+              onClick={() => onDelete(ticket)}
               sx={{ width: '120px' }}
             >
-              Archive
+              Delete
             </Button>
           ) : ticket.status === 'Ongoing' ? (
             <Button
@@ -78,16 +78,16 @@ const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) =>
             >
               Cancel
             </Button>
-          ) : ticket.status !== 'Archived' ? (
+          ) : (
             <Button
               variant="contained"
               color="error"
-              onClick={() => onArchive(ticket)}
+              onClick={() => onDelete(ticket)}
               sx={{ width: '120px' }}
             >
               Cancel
             </Button>
-          ) : null}
+          )}
         </Box>
       </TableCell>
     </TableRow>
@@ -98,7 +98,7 @@ const MyTickets = () => {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [ticketToArchive, setTicketToArchive] = useState(null);
+  const [ticketToDelete, setTicketToDelete] = useState(null);
   const [feedbackModalTicket, setFeedbackModalTicket] = useState(null);
   const [userFeedback, setUserFeedback] = useState('');
   const [feedbackError, setFeedbackError] = useState('');
@@ -106,6 +106,7 @@ const MyTickets = () => {
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Memoized API calls
   const fetchTickets = useCallback(async (username) => {
     setLoading(true);
     try {
@@ -154,31 +155,20 @@ const MyTickets = () => {
     }
   }, [navigate, fetchTickets]);
 
-  const confirmArchiveTicket = async () => {
-    if (ticketToArchive) {
+  const confirmDeleteTicket = async () => {
+    if (ticketToDelete) {
       try {
-        const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToArchive.id}/archive`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            status: ticketToArchive.status === 'Resolved' ? 'Archived' : 'Cancelled'
-          })
+        const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToDelete.id}`, {
+          method: 'DELETE'
         });
-        
         if (response.ok) {
-          setTickets(prev => prev.map(ticket => 
-            ticket.id === ticketToArchive.id 
-              ? { ...ticket, status: ticketToArchive.status === 'Resolved' ? 'Archived' : 'Cancelled' }
-              : ticket
-          ));
+          setTickets(prev => prev.filter(ticket => ticket.id !== ticketToDelete.id));
           setSuccessSnackbarOpen(true);
         }
       } catch (error) {
-        console.error('Error archiving ticket:', error);
+        console.error('Error deleting ticket:', error);
       }
-      setTicketToArchive(null);
+      setTicketToDelete(null);
     }
   };
 
@@ -204,40 +194,41 @@ const MyTickets = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
-              {tickets.length === 0 ? (
-                <Typography variant="h6" align="center">
-                  No Tickets submitted.
-                </Typography>
-              ) : (
-                <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
-                  <Table stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Ticket Number</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Priority</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {tickets.map((ticket) => (
-                        <TicketRow
-                          key={ticket.id}
-                          ticket={ticket}
-                          onViewDetails={setSelectedTicket}
-                          onViewFeedback={setFeedbackModalTicket}
-                          onArchive={setTicketToArchive}
-                        />
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              )}
-            </Paper>
-          )}
+
+          <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
+            {tickets.length === 0 ? (
+              <Typography variant="h6" align="center">
+                No Tickets submitted.
+              </Typography>
+            ) : (
+              <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Ticket Number</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Priority</TableCell>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tickets.map((ticket) => (
+                      <TicketRow
+                        key={ticket.id}
+                        ticket={ticket}
+                        onViewDetails={setSelectedTicket}
+                        onViewFeedback={setFeedbackModalTicket}
+                        onDelete={setTicketToDelete}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            )}
+          </Paper>
+           )}
         </Box>
 
         {/* Details Dialog */}
@@ -267,21 +258,21 @@ const MyTickets = () => {
           </DialogActions>
         </Dialog>
 
-        {/* Archive/Cancel Dialog */}
-        <Dialog open={Boolean(ticketToArchive)} onClose={() => setTicketToArchive(null)}>
+        {/* Delete/Cancel Dialog */}
+        <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
           <DialogTitle>
-            {ticketToArchive?.status === 'Resolved' ? 'Confirm Archive' : 'Confirm Cancellation'}
+            {ticketToDelete?.status === 'Resolved' ? 'Confirm Deletion' : 'Confirm Cancellation'}
           </DialogTitle>
           <DialogContent>
             <Typography>
-              {ticketToArchive?.status === 'Resolved'
-                ? 'Are you sure you want to archive this resolved ticket?'
+              {ticketToDelete?.status === 'Resolved'
+                ? 'Are you sure you want to delete this resolved ticket?'
                 : 'Are you sure you want to cancel this ticket?'}
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={confirmArchiveTicket} color="primary">Yes</Button>
-            <Button onClick={() => setTicketToArchive(null)}>No</Button>
+            <Button onClick={confirmDeleteTicket} color="error">Yes</Button>
+            <Button onClick={() => setTicketToDelete(null)}>No</Button>
           </DialogActions>
         </Dialog>
 
@@ -320,7 +311,7 @@ const MyTickets = () => {
           open={successSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSuccessSnackbarOpen(false)}
-          message={ticketToArchive?.status === 'Resolved' ? "Ticket Archived" : "Ticket Cancelled"}
+          message="Ticket Cancelled"
         />
         <Snackbar
           open={feedbackSuccessSnackbarOpen}
