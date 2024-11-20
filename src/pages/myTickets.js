@@ -279,39 +279,39 @@ const MyTickets = () => {
         </Dialog>
 
         {/* Feedback Dialog */}
-      {/* Feedback Dialog */}
-<Dialog open={Boolean(feedbackModalTicket)} onClose={() => setFeedbackModalTicket(null)} maxWidth="md" fullWidth>
-  <DialogTitle>Feedback</DialogTitle>
-  <DialogContent>
-    {feedbackModalTicket?.feedback && (
-      <Typography sx={{ mb: 2 }}>
-        <strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}
-      </Typography>
-    )}
-    {feedbackModalTicket?.userFeedback ? (
-      <Typography>
-        <strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}
-      </Typography>
-    ) : (
-      <TextField
-        label="Enter your feedback"
-        multiline
-        fullWidth
-        value={userFeedback}
-        onChange={(e) => setUserFeedback(e.target.value)}
-        error={!!feedbackError}
-        helperText={feedbackError}
-        sx={{ mt: 2 }}
-      />
-    )}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => handleSendFeedback(feedbackModalTicket?.id)} color="primary">
-      Send feedback
-    </Button>
-    <Button onClick={() => setFeedbackModalTicket(null)}>Cancel</Button>
-  </DialogActions>
-</Dialog>
+        <Dialog open={Boolean(feedbackModalTicket)} onClose={() => setFeedbackModalTicket(null)} maxWidth="md" fullWidth>
+          <DialogTitle>Feedback</DialogTitle>
+          <DialogContent>
+  {feedbackModalTicket?.feedback && (
+    <Typography sx={{ mb: 2 }}>
+      <strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}
+    </Typography>
+  )}
+  {!hasSubmittedFeedback ? (
+    <TextField
+      label="Enter your feedback"
+      multiline
+      fullWidth
+      value={userFeedback}
+      onChange={(e) => setUserFeedback(e.target.value)}
+      error={!!feedbackError}
+      helperText={feedbackError}
+      sx={{ mt: 2 }}
+    />
+  ) : (
+    <Typography>
+      <strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}
+    </Typography>
+  )}
+</DialogContent>
+          <DialogActions>
+            <Button onClick={() => handleSendFeedback(feedbackModalTicket?.id)} color="primary">
+              Send feedback
+            </Button>
+            <Button onClick={() => setFeedbackModalTicket(null)}>Cancel</Button>
+          </DialogActions>
+        </Dialog>
+
         {/* Snackbars */}
         <Snackbar
           open={successSnackbarOpen}
