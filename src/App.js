@@ -52,14 +52,6 @@ function App() {
              } 
           />
 
-            <Route
-            path="/tickets/archived" 
-            element={
-              <RouteGuard requiredRole="User">
-            <ArchivedTickets /> 
-             </RouteGuard>
-            }
-            />
           <Route 
             path="/AccountManagement" 
             element={
