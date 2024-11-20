@@ -142,15 +142,9 @@ const MyTickets = () => {
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
-  
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-    // Navigate to the correct route
-    if (newValue === 0) {
-      navigate('/tickets');
-    } else {
-      navigate('/archived');
-    }
+    navigate(newValue === 0 ? '/tickets' : '/archived'); // Changed the URL for the Archived tab
   };
   
 
@@ -175,14 +169,11 @@ const MyTickets = () => {
       navigate('/');
     } else {
       fetchTickets(username);
-       // Set initial tab based on URL path
-       if (location.pathname.includes('/archived')) {
-        setTabValue(1);
-      } else {
-        setTabValue(0);
-      }
+      // Set initial tab based on URL
+      setTabValue(location.pathname.includes('/archived') ? 1 : 0);
     }
   }, [navigate, fetchTickets, location]);
+
   const handleSendFeedback = useCallback(async (ticketId) => {
     if (!userFeedback.trim()) {
       setFeedbackError('Please enter your feedback before submitting.');
