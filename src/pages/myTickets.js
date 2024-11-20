@@ -105,6 +105,7 @@ const MyTickets = () => {
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
 
   // Memoized API calls
   const fetchTickets = useCallback(async (username) => {
@@ -127,24 +128,25 @@ const MyTickets = () => {
       setFeedbackError('Please enter your feedback before submitting.');
       return;
     }
-
+  
     try {
       const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketId}/user-feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feedback: userFeedback }),
       });
-
+  
       if (response.ok) {
         setFeedbackModalTicket(null);
         setFeedbackSuccessSnackbarOpen(true);
+        setHasSubmittedFeedback(true);
         const username = sessionStorage.getItem('username');
         fetchTickets(username);
       }
     } catch (error) {
       setFeedbackError('Failed to send feedback');
     }
-  }, [userFeedback, fetchTickets]);
+  }, [userFeedback, fetchTickets, setHasSubmittedFeedback]);
 
   useEffect(() => {
     const username = sessionStorage.getItem('username');
@@ -280,24 +282,28 @@ const MyTickets = () => {
         <Dialog open={Boolean(feedbackModalTicket)} onClose={() => setFeedbackModalTicket(null)} maxWidth="md" fullWidth>
           <DialogTitle>Feedback</DialogTitle>
           <DialogContent>
-            {feedbackModalTicket?.feedback && (
-              <Typography sx={{ mb: 2 }}><strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}</Typography>
-            )}
-            {feedbackModalTicket?.userFeedback ? (
-              <Typography><strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}</Typography>
-            ) : (
-              <TextField
-                label="Enter your feedback"
-                multiline
-                fullWidth
-                value={userFeedback}
-                onChange={(e) => setUserFeedback(e.target.value)}
-                error={!!feedbackError}
-                helperText={feedbackError}
-                sx={{ mt: 2 }}
-              />
-            )}
-          </DialogContent>
+  {feedbackModalTicket?.feedback && (
+    <Typography sx={{ mb: 2 }}>
+      <strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}
+    </Typography>
+  )}
+  {!hasSubmittedFeedback ? (
+    <TextField
+      label="Enter your feedback"
+      multiline
+      fullWidth
+      value={userFeedback}
+      onChange={(e) => setUserFeedback(e.target.value)}
+      error={!!feedbackError}
+      helperText={feedbackError}
+      sx={{ mt: 2 }}
+    />
+  ) : (
+    <Typography>
+      <strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}
+    </Typography>
+  )}
+</DialogContent>
           <DialogActions>
             <Button onClick={() => handleSendFeedback(feedbackModalTicket?.id)} color="primary">
               Send feedback
