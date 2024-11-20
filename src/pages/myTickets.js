@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import CircularProgress from '@mui/material/CircularProgress';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import ListAltIcon from '@mui/icons-material/ListAlt';
 import {
     Box,
     Typography,
@@ -21,8 +19,6 @@ import {
     TextField,
     Snackbar,
     Paper,
-    Tabs,
-    Tab,
 } from '@mui/material';
 
 const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) => {
@@ -64,7 +60,7 @@ const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) =>
               View Feedback
             </Button>
           )}
-          {ticket.status === 'Resolved' && !ticket.archived && (
+          {ticket.status === 'Resolved' && !ticket.archived ? (
             <Button
               variant="contained"
               color="info"
@@ -73,8 +69,7 @@ const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) =>
             >
               Archive
             </Button>
-          )}
-          {ticket.status === 'Ongoing' ? (
+          ) : ticket.status === 'Ongoing' ? (
             <Button
               variant="contained"
               color="error"
@@ -83,55 +78,24 @@ const TicketRow = memo(({ ticket, onViewDetails, onViewFeedback, onArchive }) =>
             >
               Cancel
             </Button>
-          ) : (
-            ticket.status !== 'Archived' && ticket.status !== 'Resolved' && (
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => onArchive(ticket)}
-                sx={{ width: '120px' }}
-              >
-                Cancel
-              </Button>
-            )
-          )}
+          ) : ticket.status !== 'Archived' ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => onArchive(ticket)}
+              sx={{ width: '120px' }}
+            >
+              Cancel
+            </Button>
+          ) : null}
         </Box>
       </TableCell>
     </TableRow>
   );
 });
 
-const TicketTable = ({ tickets, onViewDetails, onViewFeedback, onArchive }) => (
-  <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
-    <Table stickyHeader>
-      <TableHead>
-        <TableRow>
-          <TableCell>Ticket Number</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Priority</TableCell>
-          <TableCell>Location</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell>Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tickets.map((ticket) => (
-          <TicketRow
-            key={ticket.id}
-            ticket={ticket}
-            onViewDetails={onViewDetails}
-            onViewFeedback={onViewFeedback}
-            onArchive={onArchive}
-          />
-        ))}
-      </TableBody>
-    </Table>
-  </Box>
-);
-
 const MyTickets = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [ticketToArchive, setTicketToArchive] = useState(null);
@@ -141,12 +105,6 @@ const MyTickets = () => {
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [tabValue, setTabValue] = useState(0);
-
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-    navigate(newValue === 0 ? '/tickets' : '/tickets/archived');
-  };
 
   const fetchTickets = useCallback(async (username) => {
     setLoading(true);
@@ -162,17 +120,6 @@ const MyTickets = () => {
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    const username = sessionStorage.getItem('username');
-    if (!username) {
-      navigate('/');
-    } else {
-      fetchTickets(username);
-      // Set initial tab based on URL
-      setTabValue(location.pathname.includes('/archived') ? 1 : 0);
-    }
-  }, [navigate, fetchTickets, location]);
 
   const handleSendFeedback = useCallback(async (ticketId) => {
     if (!userFeedback.trim()) {
@@ -197,6 +144,15 @@ const MyTickets = () => {
       setFeedbackError('Failed to send feedback');
     }
   }, [userFeedback, fetchTickets]);
+
+  useEffect(() => {
+    const username = sessionStorage.getItem('username');
+    if (!username) {
+      navigate('/');
+    } else {
+      fetchTickets(username);
+    }
+  }, [navigate, fetchTickets]);
 
   const confirmArchiveTicket = async () => {
     if (ticketToArchive) {
@@ -226,9 +182,6 @@ const MyTickets = () => {
     }
   };
 
-  const activeTickets = tickets.filter(ticket => ticket.status !== 'Archived');
-  const archivedTickets = tickets.filter(ticket => ticket.status === 'Archived');
-
   return (
     <>
       <TicketAppBar />
@@ -240,24 +193,6 @@ const MyTickets = () => {
               JobTrack
             </Typography>
           </Box>
-
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange}
-            sx={{ mb: 3, borderBottom: 1, borderColor: 'divider', width: '100%', maxWidth: 1450 }}
-          >
-            <Tab 
-              icon={<ListAltIcon />} 
-              label="Active Tickets" 
-              iconPosition="start"
-            />
-            <Tab 
-              icon={<ArchiveIcon />} 
-              label="Archived Tickets" 
-              iconPosition="start"
-            />
-          </Tabs>
-
           {loading ? (
             <Box sx={{ 
               position: 'fixed',
@@ -270,28 +205,36 @@ const MyTickets = () => {
             </Box>
           ) : (
             <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
-              {tabValue === 0 ? (
-                activeTickets.length === 0 ? (
-                  <Typography variant="h6" align="center">No active tickets.</Typography>
-                ) : (
-                  <TicketTable
-                    tickets={activeTickets}
-                    onViewDetails={setSelectedTicket}
-                    onViewFeedback={setFeedbackModalTicket}
-                    onArchive={setTicketToArchive}
-                  />
-                )
+              {tickets.length === 0 ? (
+                <Typography variant="h6" align="center">
+                  No Tickets submitted.
+                </Typography>
               ) : (
-                archivedTickets.length === 0 ? (
-                  <Typography variant="h6" align="center">No archived tickets.</Typography>
-                ) : (
-                  <TicketTable
-                    tickets={archivedTickets}
-                    onViewDetails={setSelectedTicket}
-                    onViewFeedback={setFeedbackModalTicket}
-                    onArchive={setTicketToArchive}
-                  />
-                )
+                <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Ticket Number</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Priority</TableCell>
+                        <TableCell>Location</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {tickets.map((ticket) => (
+                        <TicketRow
+                          key={ticket.id}
+                          ticket={ticket}
+                          onViewDetails={setSelectedTicket}
+                          onViewFeedback={setFeedbackModalTicket}
+                          onArchive={setTicketToArchive}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
               )}
             </Paper>
           )}
