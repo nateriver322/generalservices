@@ -524,19 +524,11 @@ const AccountManagement = () => {
   };
 
   const handleSaveAccountChanges = (updatedAccount) => {
-    if (!updatedAccount.id) {
-        console.error("Error: updatedAccount.id is undefined");
-        return;
-    }
     setAccounts((prevAccounts) =>
-        prevAccounts.map((acc) =>
-            acc.id === updatedAccount.id ? updatedAccount : acc
+        prevAccounts.map((account) =>
+            account.id === updatedAccount.id ? updatedAccount : account
         )
     );
-    setIsEditModalOpen(false);
-
-    // Fetch the latest data from the server
-    fetchAccounts();
 };
 
   
