@@ -279,8 +279,10 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
+      console.log("Sending data to backend:", formData);
       const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
+        console.log("Response from backend:", response.data);
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
         onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
@@ -695,6 +697,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
 
 // AccountRow component
 const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
+  console.log('Rendering AccountRow:', account);
   return (
     <tr>
       <td>{account.username}</td>
