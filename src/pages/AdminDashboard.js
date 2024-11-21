@@ -523,37 +523,22 @@ const AccountManagement = () => {
     setIsRegistrationModalOpen(false);
   };
 
-  const handleSaveAccountChanges = async (updatedAccount) => {
+  const handleSaveAccountChanges = (updatedAccount) => {
     if (!updatedAccount.id) {
-      console.error("Error: updatedAccount.id is undefined");
-      return;
+        console.error("Error: updatedAccount.id is undefined");
+        return;
     }
-  
-    try {
-      const response = await axios.put(
-        `https://generalservicescontroller.onrender.com/user/${updatedAccount.id}`,
-        updatedAccount
-      );
-  
-      if (response.status === 200) {
-        console.log("User updated successfully");
-        // Update local state with the updated account
-        setAccounts((prevAccounts) =>
-          prevAccounts.map((acc) =>
+    setAccounts((prevAccounts) =>
+        prevAccounts.map((acc) =>
             acc.id === updatedAccount.id ? updatedAccount : acc
-          )
-        );
-      } else {
-        console.error("Failed to update user");
-        alert("Failed to update user");
-      }
-    } catch (error) {
-      console.error("Error updating user:", error);
-      alert("Error updating user");
-    } finally {
-      setIsEditModalOpen(false); // Close the edit modal
-    }
-  };
+        )
+    );
+    setIsEditModalOpen(false);
+
+    // Fetch the latest data from the server
+    fetchAccounts();
+};
+
   
 
   const handleRegisterNewAccount = async () => {
