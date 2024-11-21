@@ -265,14 +265,14 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       ...formData,
       [name]: value,
     });
-    setIsFormChanged(true); // Form has been changed
+    setIsFormChanged(true); // Mark the form as changed
   };
 
   const handleSaveClick = () => {
     if (isFormChanged) {
       setIsConfirmModalOpen(true);
     } else {
-      onSave(formData);
+      onSave(formData); // Pass the edited account back to the parent
       onClose();
     }
   };
@@ -280,12 +280,12 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const handleConfirmSave = async () => {
     try {
       console.log("Sending data to backend:", formData);
-      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`,formData);
       if (response.status === 200) {
         console.log("Response from backend:", response.data);
         console.log("User updated successfully");
         setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
+        onSave({ ...formData, id: account.id }); 
       } else {
         console.error("Failed to update user");
         alert("Failed to update user");
@@ -386,6 +386,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     </>
   );
 };
+
 
 // AccountManagement component
 const AccountManagement = () => {
@@ -504,14 +505,11 @@ const AccountManagement = () => {
   };
 
   const fetchAccounts = async () => {
-    setIsLoading(true);
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      setAccounts(response.data); // Assuming setAccounts is in scope
+      const response = await axios.get('https://generalservicescontroller.onrender.com/users');
+      setAccounts(response.data);
     } catch (error) {
-      console.error('Error fetching accounts:', error);
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching accounts:", error);
     }
   };
   
@@ -525,19 +523,38 @@ const AccountManagement = () => {
     setIsRegistrationModalOpen(false);
   };
 
-  const handleSaveAccountChanges = (updatedAccount) => {
+  const handleSaveAccountChanges = async (updatedAccount) => {
     if (!updatedAccount.id) {
       console.error("Error: updatedAccount.id is undefined");
       return;
     }
-    setAccounts((prevAccounts) =>
-      prevAccounts.map((acc) =>
-        acc.id === updatedAccount.id ? updatedAccount : acc
-      )
-    );
-    setIsEditModalOpen(false);
-    fetchAccounts(); 
+  
+    try {
+      const response = await axios.put(
+        `https://generalservicescontroller.onrender.com/user/${updatedAccount.id}`,
+        updatedAccount
+      );
+  
+      if (response.status === 200) {
+        console.log("User updated successfully");
+        // Update local state with the updated account
+        setAccounts((prevAccounts) =>
+          prevAccounts.map((acc) =>
+            acc.id === updatedAccount.id ? updatedAccount : acc
+          )
+        );
+      } else {
+        console.error("Failed to update user");
+        alert("Failed to update user");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Error updating user");
+    } finally {
+      setIsEditModalOpen(false); // Close the edit modal
+    }
   };
+  
 
   const handleRegisterNewAccount = async () => {
     try {
