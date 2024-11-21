@@ -280,7 +280,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const handleConfirmSave = async () => {
     try {
       console.log("Sending data to backend:", formData);
-      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`,formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/accounts${account.id}`,formData);
       if (response.status === 200) {
         console.log("Response from backend:", response.data);
         console.log("User updated successfully");
@@ -506,7 +506,7 @@ const AccountManagement = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user');
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error("Error fetching accounts:", error);
