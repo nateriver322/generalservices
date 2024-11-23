@@ -87,6 +87,7 @@ const Login = React.memo(() => {
                 position: 'relative', 
                 height: '100vh',
                 width: '100vw',
+                overflow: 'hidden',
             }}
         >
            
@@ -107,13 +108,16 @@ const Login = React.memo(() => {
                 onSubmit={handleLoginSubmit}
                 sx={{
                     maxWidth: '400px',
-                    width: '100%',
+                    width: '90%',
                     bgcolor: 'white',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    mt: 4
+                    position: 'absolute', 
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
                 }}
             >
                 <Box 
@@ -126,6 +130,10 @@ const Login = React.memo(() => {
                 >
                     <ConstructionIcon sx={{ fontSize: 60, mb: 2, mr: 2 }} />
                     <Typography variant="h4" component="h2" gutterBottom>
+                    sx={{
+                        fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                        textAlign: 'center',
+                    }}
                         JobTrack
                     </Typography>
                             
