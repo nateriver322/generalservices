@@ -106,9 +106,9 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    width: '90%', // Responsive width
-                    maxWidth: '400px', // Limits the width on larger screens
-                    backgroundColor: '#fff',
+                    maxWidth: '400px',
+                    width: '100%',
+                    bgcolor: 'white',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
