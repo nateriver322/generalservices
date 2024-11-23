@@ -84,9 +84,13 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                position: 'relative', 
-                height: '100vh',
-                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                width: '100%',
+                padding: '16px', // Add padding for smaller screens
+                boxSizing: 'border-box',
             }}
         >
            
@@ -112,8 +116,6 @@ const Login = React.memo(() => {
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
-                    margin: '0 auto',
-                    mt: 4
                 }}
             >
                 <Box 
@@ -131,6 +133,7 @@ const Login = React.memo(() => {
                             
                 </Box>
                 <Typography variant="h5" component="h3" gutterBottom>
+                    sx={{ fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}
                     Log In
                 </Typography>
 
