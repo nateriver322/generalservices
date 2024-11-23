@@ -84,9 +84,13 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                position: 'relative', 
-                height: '100vh',
-                width: '100vw',
+                position: 'relative',
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
             }}
         >
            
@@ -113,7 +117,6 @@ const Login = React.memo(() => {
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    mt: 4
                 }}
             >
                 <Box 
