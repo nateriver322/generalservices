@@ -87,9 +87,6 @@ const Login = React.memo(() => {
                 position: 'relative', 
                 height: '100vh',
                 width: '100vw',
-                display: 'flex',
-                justifyContent:'center',
-                alignItems:'center',
             }}
         >
            
@@ -97,13 +94,11 @@ const Login = React.memo(() => {
             <LoginResponsiveAppBar />
             <Box
                 sx={{
-                    width: '400px',
-                    bgcolor: 'white',
-                    p: 4,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    margin: '0 auto', // Horizontally centered
-                    position: 'relative', // Change from absolute
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '30px'
                 }}
             >   
             </Box>
@@ -111,11 +106,14 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    width: '300px',
+                    maxWidth: '400px',
+                    width: '100%',
                     bgcolor: 'white',
-                    p: 3,
+                    p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
+                    margin: '0 auto',
+                    mt: 4
                 }}
             >
                 <Box 
