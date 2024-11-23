@@ -97,11 +97,13 @@ const Login = React.memo(() => {
             <LoginResponsiveAppBar />
             <Box
                 sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                    marginTop: '30px'
+                    width: '400px',
+                    bgcolor: 'white',
+                    p: 4,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    margin: '0 auto', // Horizontally centered
+                    position: 'relative', // Change from absolute
                 }}
             >   
             </Box>
