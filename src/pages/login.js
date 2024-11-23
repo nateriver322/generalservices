@@ -110,13 +110,13 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    maxWidth: '400px',
-                    width: '100%',
-                    bgcolor: 'white',
+                    width: '90%', // Responsive width
+                    maxWidth: '400px', // Limits the width on larger screens
+                    backgroundColor: '#fff',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
-                    margin: '0 auto',
+                    margin: '0 auto', // Centers the form horizontall
                 }}
             >
                 <Box 
