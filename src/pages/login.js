@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import { TextField, Button, Box, Typography, IconButton, InputAdornment, CircularProgress, Backdrop } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment, CircularProgress, Backdrop, Container } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { loginRequest } from "../AuthConfig";
 import { useMsal } from "@azure/msal-react";
@@ -82,15 +82,14 @@ const Login = React.memo(() => {
     };
 
     return (
-        <div
+         <Container
+            maxWidth="sm" // Sets a max width of 'sm' (600px)
             style={{
-                position: 'relative',
-                minHeight: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
                 justifyContent: 'center',
-                padding: '16px',
+                alignItems: 'center',
+                height: '100vh',
             }}
         >
            
@@ -110,13 +109,11 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    maxWidth: '400px',
-                    width: '100%',
-                    bgcolor: 'white',
+                    backgroundColor: '#fff',
                     p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
-                    margin: '0 auto',
+                    width: '100%',
                 }}
             >
                 <Box 
@@ -295,7 +292,7 @@ const Login = React.memo(() => {
                     </Typography>
                 </Box>
             </Backdrop>
-        </div>
+        </Container>
     );
 });
 
