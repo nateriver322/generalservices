@@ -61,6 +61,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
+    if (!formData.username || !formData.password || !formData.email) {
+      setErrorMessage('Please fill out all the required fields.');
+      setIsErrorModalOpen(true);
+      setLoading(false);
+      return; 
+    }
+
     setLoading(true);
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
@@ -114,6 +121,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -123,6 +131,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -134,9 +143,10 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                     style={{ borderColor: emailError ? 'red' : '' }}
                   />
-                  {emailError && <p style={{ color: '#000000' }}>{emailError}</p>} {/* Show error message */}
+                  {emailError &&  (<div className="error-popup">{emailError}</div>)} {/* Show error message */}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
@@ -188,7 +198,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           <Button
             onClick={handleSavedModalClose}
             variant="contained"
-            color="primary"
+            sx={{
+              backgroundColor: 'red',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'darkred',
+              },
+            }}
           >
             Close
           </Button>
@@ -214,7 +230,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
           <Button
             onClick={handleErrorModalClose}
             variant="contained"
-            color="secondary"
+            sx={{
+              backgroundColor: 'red',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'darkred',
+              },
+            }}
           >
             Close
           </Button>
@@ -259,18 +281,23 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     if (isFormChanged) {
       setIsConfirmModalOpen(true);
     } else {
-      onSave(formData);
+      onSave(formData); // Pass the edited account back to the parent
       onClose();
     }
   };
 
   const handleConfirmSave = async () => {
     try {
-      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
+      console.log("Sending data to backend:", formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`,formData);
       if (response.status === 200) {
+        console.log("Response from backend:", response.data);
         console.log("User updated successfully");
-        setIsSavedModalOpen(true);
-        onSave({ ...formData, id: account.id });
+        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
+        onSave({ ...formData, id: account.id }); 
+      } else {
+        console.error("Failed to update user");
+        alert("Failed to update user");
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -449,6 +476,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   );
 };
 
+
 // AccountManagement component
 const AccountManagement = () => {
   const [accounts, setAccounts] = useState([]);
@@ -566,14 +594,11 @@ const AccountManagement = () => {
   };
 
   const fetchAccounts = async () => {
-    setIsLoading(true);
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
-      setAccounts(response.data); // Assuming setAccounts is in scope
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user');
+      setAccounts(response.data);
     } catch (error) {
-      console.error('Error fetching accounts:', error);
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching accounts:", error);
     }
   };
   
@@ -589,17 +614,21 @@ const AccountManagement = () => {
 
   const handleSaveAccountChanges = (updatedAccount) => {
     if (!updatedAccount.id) {
-      console.error("Error: updatedAccount.id is undefined");
-      return;
+        console.error("Error: updatedAccount.id is undefined");
+        return;
     }
     setAccounts((prevAccounts) =>
-      prevAccounts.map((acc) =>
-        acc.id === updatedAccount.id ? updatedAccount : acc
-      )
+        prevAccounts.map((acc) =>
+            acc.id === updatedAccount.id ? updatedAccount : acc
+        )
     );
     setIsEditModalOpen(false);
-    fetchAccounts(); 
-  };
+
+    // Fetch the latest data from the server
+    fetchAccounts();
+};
+
+  
 
   const handleRegisterNewAccount = async () => {
     try {
@@ -676,7 +705,13 @@ const AccountManagement = () => {
               <Button 
                 onClick={handleCloseDeleteSuccessModal}
                 variant="contained"
-                color="primary"
+                sx={{
+                  backgroundColor: 'red',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkred',
+                  },
+                }}
               >
                 Close
               </Button>
@@ -725,7 +760,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
       <tbody>
         {searchError ? (
           <tr>
-            <td colSpan="5" style={{textAlign: 'center', color: 'red'}}>
+            <td colSpan="5" style={{textAlign: 'center', color: 'black'}}>
               {searchError}
             </td>
           </tr>
@@ -753,6 +788,7 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
 
 // AccountRow component
 const AccountRow = ({ account, onEditClick, onDeleteClick }) => {
+  console.log('Rendering AccountRow:', account);
   return (
     <tr>
       <td>{account.username}</td>

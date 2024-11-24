@@ -127,6 +127,7 @@ th {
 
 .form-group {
   margin-bottom: 15px;
+  position: relative;
   display: flex;
   align-items: center;
 }
@@ -178,3 +179,18 @@ th {
 .modal-buttons button:last-child:hover {
   background-color: #333;
 }
+
+.error-popup {
+  background-color: red;
+  color: white;
+  padding: 3px 8px;  
+  border-radius: 5px;
+  font-size: 10px;  
+  position: absolute;
+  top: -25px; 
+  right: 10px; 
+  z-index: 10;
+  width: auto;
+  white-space: nowrap;
+}
+
