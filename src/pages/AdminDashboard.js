@@ -285,20 +285,40 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
-      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
+      console.log("Sending data to backend:", formData);
+      const response = await axios.put(
+        `https://generalservicescontroller.onrender.com/user/${account.id}`,
+        formData
+      );
       if (response.status === 200) {
-        console.log("User updated successfully");
-        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
-      } else {
-        console.error("Failed to update user");
-        alert("Failed to update user");
+        console.log('User updated successfully');
+        setIsSavedModalOpen(true); // Open "Changes Saved" modal
+        onSave({ ...formData, id: account.id });
       }
     } catch (error) {
-      console.error("Error updating user:", error);
-      alert("Error updating user");
+      console.error('Error updating user:', error);
+      if (error.response) {
+        const errorMsg = error.response.data;
+        if (errorMsg === 'Username already exists') {
+          setErrors({
+            ...errors,
+            username: 'Username already exists',
+          });
+        } else if (errorMsg === 'Invalid contact number format') {
+          setErrors({
+            ...errors,
+            contactNumber: 'Contact number must be 11 digits',
+          });
+        } else {
+          setErrorMessage(errorMsg || 'An error occurred while updating the account');
+          setIsErrorModalOpen(true);
+        }
+      } else {
+        setErrorMessage('An unexpected error occurred. Please try again.');
+        setIsErrorModalOpen(true);
+      }
     }
-    setIsConfirmModalOpen(false); // Close the confirmation modal
+    setIsConfirmModalOpen(false);
   };
 
   const handleCancelConfirm = () => {
