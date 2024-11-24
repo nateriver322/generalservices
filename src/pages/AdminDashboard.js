@@ -363,6 +363,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
           </div>
           <div className="form-row">
             <div className="form-group">
+            <label>Email</label>
             <input
   type="email"
   name="email"
