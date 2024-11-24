@@ -251,86 +251,51 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const [formData, setFormData] = useState({ ...account });
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
-  const [isFormChanged, setIsFormChanged] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setIsFormChanged(false);
     setFormData({ ...account });
-    setErrors({});
   }, [account]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
-    setIsFormChanged(true);
-    setErrors({
-      ...errors,
-      [name]: '',
-    });
+    }));
   };
 
   const handleSaveClick = () => {
-    if (isFormChanged) {
-      setIsConfirmModalOpen(true);
-    } else {
-      onClose();
-    }
+    // Open the "Save Changes" confirmation modal
+    setIsConfirmModalOpen(true);
   };
 
   const handleConfirmSave = async () => {
     try {
-      const response = await axios.put(
-        `https://generalservicescontroller.onrender.com/user/${account.id}`,
-        formData
-      );
+      // Perform the save operation (API call)
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
         console.log('User updated successfully');
-        setIsSavedModalOpen(true); // Open "Changes Saved" modal
-        onSave({ ...formData, id: account.id });
+        setIsConfirmModalOpen(false); // Close the "Save Changes" modal
+        setIsSavedModalOpen(true); // Open the "Changes Saved Successfully" modal
+        onSave({ ...formData, id: account.id }); // Trigger the onSave callback
       }
     } catch (error) {
       console.error('Error updating user:', error);
-      if (error.response) {
-        const errorMsg = error.response.data;
-        if (errorMsg === 'Username already exists') {
-          setErrors({
-            ...errors,
-            username: 'Username already exists',
-          });
-        } else if (errorMsg === 'Invalid contact number format') {
-          setErrors({
-            ...errors,
-            contactNumber: 'Contact number must be 11 digits',
-          });
-        } else {
-          setErrorMessage(errorMsg || 'An error occurred while updating the account');
-          setIsErrorModalOpen(true);
-        }
-      } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
-        setIsErrorModalOpen(true);
-      }
+      setIsConfirmModalOpen(false); // Close the "Save Changes" modal
+      alert('An error occurred. Please try again.');
     }
-    setIsConfirmModalOpen(false);
   };
 
   const handleCancelConfirm = () => {
+    // Close the "Save Changes" confirmation modal
     setIsConfirmModalOpen(false);
   };
 
   const handleSavedModalClose = () => {
+    // Close the "Changes Saved Successfully" modal
     setIsSavedModalOpen(false);
-    onClose(); // Close the edit modal
-  };
-
-  const handleErrorModalClose = () => {
-    setIsErrorModalOpen(false);
+    onClose();
   };
 
   return (
@@ -348,14 +313,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 onChange={handleChange}
                 style={{ borderColor: errors.username ? 'red' : '' }}
               />
-              {errors.username && (
-                <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
-                >
-                  {errors.username}
-                </p>
-              )}
+              {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
             </div>
             <div className="form-group">
               <label>Password</label>
@@ -367,114 +325,67 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
               />
             </div>
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                readOnly
-                style={{ backgroundColor: '#f0f0f0' }}
-              />
-            </div>
-            <div className="form-group">
-              <label>Contact No.</label>
-              <input
-                type="text"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleChange}
-                style={{ borderColor: errors.contactNumber ? 'red' : '' }}
-              />
-              {errors.contactNumber && (
-                <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
-                >
-                  {errors.contactNumber}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Account Type</label>
-            <select name="role" value={formData.role} onChange={handleChange}>
-              <option value="Staff">PCO Staff</option>
-              <option value="User">User</option>
-              <option value="Personnel">Repair Personnel</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </div>
           <div className="modal-buttons">
             <button onClick={handleSaveClick}>Save</button>
             <button onClick={onClose}>Cancel</button>
           </div>
         </div>
 
-        {/* Confirmation Modal */}
+        {/* Save Changes Confirmation Modal */}
         {isConfirmModalOpen && (
-          <ConfirmationModal
-            message="Save Changes?"
-            onConfirm={handleConfirmSave}
-            onCancel={handleCancelConfirm}
-          />
+          <Modal open={isConfirmModalOpen} onClose={handleCancelConfirm}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2,
+              }}
+            >
+              <h2>Save Changes?</h2>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <Button onClick={handleConfirmSave} variant="contained" color="primary">
+                  Confirm
+                </Button>
+                <Button onClick={handleCancelConfirm} variant="outlined">
+                  Cancel
+                </Button>
+              </div>
+            </Box>
+          </Modal>
         )}
 
-        {/* Success Modal */}
-        <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-            }}
-          >
-            <h2>Changes Saved Successfully</h2>
-            <Button
-              onClick={handleSavedModalClose}
-              variant="contained"
-              color="primary"
+        {/* Changes Saved Successfully Modal */}
+        {isSavedModalOpen && (
+          <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2,
+              }}
             >
-              Close
-            </Button>
-          </Box>
-        </Modal>
-
-        {/* Error Modal */}
-        <Modal open={isErrorModalOpen} onClose={handleErrorModalClose}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-            }}
-          >
-            <h2>Error</h2>
-            <p>{errorMessage}</p>
-            <Button
-              onClick={handleErrorModalClose}
-              variant="contained"
-              color="secondary"
-            >
-              Close
-            </Button>
-          </Box>
-        </Modal>
+              <h2>Changes Saved Successfully</h2>
+              <Button onClick={handleSavedModalClose} variant="contained" color="primary">
+                Close
+              </Button>
+            </Box>
+          </Modal>
+        )}
       </div>
     </>
   );
 };
+
 
 
 
