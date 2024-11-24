@@ -389,6 +389,11 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 value={formData.contactNumber}
                 onChange={handleChange}
                 style={{ borderColor: errors.contactNumber ? 'red' : '' }}
+                inputProps={{
+                  maxLength: 11,
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*'
+              }}
               />
               {errors.contactNumber && (
                 <p
