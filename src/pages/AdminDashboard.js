@@ -290,7 +290,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
         `https://generalservicescontroller.onrender.com/user/${account.id}`,
         formData
       );
-      if (response.status === 200) {
+      if (response.status === 404) {
         console.log('User updated successfully');
         setIsSavedModalOpen(true); // Open "Changes Saved" modal
         onSave({ ...formData, id: account.id });
