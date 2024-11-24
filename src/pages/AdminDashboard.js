@@ -255,6 +255,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const [errors, setErrors] = useState({});
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsFormChanged(false);
@@ -284,6 +285,8 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   };
 
   const handleConfirmSave = async () => {
+    setIsConfirmModalOpen(false); 
+    setLoading(true); 
     try {
       console.log("Sending data to backend:", formData);
       const response = await axios.put(
@@ -318,7 +321,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
         setIsErrorModalOpen(true);
       }
     }
-    setIsConfirmModalOpen(false);
+    setLoading(false);
   };
 
   const handleCancelConfirm = () => {
@@ -327,9 +330,8 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
 
   const handleSavedModalClose = () => {
-    console.log('Closing "Changes Saved" modal'); // Debugging log
     setIsSavedModalOpen(false);
-    onClose(); // Close the edit modal
+    onClose(); 
   };
 
   const handleErrorModalClose = () => {
@@ -426,6 +428,12 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
             onConfirm={handleConfirmSave}
             onCancel={handleCancelConfirm}
           />
+        )}
+
+        {loading && (
+          <div className="loading-spinner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000 }}>
+            <CircularProgress />
+          </div>
         )}
 
         {/* Success Modal */}
@@ -776,26 +784,6 @@ const AccountManagement = () => {
             >
               <CircularProgress />
             </Box>
-          )}
-
-          {isSavedModalOpen && (
-            <Modal open={isSavedModalOpen} onClose={handleCloseSavedModal}>
-              <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                        borderRadius: 2,
-                      }}>
-                <h2>Changes Saved Successfully</h2>
-                  <Button variant="contained" onClick={handleCloseSavedModal}>
-                    Close
-                  </Button>
-              </Box>
-            </Modal>
           )}
 
            {/* Logging out overlay */}
