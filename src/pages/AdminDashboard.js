@@ -639,7 +639,8 @@ const AccountManagement = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user');
+      // Changed from /user to /user/accounts to match your working endpoint
+      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error("Error fetching accounts:", error);
