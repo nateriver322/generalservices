@@ -494,6 +494,7 @@ const AccountManagement = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -521,14 +522,20 @@ const AccountManagement = () => {
   }, []);
 
   const handleLogoutButtonClick = async () => {
-    setIsLoggingOut(true); 
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
-    setIsLoggingOut(false);
-}
+    setIsLoggingOut(true);
+  
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate delay
+      sessionStorage.removeItem('username');
+      navigate('/'); // Redirect to login
+    } catch (error) {
+      console.error('Error during logout:', error);
+      alert('Logout failed. Please try again.');
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+  
 
   const handleCreateAccountButtonClick = () => {
     setIsRegistrationModalOpen(true);
@@ -621,23 +628,37 @@ const AccountManagement = () => {
     setIsRegistrationModalOpen(false);
   };
 
-  const handleSaveAccountChanges = (updatedAccount) => {
+  const handleSaveAccountChanges = async (updatedAccount) => {
     if (!updatedAccount.id) {
-        console.error("Error: updatedAccount.id is undefined");
-        return;
+      console.error("Error: updatedAccount.id is undefined");
+      return;
     }
-    setAccounts((prevAccounts) =>
-        prevAccounts.map((acc) =>
+    
+    try {
+      const response = await axios.put(
+        `https://generalservicescontroller.onrender.com/user/${updatedAccount.id}`,
+        updatedAccount
+      );
+      if (response.status === 200) {
+        setAccounts((prevAccounts) =>
+          prevAccounts.map((acc) =>
             acc.id === updatedAccount.id ? updatedAccount : acc
-        )
-    );
-    setIsEditModalOpen(false);
+          )
+        );
+        setIsSavedModalOpen(true); // Open the SavedModal
+      }
+    } catch (error) {
+      console.error("Error saving account changes:", error);
+      alert("Failed to save account changes.");
+    } finally {
+      setIsEditModalOpen(false);
+    }
+  };
 
-    // Fetch the latest data from the server
-    fetchAccounts();
-};
+  const handleCloseSavedModal = () => {
+    setIsSavedModalOpen(false);
+  };
 
-  
 
   const handleRegisterNewAccount = async () => {
     try {
@@ -747,6 +768,26 @@ const AccountManagement = () => {
             </Box>
           )}
 
+          {isSavedModalOpen && (
+            <Modal open={isSavedModalOpen} onClose={handleCloseSavedModal}>
+              <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                      }}>
+                <h2>Changes Saved Successfully</h2>
+                  <Button variant="contained" onClick={handleCloseSavedModal}>
+                    Close
+                  </Button>
+              </Box>
+            </Modal>
+          )}
+
            {/* Logging out overlay */}
            {isLoggingOut && (
             <Box
@@ -809,8 +850,8 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
             ))
           ) : (
             <tr>
-              <td colSpan="5" style={{ textAlign: 'center' }}>
-                Username does not exists.
+              <td colSpan="5" style={{ textAlign: 'center', color: 'gray' }}>
+                No accounts available.
               </td>
             </tr>
           )}
