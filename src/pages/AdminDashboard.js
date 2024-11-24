@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { debounce } from "lodash"; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/AccountManagement.css';
@@ -451,19 +452,6 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
             }}
           >
             <h2>Changes Saved Successfully</h2>
-            <Button
-              onClick={handleSavedModalClose}
-              variant="contained"
-              sx={{
-                backgroundColor: 'red',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: 'darkred',
-                },
-              }} 
-            >
-              Close
-            </Button>
           </Box>
         </Modal>;
 
@@ -504,15 +492,16 @@ const AccountManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
   const [currentAccount, setCurrentAccount] = useState(null);
-  const [searchUsername, setSearchUsername] = useState('');
+  const [searchUsername, setSearchUsername] = useState("");
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false); // New loading state for searching
-  const [searchError, setSearchError] = useState(''); // New state for search error message
+  const [searchError, setSearchError] = useState(""); // New state for search error message
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -524,18 +513,18 @@ const AccountManagement = () => {
 
   useEffect(() => {
     const fetchAccounts = async () => {
-      setIsLoading(true);
+      setIsSearching(true);
       try {
-        const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+        const response = await axios.get(
+          "https://generalservicescontroller.onrender.com/user/accounts"
+        );
         setAccounts(response.data);
       } catch (error) {
-        console.error('Error fetching accounts:', error);
+        console.error("Error fetching accounts:", error);
       } finally {
-        setIsLoading(false); // Set loading to false after fetching
+        setIsSearching(false);
       }
     };
-  
-
     fetchAccounts();
   }, []);
 
@@ -599,9 +588,44 @@ const AccountManagement = () => {
     setIsConfirmModalOpen(false); // Close the confirmation modal
   };
 
+  const debouncedSearch = useCallback(
+    debounce(async (query) => {
+      setIsSearching(true);
+      try {
+        if (!query.trim()) {
+          // Fetch all accounts if the search query is empty
+          const response = await axios.get(
+            "https://generalservicescontroller.onrender.com/user/accounts"
+          );
+          setAccounts(response.data);
+          setSearchError("");
+        } else {
+          // Search for accounts
+          const response = await axios.get(
+            `https://generalservicescontroller.onrender.com/user/search?query=${query}`
+          );
+          if (response.data.length === 0) {
+            setSearchError("Account does not exist.");
+            setAccounts([]);
+          } else {
+            setAccounts(response.data);
+            setSearchError("");
+          }
+        }
+      } catch (error) {
+        console.error("Error during search:", error);
+        setSearchError("Error fetching accounts.");
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300), // 300ms debounce delay
+    []
+  );
+
   const handleSearchChange = async (e) => {
     const value = e.target.value;
     setSearchUsername(value);
+    debouncedSearch(query);
 
     if (!value.trim()) {
       setIsSearching(true);
@@ -610,6 +634,12 @@ const AccountManagement = () => {
     }
     setSearchError('');
   };
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const handleSearchClick = async () => {
     if (!searchUsername.trim()) {
@@ -723,11 +753,22 @@ const AccountManagement = () => {
       </Box>
     ) : (
       <>
+        <div>
+          <input
+            type="text"
+            value={searchUsername}
+            onChange={handleSearchChange}
+            placeholder="Search accounts..."
+          />
+          {isSearching && <p>Loading...</p>}
+          {searchError && <p style={{ color: "red" }}>{searchError}</p>}
+        </div>
+
         <AccountTable accounts={accounts} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} searchError={searchError}/>
         {isEditModalOpen && (
           <EditAccountModal
             account={currentAccount}
-            onClose={() => setIsEditModalOpen(false)}
+            onClose={handleCloseEditModal}
             onSave={handleSaveAccountChanges}
           />
         )}
@@ -850,17 +891,17 @@ const AccountTable = ({ accounts, searchError, onEditClick, onDeleteClick }) => 
           </tr>
         ) : accounts.length > 0 ? (
             accounts.map((account) => (
-              <AccountRow
-                key={account.id}
-                account={account}
-                onEditClick={onEditClick}
-                onDeleteClick={onDeleteClick}
-              />
+              <tr key={account.id}>
+                <td>{account.username}</td>
+                <td>{account.email}</td>
+                <td>{account.contactNumber}</td>
+                <td>{account.role}</td>
+              </tr>
             ))
           ) : (
             <tr>
               <td colSpan="5" style={{ textAlign: 'center', color: 'gray' }}>
-                No accounts available.
+                No accounts found.
               </td>
             </tr>
           )}
