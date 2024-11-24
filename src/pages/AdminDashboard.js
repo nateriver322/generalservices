@@ -293,16 +293,13 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       setIsSavedModalOpen(true); // Show success message
       onSave({ ...formData, id: account.id });
     } catch (error) {
-      console.log('Error object:', error);
-      console.warn('Unexpected error structure:', error);
       if (error.response?.status === 404) {
-        // Handle 404 gracefully
-        console.warn('404 error ignored. Assuming the update was successful.');
-        setIsSavedModalOpen(true); // Show success modal even if 404
+        console.warn('Ignoring 404 error for successful update');
+        setIsSavedModalOpen(true); // Show success message even if 404
         onSave({ ...formData, id: account.id });
       } else {
-        // Handle other errors
         console.error('Error updating user:', error);
+        // Handle other errors (e.g., network issues, validation errors)
         if (error.response) {
           const errorMsg = error.response.data;
           if (errorMsg === 'Username already exists') {
@@ -326,8 +323,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       }
     }
     setIsConfirmModalOpen(false); // Close the confirmation modal
-  };
-
+  };  
 
   const handleCancelConfirm = () => {
     setIsConfirmModalOpen(false);
