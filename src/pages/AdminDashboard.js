@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/AccountManagement.css';
-import { Box, Button, Modal, CircularProgress } from '@mui/material';
+import { Box, Button, Modal, CircularProgress, Typography} from '@mui/material';
 import AdminResponsiveAppBar from './AdminResponsiveAppBar';
 
 
@@ -492,6 +492,7 @@ const AccountManagement = () => {
   const [searchError, setSearchError] = useState(''); // New state for search error message
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -518,9 +519,14 @@ const AccountManagement = () => {
     fetchAccounts();
   }, []);
 
-  const handleLogoutButtonClick = () => {
+  const handleLogoutButtonClick = async () => {
+    setIsLoggingOut(true); 
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
     sessionStorage.removeItem('username'); // Clear username from sessionStorage
     navigate('/'); // Redirect to login page
+    setIsLoggingOut(false);
 }
 
   const handleCreateAccountButtonClick = () => {
@@ -737,6 +743,31 @@ const AccountManagement = () => {
               }}
             >
               <CircularProgress />
+            </Box>
+          )}
+
+           {/* Logging out overlay */}
+           {isLoggingOut && (
+            <Box
+              sx={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                bgcolor: 'rgba(0, 0, 0, 0.7)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 9999,
+                color: 'white',
+              }}
+            >
+              <CircularProgress color="inherit" />
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Logging out...
+              </Typography>
             </Box>
           )}
         </>
