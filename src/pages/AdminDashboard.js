@@ -437,7 +437,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
         )}
 
         {/* Success Modal */}
-        <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
+        <Modal open={isSavedModalOpen} onClose={() => {}}>
           <Box
             sx={{
             position: 'absolute',
