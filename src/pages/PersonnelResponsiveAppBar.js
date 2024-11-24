@@ -1,5 +1,6 @@
-import * as React from 'react';
+
 import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 import citLogo from '../images/cit-logo.png';
 import MenuIcon from '@mui/icons-material/Menu';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const pages = ['Home', 'ASSIGNED', 'HISTORY'];
 const settings = ['Logout'];
@@ -21,6 +24,7 @@ function PersonnelResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
@@ -39,12 +43,21 @@ function PersonnelResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    setIsLoggingOut(true); // Start loading animation
+    handleCloseUserMenu(); // Close the menu
+
+    // Simulate a small delay for the animation (you can remove this in production)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Clear session storage
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('userRole');
+    
+    // Navigate to login page
     navigate('/');
+    setIsLoggingOut(false); // Stop loading animation (though component will unmount)
   };
-
   const handlePageNavigation = (page) => {
     handleCloseNavMenu();
     
@@ -65,6 +78,7 @@ function PersonnelResponsiveAppBar() {
   };
 
   return (
+    <>
     <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -189,6 +203,23 @@ function PersonnelResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
+
+<Backdrop
+sx={{ 
+  color: '#fff', 
+  zIndex: (theme) => theme.zIndex.drawer + 1,
+  backgroundColor: 'rgba(0, 0, 0, 0.7)' 
+}}
+open={isLoggingOut}
+>
+<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+  <CircularProgress color="info" />
+  <Typography variant="h6" component="div">
+    Logging out...
+  </Typography>
+</Box>
+</Backdrop>
+</>
   );
 }
 
