@@ -288,16 +288,11 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
   const handleConfirmSave = async () => {
     try {
-      console.log("Sending data to backend:", formData);
-      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`,formData);
+      const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
-        console.log("Response from backend:", response.data);
         console.log("User updated successfully");
-        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onSave({ ...formData, id: account.id }); 
-      } else {
-        console.error("Failed to update user");
-        alert("Failed to update user");
+        setIsSavedModalOpen(true);
+        onSave({ ...formData, id: account.id });
       }
     } catch (error) {
       console.error("Error updating user:", error);
