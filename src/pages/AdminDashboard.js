@@ -585,29 +585,39 @@ const AccountManagement = () => {
     setIsConfirmModalOpen(false); // Close the confirmation modal
   };
 
-  const handleSearchChange = (e) => {
-    setSearchUsername(e.target.value);
+  const handleSearchChange = async (e) => {
+    const value = e.target.value;
+    setSearchUsername(value);
+
+    if (!value.trim()) {
+      setIsSearching(true);
+      await fetchAccounts();
+      setIsSearching(false);
+    }
     setSearchError('');
   };
 
   const handleSearchClick = async () => {
-    setIsSearching(true); 
-    setSearchError(''); 
+    if (!searchUsername.trim()) {
+      setIsSearching(true);
+      await fetchAccounts();
+      setIsSearching(false);
+      return;
+    }
+  
+    setIsSearching(true);
+    setSearchError('');
     try {
-      let response;
-      if (searchUsername.trim() === '') {
-        await fetchAccounts();
+      const response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
+      if (response.data.length === 0) {
+        setSearchError('Account does not exist.');
+        setAccounts([]);
       } else {
-        response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
-        if (response.data.length === 0) {
-          setSearchError('Account does not exist.'); // Set error if no accounts found
-        } else {
         setAccounts(response.data);
-        }
       }
     } catch (error) {
       console.error('Error fetching accounts:', error);
-      setSearchError('Error fetching accounts.')
+      setSearchError('Error fetching accounts.');
     } finally {
       setIsSearching(false);
     }
