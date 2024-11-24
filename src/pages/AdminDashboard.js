@@ -430,28 +430,34 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
 
         {/* Success Modal */}
         <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      bgcolor: 'background.paper',
-      boxShadow: 24,
-      p: 4,
-      borderRadius: 2,
-    }}
-  >
-    <h2>Changes Saved Successfully</h2>
-    <Button
-      onClick={handleSavedModalClose}
-      variant="contained"
-      color="primary"
-    >
-      Close
-    </Button>
-  </Box>
-</Modal>;
+          <Box
+            sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            }}
+          >
+            <h2>Changes Saved Successfully</h2>
+            <Button
+              onClick={handleSavedModalClose}
+              variant="contained"
+              sx={{
+                backgroundColor: 'red',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }} 
+            >
+              Close
+            </Button>
+          </Box>
+        </Modal>;
 
         {/* Error Modal */}
         <Modal open={isErrorModalOpen} onClose={handleErrorModalClose}>
