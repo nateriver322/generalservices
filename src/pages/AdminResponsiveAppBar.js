@@ -16,32 +16,12 @@ const AdminResponsiveAppBar = ({
     handleSearchChange,
     handleSearchClick,
     handleCreateAccountButtonClick,
-    navigate,
+    handleLogoutButtonClick,
     isSearching
   }) => {
 
-
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-    const handleLogoutButtonClick = async () => {
-      setIsLoggingOut(true); // Start loading animation
-  
-      // Simulate a small delay for the animation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-  
-      // Clear session and local storage
-      sessionStorage.clear();
-      localStorage.clear();
-  
-      // Navigate to the login page
-      navigate('/');
-  
-      setIsLoggingOut(false); // Stop loading animation (though component will unmount)
-    };
-
-
     return (
-      <>
+     
         <AppBar position="static" sx={{ backgroundColor: '#d4ac0d', height: 100 }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -106,37 +86,22 @@ const AdminResponsiveAppBar = ({
               </Button>
     
               <Button
-              color="inherit"
-              onClick={handleLogoutButtonClick}
-              disabled={isLoggingOut}
-              sx={{
-                color: 'white',
-                backgroundColor: isLoggingOut ? 'gray' : '#f44336',
-                borderColor: 'white',
-              }}
-            >
-               {isLoggingOut ? <CircularProgress size={20} color="inherit" /> : 'Logout'}
-            </Button>
-          </Toolbar>
-        </Container>
-      </AppBar>
+                color="inherit"
+                onClick={handleLogoutButtonClick}
+                sx={{ color: 'white', 
+                    backgroundColor: '#f44336',
+                    borderColor: 'white',
+              
+                '&:hover': {
+                backgroundColor: '#e53935', 
+              }, }}
+              >
+                Logout
+              </Button>
+            </Toolbar>
+          </Container>
+        </AppBar>
 
-<Backdrop
-sx={{
-  color: '#fff',
-  zIndex: (theme) => theme.zIndex.drawer + 1,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-}}
-open={isLoggingOut}
->
-<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-  <CircularProgress color="info" />
-  <Typography variant="h6" component="div">
-    Logging out...
-  </Typography>
-</Box>
-</Backdrop>
-</>
       );
     };
     
