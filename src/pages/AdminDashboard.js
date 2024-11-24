@@ -451,19 +451,6 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
             }}
           >
             <h2>Changes Saved Successfully</h2>
-            <Button
-              onClick={handleSavedModalClose}
-              variant="contained"
-              sx={{
-                backgroundColor: 'red',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: 'darkred',
-                },
-              }} 
-            >
-              Close
-            </Button>
           </Box>
         </Modal>;
 
