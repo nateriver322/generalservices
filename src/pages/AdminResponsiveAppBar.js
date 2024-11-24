@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import citLogo from '../images/cit-logo.png';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
 
 
 const AdminResponsiveAppBar = ({
@@ -14,7 +16,7 @@ const AdminResponsiveAppBar = ({
     handleSearchChange,
     handleSearchClick,
     handleCreateAccountButtonClick,
-    handleLogoutButtonClick,
+    navigate,
     isSearching
   }) => {
 
