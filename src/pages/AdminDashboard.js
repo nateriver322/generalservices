@@ -400,7 +400,6 @@ const AccountManagement = () => {
   const [searchError, setSearchError] = useState(''); // New state for search error message
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteSuccessModalOpen, setDeleteSuccessModalOpen] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -427,14 +426,9 @@ const AccountManagement = () => {
     fetchAccounts();
   }, []);
 
-  const handleLogoutButtonClick = async () => {
-    setIsLoggingOut(true); 
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
+  const handleLogoutButtonClick = () => {
     sessionStorage.removeItem('username'); // Clear username from sessionStorage
     navigate('/'); // Redirect to login page
-    setIsLoggingOut(false);
 }
 
   const handleCreateAccountButtonClick = () => {
@@ -455,7 +449,7 @@ const AccountManagement = () => {
     const handleConfirmDelete = async () => {
       setDeleteLoading(true);
       try {
-        const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
+        const response = await axios.delete('https://generalservicescontroller.onrender.com/user/${currentAccount}');
         if (response.status === 200) {
           setAccounts(accounts.filter(account => account.id !== currentAccount));
           setDeleteSuccessModalOpen(true);
@@ -492,14 +486,18 @@ const AccountManagement = () => {
     try {
       let response;
       if (searchUsername.trim() === '') {
-        await fetchAccounts();
+        response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
       } else {
-        response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
+        response = await axios.get('https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}');
+      }
+      if (response.status === 200) {
         if (response.data.length === 0) {
           setSearchError('Account does not exist.'); // Set error if no accounts found
         } else {
         setAccounts(response.data);
         }
+      } else {
+        console.error('Failed to fetch accounts');
       }
     } catch (error) {
       console.error('Error fetching accounts:', error);
@@ -508,16 +506,6 @@ const AccountManagement = () => {
       setIsSearching(false);
     }
   };
-
-  const fetchAccounts = async () => {
-    try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user');
-      setAccounts(response.data);
-    } catch (error) {
-      console.error("Error fetching accounts:", error);
-    }
-  };
-  
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
@@ -530,21 +518,12 @@ const AccountManagement = () => {
 
   const handleSaveAccountChanges = (updatedAccount) => {
     if (!updatedAccount.id) {
-        console.error("Error: updatedAccount.id is undefined");
-        return;
+      console.error("Error: updatedAccount.id is undefined");
+      return;
     }
-    setAccounts((prevAccounts) =>
-        prevAccounts.map((acc) =>
-            acc.id === updatedAccount.id ? updatedAccount : acc
-        )
-    );
+    setAccounts(accounts.map((acc) => (acc.id === updatedAccount.id ? updatedAccount : acc)));
     setIsEditModalOpen(false);
-
-    // Fetch the latest data from the server
-    fetchAccounts();
-};
-
-  
+  };
 
   const handleRegisterNewAccount = async () => {
     try {
@@ -621,13 +600,7 @@ const AccountManagement = () => {
               <Button 
                 onClick={handleCloseDeleteSuccessModal}
                 variant="contained"
-                sx={{
-                  backgroundColor: 'red',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'darkred',
-                  },
-                }}
+                color="primary"
               >
                 Close
               </Button>
@@ -651,31 +624,6 @@ const AccountManagement = () => {
               }}
             >
               <CircularProgress />
-            </Box>
-          )}
-
-           {/* Logging out overlay */}
-           {isLoggingOut && (
-            <Box
-              sx={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                bgcolor: 'rgba(0, 0, 0, 0.7)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 9999,
-                color: 'white',
-              }}
-            >
-              <CircularProgress color="info" />
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Logging out...
-              </Typography>
             </Box>
           )}
         </>
