@@ -281,7 +281,6 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     if (isFormChanged) {
       setIsConfirmModalOpen(true);
     } else {
-      onSave(formData); // Pass the edited account back to the parent
       onClose();
     }
   };
