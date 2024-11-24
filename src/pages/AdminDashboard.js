@@ -764,7 +764,7 @@ const AccountManagement = () => {
                 color: 'white',
               }}
             >
-              <CircularProgress color="inherit" />
+              <CircularProgress color="info" />
               <Typography variant="h6" sx={{ mt: 2 }}>
                 Logging out...
               </Typography>
