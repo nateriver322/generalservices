@@ -113,12 +113,8 @@ const AdminResponsiveAppBar = ({
                 color: 'white',
                 backgroundColor: isLoggingOut ? 'gray' : '#f44336',
                 borderColor: 'white',
-                '&:hover': {
-                  backgroundColor: isLoggingOut ? 'gray' : '#e53935',
-                },
               }}
             >
-              {isLoggingOut ? <CircularProgress size={20} color="inherit" /> : 'Logout'}
             </Button>
           </Toolbar>
         </Container>
