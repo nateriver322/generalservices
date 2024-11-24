@@ -231,10 +231,14 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const [isFormChanged, setIsFormChanged] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setIsFormChanged(false); // Reset form change detection
+    setIsFormChanged(false);
     setFormData({ ...account });
+    setErrors({});
   }, [account]);
 
   const handleChange = (e) => {
@@ -243,7 +247,12 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       ...formData,
       [name]: value,
     });
-    setIsFormChanged(true); // Form has been changed
+    setIsFormChanged(true);
+    // Clear error when user starts typing
+    setErrors({
+      ...errors,
+      [name]: ''
+    });
   };
 
   const handleSaveClick = () => {
@@ -260,17 +269,33 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
       const response = await axios.put(`https://generalservicescontroller.onrender.com/user/${account.id}`, formData);
       if (response.status === 200) {
         console.log("User updated successfully");
-        setIsSavedModalOpen(true); // Open the "Changes Saved" modal
-        onSave({ ...formData, id: account.id }); // Call onSave to refresh the account list
-      } else {
-        console.error("Failed to update user");
-        alert("Failed to update user");
+        setIsSavedModalOpen(true);
+        onSave({ ...formData, id: account.id });
       }
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Error updating user");
+      if (error.response) {
+        const errorMsg = error.response.data;
+        if (errorMsg === "Username already exists") {
+          setErrors({
+            ...errors,
+            username: "Username already exists"
+          });
+        } else if (errorMsg === "Invalid contact number format") {
+          setErrors({
+            ...errors,
+            contactNumber: "Contact number must be 11 digits"
+          });
+        } else {
+          setErrorMessage(errorMsg || 'An error occurred while updating the account');
+          setIsErrorModalOpen(true);
+        }
+      } else {
+        setErrorMessage('An unexpected error occurred. Please try again.');
+        setIsErrorModalOpen(true);
+      }
     }
-    setIsConfirmModalOpen(false); // Close the confirmation modal
+    setIsConfirmModalOpen(false);
   };
 
   const handleCancelConfirm = () => {
@@ -280,6 +305,10 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
   const handleSavedModalClose = () => {
     setIsSavedModalOpen(false);
     onClose();
+  };
+
+  const handleErrorModalClose = () => {
+    setIsErrorModalOpen(false);
   };
 
   return (
@@ -295,7 +324,10 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
+                style={{ borderColor: errors.username ? 'red' : '' }}
               />
+
+{errors.username && <p className="error-message" style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}>{errors.username}</p>}
             </div>
             <div className="form-group">
               <label>Password</label>
@@ -309,13 +341,13 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+            <input
+  type="email"
+  name="email"
+  value={formData.email}
+  readOnly
+  style={{ backgroundColor: '#f0f0f0' }}
+/>
             </div>
             <div className="form-group">
               <label>Contact No.</label>
@@ -324,7 +356,9 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 name="contactNumber"
                 value={formData.contactNumber}
                 onChange={handleChange}
+                style={{ borderColor: errors.contactNumber ? 'red' : '' }}
               />
+              {errors.contactNumber && <p className="error-message" style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}>{errors.contactNumber}</p>}
             </div>
           </div>
           <div className="form-group">
@@ -358,6 +392,58 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
             onClose={handleSavedModalClose}
           />
         )}
+
+
+         {/* Success Modal */}
+      <Modal open={isSavedModalOpen} onClose={handleSavedModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <h2>Changes Saved Successfully</h2>
+          <Button
+            onClick={handleSavedModalClose}
+            variant="contained"
+            color="primary"
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
+
+      {/* Error Modal */}
+      <Modal open={isErrorModalOpen} onClose={handleErrorModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <h2>Error</h2>
+          <p>{errorMessage}</p>
+          <Button
+            onClick={handleErrorModalClose}
+            variant="contained"
+            color="secondary"
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
       </div>
     </>
   );
