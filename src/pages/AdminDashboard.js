@@ -511,10 +511,7 @@ const AccountManagement = () => {
     fetchAccounts();
   }, []);
 
-  const handleLogoutButtonClick = () => {
-    sessionStorage.removeItem('username'); // Clear username from sessionStorage
-    navigate('/'); // Redirect to login page
-}
+
 
   const handleCreateAccountButtonClick = () => {
     setIsRegistrationModalOpen(true);
@@ -642,7 +639,6 @@ const AccountManagement = () => {
       handleSearchChange={handleSearchChange}
       handleSearchClick={handleSearchClick}
       handleCreateAccountButtonClick={handleCreateAccountButtonClick}
-      handleLogoutButtonClick={handleLogoutButtonClick}
       isSearching={isSearching}
     />
 
