@@ -23,6 +23,7 @@ export default function TicketsDone() {
   const [feedbackError, setFeedbackError] = useState('');
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [feedbackSuccessSnackbarOpen, setFeedbackSuccessSnackbarOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -124,6 +125,23 @@ export default function TicketsDone() {
     setTicketToDelete(null);
   };
 
+
+  const handleArchive = async (ticket) => {
+    try {
+      const response = await axios.post(
+        `https://generalservicescontroller.onrender.com/api/tickets/${ticket.id}/archive`
+      );
+      if (response.status === 200) {
+        setDoneTickets(doneTickets.filter(t => t.id !== ticket.id));
+        setSuccessSnackbarOpen(true);
+        setSuccessMessage('Ticket successfully archived');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while archiving the ticket.');
+    }
+  };
+
   return (
     <>
       <StaffAppBar />
@@ -176,7 +194,7 @@ export default function TicketsDone() {
                           <Button onClick={() => handleViewFeedback(ticket)} variant="outlined" color="primary" sx={{ marginRight: 1, width: '120px', height: '60px' }}>
                   View Feedback
                 </Button>
-                          <Button onClick={() => setTicketToDelete(ticket)} variant="contained" color="error" sx={{ width: '120px', height: '60px' }}>Delete</Button>
+                          <Button onClick={() => handleArchive(ticket)} variant="contained" color="error" sx={{ width: '120px', height: '60px' }}>Archive</Button>
                           </Box>
                       </TableCell>
                     </TableRow>
@@ -238,11 +256,11 @@ export default function TicketsDone() {
         </Box>
       </Modal>
 
-        <Snackbar
+      <Snackbar
           open={successSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSuccessSnackbarOpen(false)}
-          message="Ticket Terminated Successfully"
+          message={successMessage} // Use dynamic success message
         />
       </Box>
     </>
