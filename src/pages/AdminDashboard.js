@@ -48,6 +48,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,29 +62,54 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   };
 
   const handleSaveClick = async () => {
-    if (!formData.username || !formData.password || !formData.email) {
-      setErrorMessage('Please fill out all the required fields.');
-      setIsErrorModalOpen(true);
-      setLoading(false);
-      return; 
+    setErrors({});
+    setErrorMessage('');
+    
+    const newErrors = {};
+    if (!formData.username) newErrors.username = 'Username is required.';
+    if (!formData.password) newErrors.password = 'Password is required.';
+    if (!formData.email) newErrors.email = 'Email is required.';
+    if (!formData.contactNumber) {
+      newErrors.contactNumber = 'Contact number is required.';
+    } else if (formData.contactNumber.length !== 11) {
+      newErrors.contactNumber = 'Contact number must be exactly 11 digits.';
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
     setLoading(true);
+
     try {
-      const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
+      const checkResponse = await axios.get(
+        `https://generalservicescontroller.onrender.com/user/check-username?username=${formData.username}`
+      );
+      if (checkResponse.data.exists) {
+        setErrors({ username: 'Username already exists.' });
+        setLoading(false);
+        return;
+      }
+      
+      const response = await axios.post(
+        'https://generalservicescontroller.onrender.com/user/register',
+        formData
+      );
+  
       if (response.status === 201) {
-        console.log("User registered successfully");
+        console.log('User registered successfully');
         setIsSavedModalOpen(true);
         onRegister();
       } else {
-        console.error("Failed to register user");
+        console.error('Failed to register user');
         setErrorMessage('Failed to register user');
         setIsErrorModalOpen(true);
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error('Error registering user:', error);
       if (error.response && error.response.status === 409) {
-        setEmailError('This email is already registered.'); 
+        setErrors({ username: 'This username is already registered.' });
       } else {
         setErrorMessage('An unexpected error occurred. Please try again.');
         setIsErrorModalOpen(true);
@@ -122,7 +148,15 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     value={formData.username}
                     onChange={handleChange}
                     required
+                    style={{ borderColor: errors.username ? 'red' : '' }}
                   />
+                  {errors.username && (
+                    <div
+                      className="error-popup"
+                    >
+                      {errors.username}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Password</label>
@@ -155,7 +189,18 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="contactNumber"
                     value={formData.contactNumber}
                     onChange={handleChange}
+                    maxLength={11}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    style={{ borderColor: errors.contactNumber ? 'red' : '' }}
                   />
+                  {errors.contactNumber && (
+                <div
+                  className="error-popup"
+                >
+                  {errors.contactNumber}
+                </div>
+              )}
                 </div>
               </div>
               <div className="form-group">
@@ -354,12 +399,11 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 style={{ borderColor: errors.username ? 'red' : '' }}
               />
               {errors.username && (
-                <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
+                <div
+                  className="error-popup"
                 >
                   {errors.username}
-                </p>
+                </div>
               )}
             </div>
             <div className="form-group">
