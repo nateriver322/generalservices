@@ -52,66 +52,69 @@ const RegistrationModal = ({ onClose, onRegister }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
     setFormData({
       ...formData,
       [name]: value,
     });
-    if (name === 'email') {
-      setEmailError(''); // Reset email error when the user modifies the email
+  
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: "", 
+      });
+    }
+    if (name === "email") {
+      setEmailError(""); // Reset email-specific error
     }
   };
 
   const handleSaveClick = async () => {
-    setErrors({});
-    setErrorMessage('');
-    
+    // Field validations
     const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required.';
-    if (!formData.password) newErrors.password = 'Password is required.';
-    if (!formData.email) newErrors.email = 'Email is required.';
-    if (!formData.contactNumber) {
-      newErrors.contactNumber = 'Contact number is required.';
-    } else if (formData.contactNumber.length !== 11) {
-      newErrors.contactNumber = 'Contact number must be exactly 11 digits.';
+    if (!formData.username) newErrors.username = "Username is required.";
+    if (!formData.password) newErrors.password = "Password is required.";
+    if (!formData.email) newErrors.email = "Email is required.";
+    if (formData.contactNumber.length !== 11) {
+      newErrors.contactNumber = "Contact number must be exactly 11 digits.";
     }
   
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+      setErrors(newErrors); // Display errors
+      return; // Stop the save process
     }
-
+  
     setLoading(true);
 
     try {
-      const checkResponse = await axios.get(
-        `https://generalservicescontroller.onrender.com/user/check-username?username=${formData.username}`
-      );
-      if (checkResponse.data.exists) {
-        setErrors({ username: 'Username already exists.' });
-        setLoading(false);
-        return;
-      }
-
-      const response = await axios.post(
-        'https://generalservicescontroller.onrender.com/user/register',
-        formData
-      );
-  
+      const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
-        console.log('User registered successfully');
+        console.log("User registered successfully");
         setIsSavedModalOpen(true);
         onRegister();
-      } else {
-        console.error('Failed to register user');
-        setErrorMessage('Failed to register user');
-        setIsErrorModalOpen(true);
       }
     } catch (error) {
-      console.error('Error registering user:', error);
-      if (error.response && error.response.status === 409) {
-        setErrors({ username: 'This username is already registered.' });
+      console.error("Error registering user:", error);
+  
+      if (error.response) {
+        const errorMsg = error.response.data;
+  
+        if (errorMsg === "Username already exists") {
+          setErrors({
+            ...errors,
+            username: "Username already exists",
+          });
+        } else if (errorMsg === "Invalid contact number format") {
+          setErrors({
+            ...errors,
+            contactNumber: "Contact number must be 11 digits",
+          });
+        } else {
+          setErrorMessage(errorMsg || "An error occurred while registering the account");
+          setIsErrorModalOpen(true);
+        }
       } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
+        setErrorMessage("An unexpected error occurred. Please try again.");
         setIsErrorModalOpen(true);
       }
     } finally {
@@ -186,7 +189,13 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     required
                     style={{ borderColor: emailError ? 'red' : '' }}
                   />
-                  {emailError &&  (<div className="error-popup">{emailError}</div>)} {/* Show error message */}
+                  {errors.email && (
+                <div
+                  className="error-popup"
+                >
+                  {errors.email}
+                </div>
+              )}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
