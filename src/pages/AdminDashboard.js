@@ -91,7 +91,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
         setLoading(false);
         return;
       }
-      
+
       const response = await axios.post(
         'https://generalservicescontroller.onrender.com/user/register',
         formData
@@ -147,7 +147,6 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    required
                     style={{ borderColor: errors.username ? 'red' : '' }}
                   />
                   {errors.username && (
@@ -165,8 +164,15 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
+                    style={{ borderColor: errors.password ? 'red' : '' }}
                   />
+                  {errors.password && (
+                    <div
+                      className="error-popup"
+                    >
+                      {errors.password}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="form-row">
@@ -442,8 +448,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
               />
               {errors.contactNumber && (
                 <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
+                  className="error-popup"
                 >
                   {errors.contactNumber}
                 </p>
