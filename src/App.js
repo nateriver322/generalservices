@@ -42,7 +42,15 @@ function App() {
           />
 
         <Route path="/dashboard" element={<RoleBasedDashboard />} />
-        <Route path="/archived-tickets" element={<ArchivedTickets />} />
+
+        <Route 
+            path="/ArchivedTickets" 
+            element={
+              <RouteGuard requiredRole="Staff">
+                <ArchivedTickets />
+             </RouteGuard>
+             } 
+          />
 
           <Route 
             path="/myTickets" 
