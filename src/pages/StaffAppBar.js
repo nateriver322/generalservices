@@ -17,7 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import Popover from '@mui/material/Popover';
 
-const pages = ['Home', 'Resolved', 'Roles'];
+const pages = ['Home', 'Resolved', 'Roles', 'Archive'];
 const settings = ['Logout'];
 
 function StaffAppBar() {
@@ -99,7 +99,7 @@ function StaffAppBar() {
       navigate('/ticketsFixed');
     } else if (page === 'Roles') {
       navigate('/subrole');
-    } else if (page === 'ARCHIVE') {
+    } else if (page === 'Archive') {
       navigate('/ArchivedTickets');
     }
   };
@@ -108,7 +108,7 @@ function StaffAppBar() {
     if (path === 'Home' && location.pathname === '/dashboard') return true;
     if (path === 'Resolved' && location.pathname === '/ticketsFixed') return true;
     if (path === 'Roles' && location.pathname === '/subrole') return true;
-    if (path === 'ARCHIVE' && location.pathname === '/ArchivedTickets') return true;
+    if (path === 'Archive' && location.pathname === '/ArchivedTickets') return true;
     return false;
   };
 
