@@ -99,6 +99,8 @@ function StaffAppBar() {
       navigate('/ticketsFixed');
     } else if (page === 'Roles') {
       navigate('/subrole');
+    } else if (page === 'ARCHIVE') {
+      navigate('/ArchivedTickets');
     }
   };
 
@@ -106,6 +108,7 @@ function StaffAppBar() {
     if (path === 'Home' && location.pathname === '/dashboard') return true;
     if (path === 'Resolved' && location.pathname === '/ticketsFixed') return true;
     if (path === 'Roles' && location.pathname === '/subrole') return true;
+    if (path === 'ARCHIVE' && location.pathname === '/ArchivedTickets') return true;
     return false;
   };
 
