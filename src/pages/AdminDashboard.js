@@ -187,7 +187,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    style={{ borderColor: emailError ? 'red' : '' }}
+                    style={{ borderColor: errors.email ? 'red' : '' }}
                   />
                   {errors.email && (
                 <div
@@ -370,7 +370,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
         } else if (errorMsg === 'Invalid contact number format') {
           setErrors({
             ...errors,
-            contactNumber: 'Contact number must be 11 digits',
+            contactNumber: 'Contact number must be exactly 11 digits',
           });
         } else {
           setErrorMessage(errorMsg || 'An error occurred while updating the account');
