@@ -51,8 +51,16 @@ function TicketForm() {
 
     const formData = new FormData(event.target);
     const now = new Date();
-    const currentDateTime = now.toISOString();
-    formData.append("datetime", currentDateTime);
+const currentDateTime = now.toLocaleString('en-US', {
+    month: 'short', 
+    day: '2-digit', 
+    year: 'yyyy',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+}) + ` at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+formData.append("datetime", currentDateTime);
     formData.append("username", sessionStorage.getItem("username"));
 
     formData.append("workType", selectedWorkTypes.join(","));
