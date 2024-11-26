@@ -1,0 +1,43 @@
+/* General styles for desktop */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fdd835; /* Adjusted for yellow background */
+}
+
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1440px) {
+    .login-container {
+        max-width: 350px; /* Slightly reduce the size */
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Adjust font size */
+    }
+
+    input {
+        font-size: 1rem;
+    }
+}
+
+/* Styles for very small screens (below 768px) */
+@media (max-width: 768px) {
+    .login-container {
+        max-width: 300px; /* Further reduce size */
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.25rem; /* Adjust heading size */
+    }
+}
