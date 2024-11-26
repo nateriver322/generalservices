@@ -310,7 +310,7 @@ const MyTickets = () => {
         Send feedback
       </Button>
     )}
-            <Button onClick={() => setFeedbackModalTicket(null)}>Cancel</Button>
+            <Button onClick={() => setFeedbackModalTicket(null)}>Close</Button>
           </DialogActions>
         </Dialog>
 
