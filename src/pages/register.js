@@ -34,38 +34,25 @@ const Register = () => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-    
-        if (name === 'personnelId') {
-            let formattedValue = value.replace(/\D/g, ''); // Remove non-numeric characters
-            if (formattedValue.length > 2 && formattedValue.length <= 6) {
-                formattedValue = `${formattedValue.slice(0, 2)}-${formattedValue.slice(2)}`;
-            } else if (formattedValue.length > 6) {
-                formattedValue = `${formattedValue.slice(0, 2)}-${formattedValue.slice(2, 6)}-${formattedValue.slice(6, 9)}`;
-            }
+        
+        if (name === 'contactNumber' || name === 'personnelId') {
+            const onlyNumbers = value.replace(/\D/g, '');
+            const limitedToElevenDigits = onlyNumbers.slice(0, 11);
             setUserData({
                 ...userData,
-                [name]: formattedValue,
-            });
-        } else if (name === 'contactNumber') {
-            // Restrict contact number to numeric and max 11 digits
-            const onlyNumbers = value.replace(/\D/g, '').slice(0, 11);
-            setUserData({
-                ...userData,
-                [name]: onlyNumbers,
+                [name]: limitedToElevenDigits
             });
         } else {
             setUserData({
                 ...userData,
-                [name]: value,
+                [name]: value
             });
         }
-    
-        // Clear email-specific error if the email field is modified
+
         if (name === 'email' && emailError) {
             setEmailError('');
         }
     };
-    
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -80,11 +67,10 @@ const Register = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         // Personnel ID validation
-const personnelIdPattern = /^\d{3,11}$|^\d{2}-\d{4}-\d{3}$/; // Accepts 3-11 digits or 00-0000-000
-if (!personnelIdPattern.test(userData.personnelId)) {
-    newErrors.personnelId = "Personnel ID must be 3-11 digits or in the format 00-0000-000.";
-}
-
+        const personnelIdPattern = /^\d{3,11}$/; // Allows between 3 and 11 digits
+        if (!personnelIdPattern.test(userData.personnelId)) {
+            newErrors.personnelId = "Personnel ID must be between 3 and 11 digits.";
+        }
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
         } else {
@@ -201,8 +187,9 @@ if (!personnelIdPattern.test(userData.personnelId)) {
     error={!!errors.personnelId}
     helperText={errors.personnelId}
     inputProps={{
-        maxLength: 13, // Maximum length to accommodate the hyphen-separated format
-        pattern: '\\d{3,11}|\\d{2}-\\d{4}-\\d{3}', // Acceptable pattern
+        maxLength: 11,
+        inputMode: 'numeric',
+        pattern: '[0-9]{3,11}'
     }}
     sx={{
         '& .MuiOutlinedInput-root': {
