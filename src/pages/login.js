@@ -8,8 +8,6 @@ import { useMsal } from "@azure/msal-react";
 import LoginResponsiveAppBar from './LoginResponsiveAppBar';
 import { FaMicrosoft } from 'react-icons/fa';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import '../css/login.css';
-
 
 
 const Login = React.memo(() => {
