@@ -80,51 +80,40 @@ const PersonnelLogin = () => {
                     </Typography>
                 )}
 
-<TextField
-    label="Personnel ID"
-    fullWidth
-    required
-    margin="normal"
-    value={personnelId}
-    onChange={(e) => {
-        let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-        if (value.length > 2 && value.length <= 6) {
-            // Format as XX-YYYY
-            value = `${value.slice(0, 2)}-${value.slice(2)}`;
-        } else if (value.length > 6) {
-            // Format as XX-YYYY-ZZZ
-            value = `${value.slice(0, 2)}-${value.slice(2, 6)}-${value.slice(6, 9)}`;
-        }
-        setPersonnelId(value);
-    }}
-    error={!!error}
-    helperText={error}
-    inputProps={{
-        maxLength: 11, // Maximum number of characters based on format (2 + 4 + 3 + 2 dashes = 11)
-        inputMode: 'numeric',
-        pattern: '[0-9]*',
-    }}
-    sx={{
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: 'black',
-            },
-            '&:hover fieldset': {
-                borderColor: '#922B21',
-            },
-            '&.Mui-focused fieldset': {
-                borderColor: '#800000',
-            },
-        },
-        '& .MuiInputLabel-root': {
-            color: 'black',
-        },
-        '& .MuiInputLabel-root.Mui-focused': {
-            color: 'black',
-        },
-    }}
-/>
-
+                <TextField
+                    label="Personnel ID"
+                    fullWidth
+                    required
+                    margin="normal"
+                    value={personnelId}
+                    onChange={(e) => setPersonnelId(e.target.value)}
+                    error={!!error}
+                    helperText={error}
+                    inputProps={{
+                        maxLength: 11,
+                        inputMode: 'numeric',
+                        pattern: '[0-9]*'
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
+                    }}
+                />
 
                 <Box sx={{ mt: 2 }}>
                     <Button
