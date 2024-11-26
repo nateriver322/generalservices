@@ -224,15 +224,26 @@ function PersonnelTickets() {
           sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
           <Box sx={modalStyle}>
-            <Typography variant="h6">Submit Feedback for Ticket #{selectedTicket.id}</Typography>
-            <TextField
-              label="Feedback"
-              multiline
-              rows={4}
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              sx={{ width: '100%', mt: 2 }}
-            />
+      <Typography variant="h6">Personnel Feedback for Ticket #{selectedTicket.id}</Typography>
+      
+      {selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 ? (
+        Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
+          <Box key={personnel} sx={{ 
+            bgcolor: 'background.paper', 
+            p: 2, 
+            borderRadius: 2, 
+            mb: 2, 
+            border: '1px solid #e0e0e0' 
+          }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+              {personnel}
+            </Typography>
+            <Typography>{feedback}</Typography>
+          </Box>
+        ))
+      ) : (
+        <Typography>No personnel feedback available for this ticket.</Typography>
+      )}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
               <Button variant="contained" color="primary" onClick={handleSubmitFeedback}>
                 Submit
