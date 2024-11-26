@@ -287,21 +287,21 @@ const MyTickets = () => {
       <strong>Staff Feedback:</strong> {feedbackModalTicket.feedback}
     </Typography>
   )}
-  {!hasSubmittedFeedback ? (
-    <TextField
-      label="Enter your feedback"
-      multiline
-      fullWidth
-      value={userFeedback}
-      onChange={(e) => setUserFeedback(e.target.value)}
-      error={!!feedbackError}
-      helperText={feedbackError}
-      sx={{ mt: 2 }}
-    />
+   {!feedbackModalTicket?.userFeedback && !hasSubmittedFeedback ? (
+      <TextField
+        label="Enter your feedback"
+        multiline
+        fullWidth
+        value={userFeedback}
+        onChange={(e) => setUserFeedback(e.target.value)}
+        error={!!feedbackError}
+        helperText={feedbackError}
+        sx={{ mt: 2 }}
+      />
   ) : (
     <Typography>
-      <strong>Your Feedback:</strong> {feedbackModalTicket.userFeedback}
-    </Typography>
+        <strong>Your Feedback:</strong> {feedbackModalTicket?.userFeedback || userFeedback}
+      </Typography>
   )}
 </DialogContent>
           <DialogActions>
