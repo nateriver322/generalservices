@@ -148,7 +148,7 @@ function TicketsHistory() {
                       <TableCell>{ticket.priority}</TableCell>
                       <TableCell>{ticket.username}</TableCell>
                       <TableCell>{ticket.datetime}</TableCell>
-                      <TableCell>{ticket.dateResolved || 'Not resolved'}</TableCell>
+                      <TableCell>{ticket.resolvedDatetime || 'Not available'}</TableCell>
                       <TableCell>
                       <Button
                           onClick={() => handleViewTicket(ticket)}
