@@ -305,9 +305,11 @@ const MyTickets = () => {
   )}
 </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleSendFeedback(feedbackModalTicket?.id)} color="primary">
-              Send feedback
-            </Button>
+          {!feedbackModalTicket?.userFeedback && !hasSubmittedFeedback && (
+      <Button onClick={() => handleSendFeedback(feedbackModalTicket?.id)} color="primary">
+        Send feedback
+      </Button>
+    )}
             <Button onClick={() => setFeedbackModalTicket(null)}>Cancel</Button>
           </DialogActions>
         </Dialog>
