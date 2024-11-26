@@ -35,16 +35,7 @@ const Register = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         
-        if (name === 'personnelId') {
-            // Remove all non-digit characters
-            const onlyNumbers = value.replace(/\D/g, '');
-            // Limit to 9 digits total
-            const limitedToNineDigits = onlyNumbers.slice(0, 9);
-            setUserData({
-                ...userData,
-                [name]: limitedToNineDigits
-            });
-        } else if (name === 'contactNumber') {
+        if (name === 'contactNumber' || name === 'personnelId') {
             const onlyNumbers = value.replace(/\D/g, '');
             const limitedToElevenDigits = onlyNumbers.slice(0, 11);
             setUserData({
@@ -76,10 +67,9 @@ const Register = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         // Personnel ID validation
-        // Now allows 1-9 digits
-        const personnelIdPattern = /^\d{1,9}$/;
+        const personnelIdPattern = /^\d{3,11}$/; // Allows between 3 and 11 digits
         if (!personnelIdPattern.test(userData.personnelId)) {
-            newErrors.personnelId = "Personnel ID must be between 1 and 9 digits.";
+            newErrors.personnelId = "Personnel ID must be between 3 and 11 digits.";
         }
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
@@ -188,20 +178,19 @@ const Register = () => {
 
                 {/* Personnel ID Field */}
                 <TextField
-                    label="ID Number"
-                    name="personnelId"
-                    fullWidth
-                    required
-                    margin="normal"
-                    value={userData.personnelId}
-                    onChange={handleInputChange}
-                    error={!!errors.personnelId}
-                    helperText={errors.personnelId}
-                    inputProps={{
-                        maxLength: 9,
-                        inputMode: 'numeric',
-                        pattern: '[0-9]{1,9}'
-                    }}
+    label="ID Number"
+    name="personnelId"
+    fullWidth
+    required
+    margin="normal"
+    onChange={handleInputChange}
+    error={!!errors.personnelId}
+    helperText={errors.personnelId}
+    inputProps={{
+        maxLength: 11,
+        inputMode: 'numeric',
+        pattern: '[0-9]{3,11}'
+    }}
     sx={{
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
