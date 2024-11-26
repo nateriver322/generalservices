@@ -227,35 +227,14 @@ function PersonnelTickets() {
             <Typography variant="h6">Submit Feedback for Ticket #{selectedTicket.id}</Typography>
             {/* Existing Personnel Feedbacks Section */}
       {selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 && (
-        <Box sx={{ 
-          maxHeight: '200px', 
-          overflowY: 'auto', 
-          mb: 2, 
-          p: 2, 
-          bgcolor: 'background.default', 
-          borderRadius: 2 
-        }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-            Previous Personnel Feedbacks
-          </Typography>
-          {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback], index) => (
-            <Box 
-              key={index} 
-              sx={{ 
-                bgcolor: 'background.paper', 
-                p: 1.5, 
-                borderRadius: 1, 
-                mb: 1,
-                border: '1px solid #e0e0e0'
-              }}
-            >
-              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                {personnel}
-              </Typography>
-              <Typography variant="body2">{feedback}</Typography>
-            </Box>
+        <>
+          <Typography variant="subtitle1" sx={{ mb: 1 }}><strong>Personnel Feedback:</strong></Typography>
+          {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
+            <Typography key={personnel} sx={{ mb: 1 }}>
+              <strong>{personnel}:</strong> {feedback}
+            </Typography>
           ))}
-        </Box>
+        </>
       )}
 
       {/* Feedback Submission Textfield */}
