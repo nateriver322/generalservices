@@ -48,44 +48,73 @@ const RegistrationModal = ({ onClose, onRegister }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
     setFormData({
       ...formData,
       [name]: value,
     });
-    if (name === 'email') {
-      setEmailError(''); // Reset email error when the user modifies the email
+  
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: "", 
+      });
+    }
+    if (name === "email") {
+      setEmailError(""); // Reset email-specific error
     }
   };
 
   const handleSaveClick = async () => {
-    if (!formData.username || !formData.password || !formData.email) {
-      setErrorMessage('Please fill out all the required fields.');
-      setIsErrorModalOpen(true);
-      setLoading(false);
-      return; 
+    // Field validations
+    const newErrors = {};
+    if (!formData.username) newErrors.username = "Username is required.";
+    if (!formData.password) newErrors.password = "Password is required.";
+    if (!formData.email) newErrors.email = "Email is required.";
+    if (formData.contactNumber.length !== 11) {
+      newErrors.contactNumber = "Contact number must be exactly 11 digits.";
     }
-
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Display errors
+      return; // Stop the save process
+    }
+  
     setLoading(true);
+
     try {
       const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
       if (response.status === 201) {
         console.log("User registered successfully");
         setIsSavedModalOpen(true);
         onRegister();
-      } else {
-        console.error("Failed to register user");
-        setErrorMessage('Failed to register user');
-        setIsErrorModalOpen(true);
       }
     } catch (error) {
       console.error("Error registering user:", error);
-      if (error.response && error.response.status === 409) {
-        setEmailError('This email is already registered.'); 
+  
+      if (error.response) {
+        const errorMsg = error.response.data;
+  
+        if (errorMsg === "Username already exists") {
+          setErrors({
+            ...errors,
+            username: "Username already exists",
+          });
+        } else if (errorMsg === "Invalid contact number format") {
+          setErrors({
+            ...errors,
+            contactNumber: "Contact number must be 11 digits",
+          });
+        } else {
+          setErrorMessage(errorMsg || "An error occurred while registering the account");
+          setIsErrorModalOpen(true);
+        }
       } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
+        setErrorMessage("An unexpected error occurred. Please try again.");
         setIsErrorModalOpen(true);
       }
     } finally {
@@ -121,8 +150,15 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    required
+                    style={{ borderColor: errors.username ? 'red' : '' }}
                   />
+                  {errors.username && (
+                    <div
+                      className="error-popup"
+                    >
+                      {errors.username}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Password</label>
@@ -131,8 +167,15 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
+                    style={{ borderColor: errors.password ? 'red' : '' }}
                   />
+                  {errors.password && (
+                    <div
+                      className="error-popup"
+                    >
+                      {errors.password}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="form-row">
@@ -144,9 +187,15 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    style={{ borderColor: emailError ? 'red' : '' }}
+                    style={{ borderColor: errors.email ? 'red' : '' }}
                   />
-                  {emailError &&  (<div className="error-popup">{emailError}</div>)} {/* Show error message */}
+                  {errors.email && (
+                <div
+                  className="error-popup"
+                >
+                  {errors.email}
+                </div>
+              )}
                 </div>
                 <div className="form-group">
                   <label>Contact No.</label>
@@ -155,7 +204,18 @@ const RegistrationModal = ({ onClose, onRegister }) => {
                     name="contactNumber"
                     value={formData.contactNumber}
                     onChange={handleChange}
+                    maxLength={11}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    style={{ borderColor: errors.contactNumber ? 'red' : '' }}
                   />
+                  {errors.contactNumber && (
+                <div
+                  className="error-popup"
+                >
+                  {errors.contactNumber}
+                </div>
+              )}
                 </div>
               </div>
               <div className="form-group">
@@ -310,7 +370,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
         } else if (errorMsg === 'Invalid contact number format') {
           setErrors({
             ...errors,
-            contactNumber: 'Contact number must be 11 digits',
+            contactNumber: 'Contact number must be exactly 11 digits',
           });
         } else {
           setErrorMessage(errorMsg || 'An error occurred while updating the account');
@@ -354,12 +414,11 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
                 style={{ borderColor: errors.username ? 'red' : '' }}
               />
               {errors.username && (
-                <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
+                <div
+                  className="error-popup"
                 >
                   {errors.username}
-                </p>
+                </div>
               )}
             </div>
             <div className="form-group">
@@ -398,8 +457,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
               />
               {errors.contactNumber && (
                 <p
-                  className="error-message"
-                  style={{ color: 'red', fontSize: '0.8rem', margin: '4px 0' }}
+                  className="error-popup"
                 >
                   {errors.contactNumber}
                 </p>

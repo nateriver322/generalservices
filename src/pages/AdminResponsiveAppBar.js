@@ -7,8 +7,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import citLogo from '../images/cit-logo.png';
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 const AdminResponsiveAppBar = ({
@@ -67,7 +66,7 @@ const AdminResponsiveAppBar = ({
               },
              }}
               >
-                {isSearching ? <CircularProgress size={20} /> : 'Search'}
+                {isSearching ? <CircularProgress size={20} /> : <SearchIcon/>}
               </Button>
               
               <Button
