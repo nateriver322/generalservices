@@ -60,7 +60,7 @@ function PersonnelTickets() {
       }
     } catch (error) {
       console.error('Error:', error);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -126,12 +126,8 @@ function PersonnelTickets() {
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
-};
-
-  const hasSubmittedFeedback = (ticket) => {
-    const username = sessionStorage.getItem('username');
-    return ticket.personnelFeedbacks && ticket.personnelFeedbacks[username];
   };
+
   return (
     <>
       <PersonnelResponsiveAppBar />
@@ -188,15 +184,14 @@ function PersonnelTickets() {
       <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
       <TableCell>{ticket.assignedPersonnel}</TableCell>
       <TableCell>
-      <Button
-  onClick={() => handleAssessTicket(ticket)}
-  variant="outlined"
-  color="success"
-  sx={{ marginRight: 1, width: '120px', height: '60px' }}
-  disabled={hasSubmittedFeedback(ticket)}
->
-  {hasSubmittedFeedback(ticket) ? 'Assessed' : 'Assess'}
-</Button>
+        <Button
+          onClick={() => handleAssessTicket(ticket)}
+          variant="outlined"
+          color="success"
+          sx={{ marginRight: 1, width: '120px', height: '60px' }}
+        >
+          Assess
+        </Button>
         <Button
           onClick={() => handleViewTicket(ticket)}
           variant="outlined"
@@ -217,10 +212,10 @@ function PersonnelTickets() {
      </Box>
 
       <ViewDetailsModal
-  open={detailsModalOpen}
-  onClose={closeDetailsModal}
-  ticket={selectedTicket}
-/>
+        open={detailsModalOpen}
+        onClose={closeDetailsModal}
+        ticket={selectedTicket}
+      />
 
       {feedbackModalOpen && selectedTicket && (
         <Modal
@@ -247,15 +242,15 @@ function PersonnelTickets() {
         </Modal>
       )}
 
-<Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)}>
-          <Box sx={{ ...modalStyle }}>
-            <Typography variant="h6">Success</Typography>
-            <Typography>The ticket was successfully assessed !</Typography>
-            <Button onClick={() => setSuccessModalOpen(false)} color="primary">
-              Close
-            </Button>
-          </Box>
-        </Modal>
+      <Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)}>
+        <Box sx={{ ...modalStyle }}>
+          <Typography variant="h6">Success</Typography>
+          <Typography>The ticket was successfully assessed!</Typography>
+          <Button onClick={() => setSuccessModalOpen(false)} color="primary">
+            Close
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 }
