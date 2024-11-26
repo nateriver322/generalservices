@@ -81,25 +81,49 @@ const Login = React.memo(() => {
         setShowPassword(!showPassword);
     };
 
+    const theme = createTheme({
+        typography: {
+          fontSize: 16, // Adjust the base font size as needed
+        },
+        breakpoints: {
+          values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+          },
+        },
+      });
+
     return (
         <div
-            style={{
-                position: 'relative', 
-                height: '100vh',
-                width: '100vw',
-            }}
+        style={{
+            position: 'relative',
+            height: '100vh',
+            width: '100vw',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
            
               
             <LoginResponsiveAppBar />
             <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                    marginTop: '30px'
-                }}
+      component="form"
+      onSubmit={handleLoginSubmit}
+      sx={{
+        maxWidth: { xs: '90%', sm: '400px' },
+        width: '100%',
+        bgcolor: 'white',
+        p: 4,
+        borderRadius: 2,
+        boxShadow: 3,
+        margin: '0 auto',
+        mt: 4,
+      }}
             >   
             </Box>
             <Box
@@ -164,6 +188,8 @@ const Login = React.memo(() => {
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
                         },
+                        width: { xs: '100%', sm: 'auto' }, // Adjust width for smaller screens
+
                     }}
                 />
 
@@ -204,6 +230,7 @@ const Login = React.memo(() => {
                         '& .MuiInputLabel-root.Mui-focused': {
                             color: 'black',
                         },
+                        width: { xs: '100%', sm: 'auto' }, // Adjust width for smaller screens
                     }}
                 />
 
