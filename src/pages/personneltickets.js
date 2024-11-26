@@ -230,7 +230,7 @@ function PersonnelTickets() {
         <>
           {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
             <Typography key={personnel} sx={{ mb: 1 }}>
-               <Typography variant="subtitle1" sx={{ mb: 1 }}><strong>Task update:</strong></Typography> {feedback}
+               <Typography variant="subtitle1"><strong>Task update:</strong></Typography> {feedback}
             </Typography>
           ))}
         </>
@@ -238,7 +238,7 @@ function PersonnelTickets() {
 
       {/* Feedback Submission Textfield */}
       <TextField
-        label="Submit New Feedback"
+        label="Submit new Task Update"
         multiline
         rows={4}
         value={feedback}
