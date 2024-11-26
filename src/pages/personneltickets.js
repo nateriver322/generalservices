@@ -224,34 +224,63 @@ function PersonnelTickets() {
           sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
           <Box sx={modalStyle}>
-      <Typography variant="h6">Personnel Feedback for Ticket #{selectedTicket.id}</Typography>
-      
-      {selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 ? (
-        Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
-          <Box key={personnel} sx={{ 
-            bgcolor: 'background.paper', 
-            p: 2, 
-            borderRadius: 2, 
-            mb: 2, 
-            border: '1px solid #e0e0e0' 
-          }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-              {personnel}
-            </Typography>
-            <Typography>{feedback}</Typography>
-          </Box>
-        ))
-      ) : (
-        <Typography>No personnel feedback available for this ticket.</Typography>
-      )}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-              <Button variant="contained" color="primary" onClick={handleSubmitFeedback}>
-                Submit
-              </Button>
+            <Typography variant="h6">Submit Feedback for Ticket #{selectedTicket.id}</Typography>
+            {/* Existing Personnel Feedbacks Section */}
+      {selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 && (
+        <Box sx={{ 
+          maxHeight: '200px', 
+          overflowY: 'auto', 
+          mb: 2, 
+          p: 2, 
+          bgcolor: 'background.default', 
+          borderRadius: 2 
+        }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Previous Personnel Feedbacks
+          </Typography>
+          {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback], index) => (
+            <Box 
+              key={index} 
+              sx={{ 
+                bgcolor: 'background.paper', 
+                p: 1.5, 
+                borderRadius: 1, 
+                mb: 1,
+                border: '1px solid #e0e0e0'
+              }}
+            >
+              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                {personnel}
+              </Typography>
+              <Typography variant="body2">{feedback}</Typography>
             </Box>
-          </Box>
-        </Modal>
+          ))}
+        </Box>
       )}
+
+      {/* Feedback Submission Textfield */}
+      <TextField
+        label="Submit New Feedback"
+        multiline
+        rows={4}
+        value={feedback}
+        onChange={(e) => setFeedback(e.target.value)}
+        sx={{ width: '100%', mt: 2 }}
+        placeholder="Enter your feedback here..."
+      />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleSubmitFeedback}
+          disabled={!feedback.trim()}
+        >
+          Submit
+        </Button>
+      </Box>
+    </Box>
+  </Modal>
+)}
 
       <Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)}>
         <Box sx={{ ...modalStyle }}>
