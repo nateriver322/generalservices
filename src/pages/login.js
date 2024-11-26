@@ -97,8 +97,9 @@ const Login = React.memo(() => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: 'calc(100vh - 64px)', // Adjusted to leave space for the AppBar
+                    height: 'calc(100vh - 64px)', // Leaves space for the AppBar
                     padding: 2,
+                    overflowY: 'auto', // Allows scrolling if content exceeds the view
                     bgcolor: '#f5f5f5',
                 }}
             >
@@ -106,7 +107,7 @@ const Login = React.memo(() => {
                     component="form"
                     onSubmit={handleLoginSubmit}
                     sx={{
-                        maxWidth: { xs: '90%', sm: '400px' }, // Dynamic width for smaller devices
+                        maxWidth: { xs: '90%', sm: '400px' }, // Responsive width
                         width: '100%',
                         bgcolor: 'white',
                         p: 4,
@@ -205,7 +206,7 @@ const Login = React.memo(() => {
                                 bgcolor: '#800000',
                                 '&:hover': { bgcolor: '#A00000' },
                                 color: 'white',
-                                mb: 2,
+                                mb: 1, // Reduced spacing
                             }}
                             fullWidth
                         >
@@ -216,7 +217,7 @@ const Login = React.memo(() => {
                             variant="text"
                             fullWidth
                             onClick={handleForgotPasswordClick}
-                            sx={{ color: '#800000', mb: 1 }}
+                            sx={{ color: '#800000', mb: 1 }} // Reduced spacing
                         >
                             Forgot Password?
                         </Button>
@@ -228,7 +229,7 @@ const Login = React.memo(() => {
                             sx={{
                                 borderColor: '#800000',
                                 color: '#800000',
-                                mb: 2,
+                                mb: 1, // Reduced spacing
                             }}
                         >
                             Sign Up
@@ -242,7 +243,7 @@ const Login = React.memo(() => {
                             sx={{
                                 borderColor: '#800000',
                                 color: '#800000',
-                                mb: 2,
+                                mb: 1, // Reduced spacing
                             }}
                         >
                             Login with Microsoft
@@ -287,6 +288,7 @@ const Login = React.memo(() => {
             </Backdrop>
         </div>
     );
+    
     
 });
 
