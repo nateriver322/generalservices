@@ -34,42 +34,34 @@ const Register = () => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-    
+        
         if (name === 'personnelId') {
-            // Remove non-numeric characters
+            // Remove all non-digit characters
             const onlyNumbers = value.replace(/\D/g, '');
-    
-            // Format as 00-0000-000 if length > 2
-            let formattedValue = onlyNumbers;
-            if (onlyNumbers.length > 2) {
-                formattedValue = `${onlyNumbers.slice(0, 2)}-${onlyNumbers.slice(2, 6)}`;
-            }
-            if (onlyNumbers.length > 6) {
-                formattedValue = `${formattedValue}-${onlyNumbers.slice(6, 9)}`;
-            }
-    
+            // Limit to 9 digits total
+            const limitedToNineDigits = onlyNumbers.slice(0, 9);
             setUserData({
                 ...userData,
-                [name]: formattedValue,
+                [name]: limitedToNineDigits
             });
         } else if (name === 'contactNumber') {
             const onlyNumbers = value.replace(/\D/g, '');
+            const limitedToElevenDigits = onlyNumbers.slice(0, 11);
             setUserData({
                 ...userData,
-                [name]: onlyNumbers.slice(0, 11),
+                [name]: limitedToElevenDigits
             });
         } else {
             setUserData({
                 ...userData,
-                [name]: value,
+                [name]: value
             });
         }
-    
+
         if (name === 'email' && emailError) {
             setEmailError('');
         }
     };
-    
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -82,11 +74,12 @@ const Register = () => {
     const validateForm = async () => {
         const newErrors = {};
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-        // Personnel ID validation: Allows between 1 and 9 digits without dashes or formatted as 00-0000-000
-        const personnelIdPattern = /^(\d{1,9}|(\d{2}-\d{4}-\d{3}))$/;
-        if (!personnelIdPattern.test(userData.personnelId.replace(/-/g, ''))) {
-            newErrors.personnelId = "ID Number must be 1-9 digits, formatted as 00-0000-000.";
+
+        // Personnel ID validation
+        // Now allows 1-9 digits
+        const personnelIdPattern = /^\d{1,9}$/;
+        if (!personnelIdPattern.test(userData.personnelId)) {
+            newErrors.personnelId = "Personnel ID must be between 1 and 9 digits.";
         }
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
@@ -193,21 +186,22 @@ const Register = () => {
                 </Box>
                 <Typography variant="h5" component="h3" gutterBottom>Create Account</Typography>
 
-               {/* Personnel ID Field */}
-               <TextField
-    label="ID Number"
-    name="personnelId"
-    fullWidth
-    required
-    margin="normal"
-    onChange={handleInputChange}
-    error={!!errors.personnelId}
-    helperText={errors.personnelId}
-    inputProps={{
-        maxLength: 11,
-        inputMode: 'numeric',
-        pattern: '[0-9]{3,11}'
-    }}
+                {/* Personnel ID Field */}
+                <TextField
+                    label="ID Number"
+                    name="personnelId"
+                    fullWidth
+                    required
+                    margin="normal"
+                    value={userData.personnelId}
+                    onChange={handleInputChange}
+                    error={!!errors.personnelId}
+                    helperText={errors.personnelId}
+                    inputProps={{
+                        maxLength: 9,
+                        inputMode: 'numeric',
+                        pattern: '[0-9]{1,9}'
+                    }}
     sx={{
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
