@@ -38,6 +38,7 @@ const ViewDetailsModal = ({ open, onClose, ticket }) => {
           <DetailItem label="Date Created" value={ticket.datetime} />
           <DetailItem label="Status" value={ticket.status} />
           <DetailItem label="Priority" value={ticket.priority} />
+          <DetailItem label="Latest Date Needed" value={ticket.latestDateNeeded} />
           <DetailItem label="Reported By" value={ticket.username} />
           <DetailItem label="Scheduled Repair Date" value={ticket.scheduledRepairDate || 'Not scheduled'} />
           <DetailItem label="Assigned Personnel" value={ticket.assignedPersonnel} />
