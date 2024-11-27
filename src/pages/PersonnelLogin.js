@@ -23,7 +23,7 @@ const PersonnelLogin = () => {
             navigate('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            setError(err.message || 'Invalid personnel ID');
+            setError(err.message || 'User is not authorized as personnel');
         } finally {
             setLoading(false);
         }
@@ -74,11 +74,7 @@ const PersonnelLogin = () => {
                     Personnel Login
                 </Typography>
 
-                {error && (
-                    <Typography color="error" sx={{ mb: 2 }}>
-                        {error}
-                    </Typography>
-                )}
+                
 
                 <TextField
                     label="Personnel ID"
