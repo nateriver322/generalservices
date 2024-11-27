@@ -16,20 +16,13 @@ const PersonnelLogin = () => {
         event.preventDefault();
         setLoading(true);
         setError('');
-    
+
         try {
             const userData = await personnelLogin(personnelId);
-    
-            // Check if the user is personnel
-            if (!userData || userData.role !== 'personnel') {
-                throw new Error('User is not authorized as personnel.');
-            }
-    
-            // After successful login, navigate to the dashboard
+            // After successful login, navigate to dashboard
             navigate('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            // Set specific error messages
             setError(err.message || 'Invalid personnel ID');
         } finally {
             setLoading(false);
