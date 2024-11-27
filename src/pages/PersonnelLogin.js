@@ -16,7 +16,7 @@ const PersonnelLogin = () => {
         event.preventDefault();
         setLoading(true);
         setError('');
-        
+
         try {
             const userData = await personnelLogin(personnelId);
             // After successful login, navigate to dashboard
@@ -89,11 +89,7 @@ const PersonnelLogin = () => {
                     onChange={(e) => setPersonnelId(e.target.value)}
                     error={!!error}
                     helperText={error}
-                    inputProps={{
-                        maxLength: 11,
-                        inputMode: 'numeric',
-                        pattern: '[0-9]*'
-                    }}
+                    // Removed numeric restrictions and allowed general input
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
