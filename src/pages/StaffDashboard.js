@@ -69,7 +69,7 @@ function TicketsCreated() {
   const fetchTickets = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://generalservicescontroller.onrender.com/api/tickets');
+      const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/api/tickets');
       if (response.ok) {
         const data = await response.json();
         // Filter tickets to include those with status "Pending" or "Ongoing"
@@ -94,7 +94,7 @@ function TicketsCreated() {
 
   const fetchPersonnel = async () => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/personnel');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/user/personnel');
       setPersonnelList(response.data);
     } catch (error) {
       console.error('Error fetching personnel:', error);
@@ -120,7 +120,7 @@ function TicketsCreated() {
 
   const fetchPersonnelWorkload = async () => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/api/personnel/workload');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/api/personnel/workload');
       setPersonnelWorkload(response.data);
     } catch (error) {
       console.error('Error fetching personnel workload:', error);
@@ -150,7 +150,7 @@ function TicketsCreated() {
   const confirmDeleteTicket = async () => {
     if (ticketToDelete) {
       try {
-        const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToDelete.id}`, {
+        const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
           method: 'DELETE'
         });
         if (response.ok) {
@@ -168,7 +168,7 @@ function TicketsCreated() {
 
   const handleStaffFeedbackSubmit = async () => {
     try {
-      const response = await axios.post(`https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/staff-feedback`, {
+      const response = await axios.post(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${selectedTicket.id}/staff-feedback`, {
         feedback: staffFeedback,
         status: 'Resolved'
       });
@@ -194,7 +194,7 @@ function TicketsCreated() {
     }
     
     try {
-      const response = await axios.post('https://generalservicescontroller.onrender.com/api/tickets/assign', null, {
+      const response = await axios.post('https://generalservicescontroller-sq7n.onrender.com/api/tickets/assign', null, {
         params: {
           ticketId: selectedTicket.id,
           personnelUsernames: selectedPersonnel,  // This should already be an array

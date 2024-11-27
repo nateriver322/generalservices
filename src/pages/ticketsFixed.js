@@ -38,7 +38,7 @@ export default function TicketsDone() {
   const fetchDoneTickets = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/api/tickets');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/api/tickets');
       if (response.status === 200) {
         const doneTix = response.data.filter(ticket => ticket.status === 'Resolved');
         setDoneTickets(doneTix);
@@ -67,7 +67,7 @@ export default function TicketsDone() {
   const confirmDeleteTicket = async () => {
     if (ticketToDelete) {
       try {
-        const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToDelete.id}`, {
+        const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
           method: 'DELETE',
         });
         if (response.ok) {
@@ -91,7 +91,7 @@ export default function TicketsDone() {
     }
 
     try {
-      const response = await axios.post(`https://generalservicescontroller.onrender.com/api/tickets/${selectedTicket.id}/user-feedback`, { feedback });
+      const response = await axios.post(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${selectedTicket.id}/user-feedback`, { feedback });
       setFeedbackModalOpen(false);
       setFeedbackSuccessSnackbarOpen(true);
       fetchDoneTickets();
@@ -129,7 +129,7 @@ export default function TicketsDone() {
   const handleArchive = async (ticket) => {
     try {
       const response = await axios.post(
-        `https://generalservicescontroller.onrender.com/api/tickets/${ticket.id}/archive`
+        `https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticket.id}/archive`
       );
       if (response.status === 200) {
         setDoneTickets(doneTickets.filter(t => t.id !== ticket.id));

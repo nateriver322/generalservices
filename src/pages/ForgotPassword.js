@@ -21,7 +21,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await axios.post('https://generalservicescontroller.onrender.com/api/forgot_password', { email });
+      const response = await axios.post('https://generalservicescontroller-sq7n.onrender.com/api/forgot_password', { email });
       setMessage(response.data.message);
     } catch (error) {
       setError('An error occurred. Please try again.');

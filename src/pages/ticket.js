@@ -60,7 +60,7 @@ formData.append("datetime", currentDateTime);
 
     try {
       const response = await fetch(
-        "https://generalservicescontroller.onrender.com/api/tickets",
+        "https://generalservicescontroller-sq7n.onrender.com/api/tickets",
         {
           method: "POST",
           body: formData,

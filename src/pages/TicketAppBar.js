@@ -46,7 +46,7 @@ function TicketAppBar() {
 
   const fetchNotifications = async (username) => {
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/notifications/${username}`);
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/notifications/${username}`);
       if (response.ok) {
         const data = await response.json();
         setNotifications(data);
@@ -60,7 +60,7 @@ function TicketAppBar() {
 
   const markNotificationAsRead = async (notificationId) => {
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/notifications/${notificationId}`, {
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/notifications/${notificationId}`, {
         method: 'PUT',
       });
       if (response.ok) {

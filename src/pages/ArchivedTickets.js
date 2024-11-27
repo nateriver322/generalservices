@@ -35,7 +35,7 @@ export default function ArchivedTickets() {
   const fetchArchivedTickets = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/api/tickets/archived');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/api/tickets/archived');
       if (response.status === 200) {
         setArchivedTickets(response.data);
       } else {
@@ -67,7 +67,7 @@ export default function ArchivedTickets() {
     if (ticketToUnarchive) {
       try {
         const response = await axios.post(
-          `https://generalservicescontroller.onrender.com/api/tickets/${ticketToUnarchive.id}/unarchive`
+          `https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToUnarchive.id}/unarchive`
         );
         if (response.status === 200) {
           setArchivedTickets(archivedTickets.filter(ticket => ticket.id !== ticketToUnarchive.id));

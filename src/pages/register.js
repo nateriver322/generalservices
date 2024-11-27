@@ -96,7 +96,7 @@ const Register = () => {
         }
     
         try {
-            const response = await fetch('https://generalservicescontroller.onrender.com/user/add', {
+            const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/user/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ const Register = () => {
 
     const isEmailAlreadyRegistered = async (email) => {
         try {
-            const response = await fetch(`https://generalservicescontroller.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
+            const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
             const result = await response.json();
             return result.exists;
         } catch (error) {

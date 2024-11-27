@@ -87,7 +87,7 @@ const RegistrationModal = ({ onClose, onRegister }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://generalservicescontroller.onrender.com/user/register', formData);
+      const response = await axios.post('https://generalservicescontroller-sq7n.onrender.com/user/register', formData);
       if (response.status === 201) {
         console.log("User registered successfully");
         setIsSavedModalOpen(true);
@@ -350,7 +350,7 @@ const EditAccountModal = ({ account, onClose, onSave }) => {
     try {
       console.log("Sending data to backend:", formData);
       const response = await axios.put(
-        `https://generalservicescontroller.onrender.com/user/${account.id}`,
+        `https://generalservicescontroller-sq7n.onrender.com/user/${account.id}`,
         formData
       );
       if (response.status === 200) {
@@ -571,7 +571,7 @@ const AccountManagement = () => {
     const fetchAccounts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+        const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/user/accounts');
         setAccounts(response.data);
       } catch (error) {
         console.error('Error fetching accounts:', error);
@@ -618,7 +618,7 @@ const AccountManagement = () => {
     const handleConfirmDelete = async () => {
       setDeleteLoading(true);
       try {
-        const response = await axios.delete(`https://generalservicescontroller.onrender.com/user/${currentAccount}`);
+        const response = await axios.delete(`https://generalservicescontroller-sq7n.onrender.com/user/${currentAccount}`);
         if (response.status === 200) {
           setAccounts(accounts.filter(account => account.id !== currentAccount));
           setDeleteSuccessModalOpen(true);
@@ -667,7 +667,7 @@ const AccountManagement = () => {
     setIsSearching(true);
     setSearchError('');
     try {
-      const response = await axios.get(`https://generalservicescontroller.onrender.com/user/search?query=${searchUsername}`);
+      const response = await axios.get(`https://generalservicescontroller-sq7n.onrender.com/user/search?query=${searchUsername}`);
       if (response.data.length === 0) {
         setSearchError('Account does not exist.');
         setAccounts([]);
@@ -685,7 +685,7 @@ const AccountManagement = () => {
   const fetchAccounts = async () => {
     try {
       // Changed from /user to /user/accounts to match your working endpoint
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error("Error fetching accounts:", error);
@@ -710,7 +710,7 @@ const AccountManagement = () => {
     
     try {
       const response = await axios.put(
-        `https://generalservicescontroller.onrender.com/user/${updatedAccount.id}`,
+        `https://generalservicescontroller-sq7n.onrender.com/user/${updatedAccount.id}`,
         updatedAccount
       );
       if (response.status === 200) {
@@ -736,7 +736,7 @@ const AccountManagement = () => {
 
   const handleRegisterNewAccount = async () => {
     try {
-      const response = await axios.get('https://generalservicescontroller.onrender.com/user/accounts');
+      const response = await axios.get('https://generalservicescontroller-sq7n.onrender.com/user/accounts');
       setAccounts(response.data);
     } catch (error) {
       console.error('Error fetching accounts:', error);

@@ -111,7 +111,7 @@ const MyTickets = () => {
   const fetchTickets = useCallback(async (username) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/user/${username}`);
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/user/${username}`);
       if (response.ok) {
         const data = await response.json();
         setTickets(data);
@@ -130,7 +130,7 @@ const MyTickets = () => {
     }
   
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketId}/user-feedback`, {
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketId}/user-feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feedback: userFeedback }),
@@ -160,7 +160,7 @@ const MyTickets = () => {
   const confirmDeleteTicket = async () => {
     if (ticketToDelete) {
       try {
-        const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/${ticketToDelete.id}`, {
+        const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
           method: 'DELETE'
         });
         if (response.ok) {

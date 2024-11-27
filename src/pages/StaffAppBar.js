@@ -34,7 +34,7 @@ function StaffAppBar() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch('https://generalservicescontroller.onrender.com/api/notifications/staff');
+      const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/api/notifications/staff');
       if (response.ok) {
         const data = await response.json();
         setNotifications(data);
@@ -48,7 +48,7 @@ function StaffAppBar() {
 
   const markNotificationAsRead = async (notificationId) => {
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/notifications/${notificationId}`, {
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/notifications/${notificationId}`, {
         method: 'PUT',
       });
       if (response.ok) {
