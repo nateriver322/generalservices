@@ -241,6 +241,7 @@ const MyTickets = () => {
               <Box sx={{ mt: 2 }}>
                 <Typography><strong>Description:</strong> {selectedTicket.description}</Typography>
                 <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
+                <Typography><strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded}</Typography>
                 <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
                 <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
                 <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
