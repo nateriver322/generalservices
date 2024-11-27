@@ -23,7 +23,7 @@ const PersonnelLogin = () => {
             navigate('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            setError(err.message || 'User is not authorized as personnel');
+            setError(err.message || 'Invalid personnel ID');
         } finally {
             setLoading(false);
         }
