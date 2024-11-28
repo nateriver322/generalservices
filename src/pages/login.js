@@ -84,9 +84,11 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                position: 'relative', 
-                height: '100vh',
-                width: '100vw',
+                position: 'relative',
+                minHeight: '100vh',
+                width: '100%',
+                margin: '0 auto',
+                overflow: 'hidden',
             }}
         >
            
@@ -106,14 +108,14 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    maxWidth: '400px',
+                    maxWidth: { xs: '95%', sm: '400px' },
                     width: '100%',
                     bgcolor: 'white',
-                    p: 4,
+                    p: { xs: 2, sm: 4 },
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    mt: 4
+                    mt: 4,
                 }}
             >
                 <Box 
