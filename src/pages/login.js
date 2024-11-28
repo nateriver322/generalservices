@@ -84,41 +84,51 @@ const Login = React.memo(() => {
     return (
         <div
             style={{
-                position: 'relative',
-                minHeight: '100vh',
-                width: '100%',
-                margin: '0 auto',
-                backgroundColor: '#FFD700',
-                overflow: 'hidden',
+                position: 'relative', 
+                height: '100vh',
+                width: '100vw',
             }}
         >
+           
+              
             <LoginResponsiveAppBar />
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '30px'
+                }}
+            >   
+            </Box>
             <Box
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    maxWidth: { xs: '95%', sm: '400px' },
+                    maxWidth: '400px',
                     width: '100%',
                     bgcolor: 'white',
-                    p: { xs: 2, sm: 4 },
+                    p: 4,
                     borderRadius: 2,
                     boxShadow: 3,
                     margin: '0 auto',
-                    mt: 4,
+                    mt: 4
                 }}
             >
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
+                <Box 
+                    display="flex" 
+                    flexDirection="row" 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    textAlign="center" 
                     mb={4}
                 >
                     <ConstructionIcon sx={{ fontSize: 60, mb: 2, mr: 2 }} />
                     <Typography variant="h4" component="h2" gutterBottom>
                         JobTrack
                     </Typography>
+                            
                 </Box>
                 <Typography variant="h5" component="h3" gutterBottom>
                     Log In
@@ -135,16 +145,28 @@ const Login = React.memo(() => {
                     margin="normal"
                     onChange={handleInputChange}
                     value={credentials.email}
+                    inputProps={{ minLength: 3, maxLength: 80 }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: 'black' },
-                            '&:hover fieldset': { borderColor: '#922B21' },
-                            '&.Mui-focused fieldset': { borderColor: '#800000' },
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
                         },
-                        '& .MuiInputLabel-root': { color: 'black' },
-                        '& .MuiInputLabel-root.Mui-focused': { color: 'black' },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
                     }}
                 />
+
                 <TextField
                     label="Password"
                     type={showPassword ? 'text' : 'password'}
@@ -154,6 +176,7 @@ const Login = React.memo(() => {
                     margin="normal"
                     onChange={handleInputChange}
                     value={credentials.password}
+                    inputProps={{ minLength: 8, maxLength: 80 }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -165,40 +188,110 @@ const Login = React.memo(() => {
                     }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: 'black' },
-                            '&:hover fieldset': { borderColor: '#922B21' },
-                            '&.Mui-focused fieldset': { borderColor: '#800000' },
+                            '& fieldset': {
+                                borderColor: 'black',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#922B21',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#800000',
+                            },
                         },
-                        '& .MuiInputLabel-root': { color: 'black' },
-                        '& .MuiInputLabel-root.Mui-focused': { color: 'black' },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'black',
+                        },
                     }}
                 />
 
-                <Box sx={{ mt: 2 }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{
-                            bgcolor: '#800000',
-                            '&:hover': { bgcolor: '#A00000' },
-                            color: 'white',
-                            mb: 2,
-                        }}
-                        fullWidth
-                    >
-                        Log In
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="text"
-                        fullWidth
-                        onClick={handleForgotPasswordClick}
-                        sx={{ color: '#800000', mb: 1 }}
-                    >
-                        Forgot Password?
-                    </Button>
-                </Box>
+<Box sx={{ mt: 2 }}>
+    <Button
+        type="submit"
+        variant="contained"
+        sx={{
+            bgcolor: '#800000',
+            '&:hover': {
+                bgcolor: '#A00000',
+            },
+            color: 'white',
+            mb: 2
+        }}
+        fullWidth
+    >
+        Log In
+    </Button>
+
+    {/* Forgot Password Button */}
+    <Button
+        type="button"
+        variant="text"
+        fullWidth
+        onClick={handleForgotPasswordClick}
+        sx={{ color: '#800000', mb: 1 }}  // Reduced margin-bottom
+    >
+        Forgot Password?
+    </Button>
+
+    <Button
+        type="button"
+        variant="outlined"
+        fullWidth
+        onClick={handleSignUpClick}
+        sx={{
+            borderColor: '#800000',
+            color: '#800000',
+            mb: 2,  // This margin is kept for spacing between the buttons
+        }}
+    >
+        Sign Up
+    </Button>
+
+    <Button
+        type="button"
+        variant="outlined"
+        fullWidth
+        onClick={handleMicrosoftLogin}
+        startIcon={<FaMicrosoft size={20} style={{ marginRight: 10 }} />}
+        sx={{
+            borderColor: '#800000',
+            color: '#800000',
+            mb: 2,
+        }}
+    >
+        Login with Microsoft
+    </Button>
+    
+    <Button
+        type="button"
+        variant="outlined"
+        fullWidth
+        onClick={handleLogInAsPersonnelClick}
+        sx={{ 
+            borderColor: '#800000',
+            color: '#800000' }} 
+    >
+        Log In as Personnel
+    </Button>
+</Box>
             </Box>
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+                }}
+                open={loading}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                    <CircularProgress color="info" />
+                    <Typography variant="h6" component="div">
+                        Logging in...
+                    </Typography>
+                </Box>
+            </Backdrop>
         </div>
     );
 });
