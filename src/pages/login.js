@@ -85,8 +85,8 @@ const Login = React.memo(() => {
         <div
             style={{
                 position: 'relative', 
-                height: 'auto',
-                width: '100%',
+                height: '100vh',
+                width: '100vw',
             }}
         >
            
@@ -106,7 +106,7 @@ const Login = React.memo(() => {
                 component="form"
                 onSubmit={handleLoginSubmit}
                 sx={{
-                    maxWidth: { xs: '100%', sm: '400px' },
+                    maxWidth: '400px',
                     width: '100%',
                     bgcolor: 'white',
                     p: 4,
