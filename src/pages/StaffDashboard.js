@@ -499,7 +499,7 @@ function TicketsCreated() {
                       component="span"
                       sx={{
                         fontWeight: 'bold',
-                        color: 'white',
+                        color: 'black',
                         backgroundColor: '#FFD700',
                         padding: '2px 6px',
                         borderRadius: '12px',
