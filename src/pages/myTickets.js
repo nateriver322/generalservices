@@ -245,6 +245,8 @@ const MyTickets = () => {
                 <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
                 <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
                 <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
+                <Typography><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
+                <Typography><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'None'}</Typography>
                 {selectedTicket.imageBase64 && (
                   <img
                     src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
