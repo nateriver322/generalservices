@@ -228,10 +228,11 @@ function PersonnelTickets() {
             {/* Existing Personnel Feedbacks Section */}
       {selectedTicket.personnelFeedbacks && Object.keys(selectedTicket.personnelFeedbacks).length > 0 && (
         <>
-          {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
-            <Typography key={personnel} sx={{ mb: 1 }}>
-               <Typography variant="subtitle1"><strong>Task update:</strong></Typography> {feedback}
-            </Typography>
+           <Typography variant="subtitle1" sx={{ mb: 1 }}><strong>Personnel Feedback:</strong></Typography>
+              {Object.entries(selectedTicket.personnelFeedbacks).map(([personnel, feedback]) => (
+                <Typography key={personnel} sx={{ mb: 1 }}>
+                  <strong>{personnel}:</strong> {feedback}
+                </Typography>
           ))}
         </>
       )}
