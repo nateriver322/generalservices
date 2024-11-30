@@ -20,6 +20,7 @@ function TicketForm() {
   const [requestType, setRequestType] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [othersWorkType, setOthersWorkType] = useState('');
 
   useEffect(() => {
     if (!username) {
@@ -50,7 +51,7 @@ function TicketForm() {
       return;
     }
 
-    if (selectedWorkTypes.includes("Others") && !description.trim()) {
+    if (selectedWorkTypes.includes("Others") && !othersWorkType.trim()) {
       alert("Please specify the custom work type for 'Others'.");
       return;
     }
@@ -62,7 +63,11 @@ const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${
 formData.append("datetime", currentDateTime);
     formData.append("username", sessionStorage.getItem("username"));
 
-    formData.append("workType", selectedWorkTypes.join(","));
+
+    const workTypesToSubmit = selectedWorkTypes.map(type => 
+      type === "Others" ? othersWorkType : type
+    );
+    formData.append("workType", workTypesToSubmit.join(","));
     formData.append("latestDateNeeded", latestDateNeeded);
 
 
