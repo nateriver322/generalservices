@@ -58,7 +58,7 @@ formData.append("datetime", currentDateTime);
     formData.append("username", sessionStorage.getItem("username"));
 
     formData.append("workType", selectedWorkTypes.join(","));
-    formData.append("latestDateNeeded", latestDateNeeded);
+    formData.append("latestDateNeeded", latestDateNeeded.trim());
 
 
     try {
