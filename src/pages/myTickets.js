@@ -233,58 +233,33 @@ const MyTickets = () => {
            )}
         </Box>
 
-     {/* Details Dialog */}
-<Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
-  <DialogTitle sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Ticket Details</DialogTitle>
-  <DialogContent>
-    {selectedTicket && (
-      <Box sx={{ mt: 2, p: 2, backgroundColor: '#fafafa', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Overview</Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Description:</strong> {selectedTicket.description || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Priority:</strong> {selectedTicket.priority || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Request Type:</strong> {selectedTicket.requestType || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Work Type:</strong> {selectedTicket.workType || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Location:</strong> {selectedTicket.location || 'N/A'}
-        </Typography>
-        <Typography sx={{ mb: 1 }}>
-          <strong>Date:</strong> {selectedTicket.datetime || 'N/A'}
-        </Typography>
-
-        {selectedTicket.imageBase64 && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>Attachment</Typography>
-            <img
-              src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-              alt="Ticket"
-              style={{
-                width: '100%',
-                borderRadius: '8px',
-                border: '1px solid #ddd',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              }}
-            />
-          </Box>
-        )}
-      </Box>
-    )}
-  </DialogContent>
-  <DialogActions sx={{ backgroundColor: '#f5f5f5', borderTop: '1px solid #ddd' }}>
-    <Button variant="contained" color="primary" onClick={() => setSelectedTicket(null)}>Close</Button>
-  </DialogActions>
-</Dialog>
-
+        {/* Details Dialog */}
+        <Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
+          <DialogTitle>Ticket Details</DialogTitle>
+          <DialogContent>
+            {selectedTicket && (
+              <Box sx={{ mt: 2 }}>
+                <Typography><strong>Description:</strong> {selectedTicket.description}</Typography>
+                <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
+                <Typography><strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded}</Typography>
+                <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
+                <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
+                <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
+                <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
+                {selectedTicket.imageBase64 && (
+                  <img
+                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
+                    alt="Ticket"
+                    style={{ width: '100%', marginTop: '16px' }}
+                  />
+                )}
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setSelectedTicket(null)}>Close</Button>
+          </DialogActions>
+        </Dialog>
 
         {/* Delete/Cancel Dialog */}
         <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
