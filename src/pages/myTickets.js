@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TicketAppBar from './TicketAppBar';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import CircularProgress from '@mui/material/CircularProgress';
+import ViewDetailsModal from './ViewDetailsModal';
 import {
     Box,
     Typography,
@@ -233,33 +234,11 @@ const MyTickets = () => {
            )}
         </Box>
 
-        {/* Details Dialog */}
-        <Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
-          <DialogTitle>Ticket Details</DialogTitle>
-          <DialogContent>
-            {selectedTicket && (
-              <Box sx={{ mt: 2 }}>
-                <Typography><strong>Description:</strong> {selectedTicket.description}</Typography>
-                <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-                <Typography><strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded}</Typography>
-                <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
-                <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-                <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
-                <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
-                {selectedTicket.imageBase64 && (
-                  <img
-                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-                    alt="Ticket"
-                    style={{ width: '100%', marginTop: '16px' }}
-                  />
-                )}
-              </Box>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setSelectedTicket(null)}>Close</Button>
-          </DialogActions>
-        </Dialog>
+        <ViewDetailsModal
+  open={detailsModalOpen}
+  onClose={closeDetailsModal}
+  ticket={selectedTicket}
+/>
 
         {/* Delete/Cancel Dialog */}
         <Dialog open={Boolean(ticketToDelete)} onClose={() => setTicketToDelete(null)}>
