@@ -500,7 +500,7 @@ function TicketsCreated() {
                       sx={{
                         fontWeight: 'bold',
                         color: 'white',
-                        backgroundColor: 'blue',
+                        backgroundColor: '#FFD700',
                         padding: '2px 6px',
                         borderRadius: '12px',
                         fontSize: '0.8rem',
