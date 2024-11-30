@@ -35,19 +35,12 @@ const Register = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         
-        if (name === 'contactNumber' || name === 'personnelId') {
-            const onlyNumbers = value.replace(/\D/g, '');
-            const limitedToElevenDigits = onlyNumbers.slice(0, 11);
-            setUserData({
-                ...userData,
-                [name]: limitedToElevenDigits
-            });
-        } else {
+     
             setUserData({
                 ...userData,
                 [name]: value
             });
-        }
+        
 
         if (name === 'email' && emailError) {
             setEmailError('');
@@ -66,11 +59,7 @@ const Register = () => {
         const newErrors = {};
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        // Personnel ID validation
-        const personnelIdPattern = /^\d{3,11}$/; // Allows between 3 and 11 digits
-        if (!personnelIdPattern.test(userData.personnelId)) {
-            newErrors.personnelId = "Personnel ID must be between 3 and 11 digits.";
-        }
+      
         if (!emailPattern.test(userData.email)) {
             newErrors.email = "Please enter a valid email address.";
         } else {
@@ -107,7 +96,7 @@ const Register = () => {
         }
     
         try {
-            const response = await fetch('https://generalservicescontroller.onrender.com/user/add', {
+            const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/user/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -133,7 +122,7 @@ const Register = () => {
 
     const isEmailAlreadyRegistered = async (email) => {
         try {
-            const response = await fetch(`https://generalservicescontroller.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
+            const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/user/checkEmail?email=${encodeURIComponent(email)}`);
             const result = await response.json();
             return result.exists;
         } catch (error) {
@@ -184,13 +173,6 @@ const Register = () => {
     required
     margin="normal"
     onChange={handleInputChange}
-    error={!!errors.personnelId}
-    helperText={errors.personnelId}
-    inputProps={{
-        maxLength: 11,
-        inputMode: 'numeric',
-        pattern: '[0-9]{3,11}'
-    }}
     sx={{
         '& .MuiOutlinedInput-root': {
             '& fieldset': {

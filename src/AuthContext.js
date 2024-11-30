@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       const userRole = sessionStorage.getItem('userRole');
       if (username) {
         try {
-          const response = await fetch(`https://generalservicescontroller.onrender.com/user/${username}`);
+          const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/user/${username}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('https://generalservicescontroller.onrender.com/user/login', {
+      const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }) => {
       const token = tokenResponse.accessToken;
 
       // Send the token to the backend for authentication
-      const apiResponse = await fetch('https://generalservicescontroller.onrender.com/user/microsoft-login', {
+      const apiResponse = await fetch('https://generalservicescontroller-sq7n.onrender.com/user/microsoft-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ export const AuthProvider = ({ children }) => {
 
   const personnelLogin = async (personnelId) => {
     try {
-      const response = await fetch('https://generalservicescontroller.onrender.com/user/personnel-login', {
+      const response = await fetch('https://generalservicescontroller-sq7n.onrender.com/user/personnel-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

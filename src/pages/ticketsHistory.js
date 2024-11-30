@@ -35,7 +35,7 @@ function TicketsHistory() {
   const fetchTickets = async (username) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://generalservicescontroller.onrender.com/api/tickets/personnel/${username}`);
+      const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/personnel/${username}`);
       if (response.ok) {
         const data = await response.json();
         

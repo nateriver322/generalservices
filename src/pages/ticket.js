@@ -16,6 +16,7 @@ function TicketForm() {
 
   // New state for form fields
   const [priority, setPriority] = useState("");
+  const [latestDateNeeded, setLatestDateNeeded] = useState("");
   const [requestType, setRequestType] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -57,10 +58,12 @@ formData.append("datetime", currentDateTime);
     formData.append("username", sessionStorage.getItem("username"));
 
     formData.append("workType", selectedWorkTypes.join(","));
+    formData.append("latestDateNeeded", latestDateNeeded);
+
 
     try {
       const response = await fetch(
-        "https://generalservicescontroller.onrender.com/api/tickets",
+        "https://generalservicescontroller-sq7n.onrender.com/api/tickets",
         {
           method: "POST",
           body: formData,
@@ -196,6 +199,38 @@ formData.append("datetime", currentDateTime);
           <option value="High">High</option>
           <option value="Low">Low</option>
         </TextField>
+
+        {/* New Date Field */}
+  <TextField
+    label="Latest Date Needed"
+    name="latestDateNeeded"
+    type="date"
+    required
+    fullWidth
+    margin="normal"
+    InputLabelProps={{ shrink: true }}
+    value={latestDateNeeded}
+    onChange={(e) => setLatestDateNeeded(e.target.value)}
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "black",
+        },
+        "&:hover fieldset": {
+          borderColor: "#922B21",
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: "#800000",
+        },
+      },
+      "& .MuiInputLabel-root": {
+        color: "black",
+      },
+      "& .MuiInputLabel-root.Mui-focused": {
+        color: "black",
+      },
+    }}
+  />
 
         {/* Custom Dropdown for Work Type */}
         <Box
