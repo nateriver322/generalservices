@@ -50,6 +50,11 @@ function TicketForm() {
       return;
     }
 
+    if (selectedWorkTypes.includes("Others") && !description.trim()) {
+      alert("Please specify the custom work type for 'Others'.");
+      return;
+    }
+
     const formData = new FormData(event.target);
     const now = new Date();
 const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -312,6 +317,45 @@ formData.append("datetime", currentDateTime);
                     {workType}
                   </label>
                 ))}
+                 <label style={{ marginBottom: "8px" }}>
+          <input
+            type="checkbox"
+            value="Others"
+            checked={selectedWorkTypes.includes("Others")}
+            onChange={handleWorkTypeChange}
+            style={{ marginRight: "8px" }}
+          />
+          Others
+        </label>
+        {/* Text field for "Others" */}
+        {selectedWorkTypes.includes("Others") && (
+          <TextField
+            label="Please specify"
+            fullWidth
+            margin="normal"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "black",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#922B21",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#800000",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "black",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "black",
+              },
+            }}
+          />
+        )}
               </Box>
             </Box>
           )}
