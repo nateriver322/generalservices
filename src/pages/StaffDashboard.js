@@ -130,14 +130,7 @@ function TicketsCreated() {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
     const workTypes = ticket.workType.split(',');
-    if (workTypes.includes("Others")) {
-      setFilteredPersonnel([]); // No personnel can be assigned if work type is "Others"
-    } else {
-      setFilteredPersonnel(
-        personnelList.filter(personnel => workTypes.includes(personnel.subrole))
-      );
-    }
-  
+    setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
     setSelectedPersonnel([]);
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
@@ -195,21 +188,10 @@ function TicketsCreated() {
 
   const handleAssignPersonnel = async () => {
     if (!selectedTicket || !selectedTicket.id) {
+      console.error('No ticket selected or invalid ticket ID');
       alert('Please select a valid ticket before assigning personnel');
       return;
     }
-
-    const workTypes = selectedTicket.workType.split(',');
-    if (workTypes.includes("Others")) {
-      alert("Personnel assignment is not allowed for tickets with 'Others' as the work type.");
-      return;
-    }
-
-    if (selectedPersonnel.length === 0) {
-      alert("Please select at least one personnel to assign.");
-      return;
-    }
-  
     
     try {
       const response = await axios.post('https://generalservicescontroller-sq7n.onrender.com/api/tickets/assign', null, {
