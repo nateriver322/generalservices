@@ -474,29 +474,46 @@ function TicketsCreated() {
               >
                 {filteredPersonnel.map((personnel) => (
           <MenuItem key={personnel.id} value={personnel.username}>
-            <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
-            <ListItemText 
-              primary={
-                <Box display="flex" alignItems="center">
-                  <Typography>{personnel.username}</Typography>
+          <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
+          <ListItemText 
+            primary={
+              <Box display="flex" alignItems="center">
+                <Typography>{personnel.username}</Typography>
+                <Box display="flex" marginLeft={1}>
                   <Typography
                     component="span"
                     sx={{
-                      marginLeft: 1,
                       fontWeight: 'bold',
                       color: 'white',
                       backgroundColor: 'maroon',
                       padding: '2px 6px',
                       borderRadius: '12px',
-                      fontSize: '0.80rem'
+                      fontSize: '0.8rem',
+                      marginRight: 0.5, // Add spacing between badges
                     }}
                   >
                     {personnelWorkload[personnel.username] || 0} tickets assigned
                   </Typography>
+                  {personnel.subrole && (
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: 'white',
+                        backgroundColor: 'blue',
+                        padding: '2px 6px',
+                        borderRadius: '12px',
+                        fontSize: '0.8rem',
+                      }}
+                    >
+                      {personnel.subrole}
+                    </Typography>
+                  )}
                 </Box>
-              }
-            />
-          </MenuItem>
+              </Box>
+            }
+          />
+        </MenuItem>
         ))}
               </Select>
             </FormControl>
