@@ -13,6 +13,7 @@ function TicketForm() {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const formRef = useRef(null);
   const username = sessionStorage.getItem("username");
+  const [otherWorkType, setOtherWorkType] = useState(""); // State for custom work type
 
   // New state for form fields
   const [priority, setPriority] = useState("");
@@ -50,6 +51,11 @@ function TicketForm() {
       return;
     }
 
+    const selectedWorkTypesWithCustom =
+    selectedWorkTypes.includes("Others") && otherWorkType
+      ? [...selectedWorkTypes.filter((type) => type !== "Others"), otherWorkType]
+      : selectedWorkTypes;
+
     const formData = new FormData(event.target);
     const now = new Date();
 const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -57,8 +63,11 @@ const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${
 formData.append("datetime", currentDateTime);
     formData.append("username", sessionStorage.getItem("username"));
 
-    formData.append("workType", selectedWorkTypes.join(","));
+    formData.append("workType", selectedWorkTypesWithCustom.join(","));
     formData.append("latestDateNeeded", latestDateNeeded);
+
+   
+    
 
 
     try {
@@ -99,12 +108,22 @@ formData.append("datetime", currentDateTime);
 
   const handleWorkTypeChange = (e) => {
     const value = e.target.value;
-    // Toggle work type selection
-    if (selectedWorkTypes.includes(value)) {
-      setSelectedWorkTypes(selectedWorkTypes.filter((item) => item !== value));
+    if (value === "Others") {
+      if (!selectedWorkTypes.includes(value)) {
+        setSelectedWorkTypes([...selectedWorkTypes, value]);
+      }
     } else {
-      setSelectedWorkTypes([...selectedWorkTypes, value]);
+      // Toggle selection for other work types
+      if (selectedWorkTypes.includes(value)) {
+        setSelectedWorkTypes(selectedWorkTypes.filter((item) => item !== value));
+      } else {
+        setSelectedWorkTypes([...selectedWorkTypes, value]);
+      }
     }
+  };
+  
+  const handleOtherWorkTypeChange = (e) => {
+    setOtherWorkType(e.target.value);
   };
 
   useEffect(() => {
@@ -120,6 +139,8 @@ formData.append("datetime", currentDateTime);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  
 
   return (
     <>
@@ -234,88 +255,118 @@ formData.append("datetime", currentDateTime);
 
         {/* Custom Dropdown for Work Type */}
         <Box
-          sx={{ position: "relative", marginBottom: "1px", marginTop: "10px" }}
-          ref={dropdownRef}
-        >
-          <Button
-            variant="outlined"
-            onClick={() => setShowWorkTypeDropdown(!showWorkTypeDropdown)}
+  sx={{ position: "relative", marginBottom: "1px", marginTop: "10px" }}
+  ref={dropdownRef}
+>
+  <Button
+    variant="outlined"
+    onClick={() => setShowWorkTypeDropdown(!showWorkTypeDropdown)}
+    fullWidth
+    sx={{
+      borderColor: "#000000",
+      color: "#000000",
+      "&:hover": {
+        borderColor: "#922B21",
+      },
+      height: "56px",
+      fontSize: "15px",
+      textTransform: "none",
+      textAlign: "left",
+      display: "flex",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      fontWeight: "bold",
+    }}
+  >
+    {selectedWorkTypes.length > 0
+      ? selectedWorkTypes.join(", ")
+      : "Select Work Type *"}
+  </Button>
+  {showWorkTypeDropdown && (
+    <Box
+      sx={{
+        position: "absolute",
+        zIndex: 10,
+        width: "100%",
+        bgcolor: "white",
+        border: "1px solid #ddd",
+        borderRadius: "4px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        mt: 1,
+        maxHeight: "200px",
+        overflowY: "auto",
+      }}
+    >
+      <Typography
+        variant="h6"
+        component="label"
+        sx={{
+          color: "#000000",
+          marginBottom: "8px",
+          fontWeight: "bold",
+          p: 1,
+        }}
+      >
+        Scope of Work
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          p: 1,
+        }}
+      >
+        {[
+          "Plumbing",
+          "Carpentry/Masonry/Steel Works",
+          "Electrical",
+          "Electro-Mechanical",
+          "Others", // Added "Others" option
+        ].map((workType) => (
+          <label key={workType} style={{ marginBottom: "8px" }}>
+            <input
+              type="checkbox"
+              value={workType}
+              checked={selectedWorkTypes.includes(workType)}
+              onChange={handleWorkTypeChange}
+              style={{ marginRight: "8px" }}
+            />
+            {workType}
+          </label>
+        ))}
+        {selectedWorkTypes.includes("Others") && (
+          <TextField
+            label="Specify Other Work Type"
+            value={otherWorkType}
+            onChange={handleOtherWorkTypeChange}
             fullWidth
+            margin="normal"
             sx={{
-              borderColor: "#000000",
-              color: "#000000",
-              "&:hover": {
-                borderColor: "#922B21",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "black",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#922B21",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#800000",
+                },
               },
-              height: "56px", // Adjust to match other buttons' height
-              fontSize: "15px", // Adjust font size if needed
-              textTransform: "none", // Prevent text from being transformed to uppercase
-              textAlign: "left", // Align text to the left
-              display: "flex", // Use flexbox to align items
-              justifyContent: "flex-start", // Align content to the start (left)
-              alignItems: "center",
-              fontWeight: "bold", // Ensure vertical alignment
+              "& .MuiInputLabel-root": {
+                color: "black",
+                fontWeight: "bold",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "black",
+              },
             }}
-          >
-            {selectedWorkTypes.length > 0
-              ? selectedWorkTypes.join(", ")
-              : "Select Work Type *"}
-          </Button>
-          {showWorkTypeDropdown && (
-            <Box
-              sx={{
-                position: "absolute",
-                zIndex: 10,
-                width: "100%",
-                bgcolor: "white",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                mt: 1,
-                maxHeight: "200px",
-                overflowY: "auto",
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="label"
-                sx={{
-                  color: "#000000",
-                  marginBottom: "8px",
-                  fontWeight: "bold",
-                  p: 1,
-                }}
-              >
-                Scope of Work
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  p: 1,
-                }}
-              >
-                {[
-                  "Plumbing",
-                  "Carpentry/Masonry/Steel Works",
-                  "Electrical",
-                  "Electro-Mechanical",
-                ].map((workType) => (
-                  <label key={workType} style={{ marginBottom: "8px" }}>
-                    <input
-                      type="checkbox"
-                      value={workType}
-                      checked={selectedWorkTypes.includes(workType)}
-                      onChange={handleWorkTypeChange}
-                      style={{ marginRight: "8px" }}
-                    />
-                    {workType}
-                  </label>
-                ))}
-              </Box>
-            </Box>
-          )}
-        </Box>
+          />
+        )}
+      </Box>
+    </Box>
+  )}
+</Box>
 
         <TextField
           select
