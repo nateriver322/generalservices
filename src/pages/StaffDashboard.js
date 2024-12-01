@@ -132,18 +132,17 @@ function TicketsCreated() {
 
     // Get the work types from the ticket
     const workTypes = ticket.workType.split(',').map(type => type.trim());
-
-    // Check if "Others" work type is present
-    const isOthersWorkType = workTypes.includes("Others") || workTypes.some(type => type.startsWith("Others -"));
-
-    // Filter personnel based on the work types
+    console.log("Work Types:", workTypes);
+    
     const filteredPersonnel = isOthersWorkType
-        ? personnelList // Show all personnel if "Others" is present
-        : personnelList.filter(personnel =>
-            workTypes.some(type => 
-                personnel.subrole.split(',').map(s => s.trim()).includes(type)
-            )
-        );
+        ? personnelList
+        : personnelList.filter(personnel => {
+            const subroles = personnel.subrole.split(',').map(subrole => subrole.trim());
+            console.log("Checking Personnel:", personnel.name, "Subroles:", subroles);
+            return workTypes.some(type => subroles.includes(type));
+        });
+    
+    console.log("Filtered Personnel:", filteredPersonnel);
 
     // Set the filtered personnel list
     setFilteredPersonnel(filteredPersonnel);
