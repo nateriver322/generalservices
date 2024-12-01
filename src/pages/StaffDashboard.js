@@ -363,13 +363,15 @@ function TicketsCreated() {
                     </Select>
                   </FormControl>
 
-                  <Box sx={{ 
+                  <Box  sx={{ 
     maxHeight: '520px', 
     overflowY: 'auto', 
     border: '1.5px solid #800000', 
     borderRadius: '4px',
-    position: 'relative', // Add this to create a stacking context
-  }}>
+    '& .MuiTable-root': {
+      borderCollapse: 'separate',
+      borderSpacing: 0
+    } }}>
                     <Table sx={{ margin: 0, padding: 0, '& .MuiTableHead-root': {
       position: 'sticky',
       top: 0,
