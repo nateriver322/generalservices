@@ -129,22 +129,10 @@ function TicketsCreated() {
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
-  
     const workTypes = ticket.workType.split(',');
-  
-    // Filter personnel, including logic for "Others"
-    if (workTypes.includes('Others')) {
-      setFilteredPersonnel(personnelList); // Allow all personnel to show up for "Others"
-    } else {
-      setFilteredPersonnel(
-        personnelList.filter(personnel => 
-          workTypes.includes(personnel.subrole) || personnel.subrole === 'Others'
-        )
-      );
-    }
-  
+    setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
     setSelectedPersonnel([]);
-    fetchPersonnelWorkload(); // Fetch updated workload
+    fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
   const closeDetailsModal = () => {
     setDetailsModalOpen(false);
