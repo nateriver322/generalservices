@@ -129,7 +129,6 @@ function TicketsCreated() {
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
-<<<<<<< HEAD
   
     // Get the work types from the ticket
     const workTypes = ticket.workType.split(',');
@@ -154,10 +153,6 @@ function TicketsCreated() {
   
     // Set the filtered personnel list
     setFilteredPersonnel(filteredPersonnel);
-=======
-    const workTypes = ticket.workType.split(',');
-    setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
->>>>>>> parent of 51813cb (STAFF SIDE FIX WORKTYPE)
     setSelectedPersonnel([]);
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
