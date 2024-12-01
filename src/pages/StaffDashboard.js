@@ -53,7 +53,9 @@ function TicketsCreated() {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [personnelWorkload, setPersonnelWorkload] = useState({});
   const [loading, setLoading] = useState(true);
- 
+  const [selectedWorkType, setSelectedWorkType] = useState('');
+  const [otherWorkType, setOtherWorkType] = useState('');
+
     
   useEffect(() => {
     const username = sessionStorage.getItem('username');
@@ -199,6 +201,8 @@ function TicketsCreated() {
           ticketId: selectedTicket.id,
           personnelUsernames: selectedPersonnel,  // This should already be an array
           scheduledRepairDate: scheduledRepairDate,
+          workType: selectedWorkType, // Single work type
+          otherWorkType: selectedWorkType === 'Others' ? otherWorkType : null,
         },
         paramsSerializer: params => {
           return qs.stringify(params, {arrayFormat: 'repeat'})
@@ -472,7 +476,14 @@ function TicketsCreated() {
                 onChange={(e) => setSelectedPersonnel(e.target.value)}
                 renderValue={(selected) => selected.join(', ')}
               >
-                {filteredPersonnel.map((personnel) => (
+                {filteredPersonnel
+            .filter(personnel => 
+              // If ANY work type includes "Others", include personnel without subrole
+              selectedWorkType === "Others"  
+                ? true 
+                : personnel.subrole !== null && personnel.subrole !== undefined
+            )
+            .map((personnel) => (
           <MenuItem key={personnel.id} value={personnel.username}>
           <Checkbox checked={selectedPersonnel.indexOf(personnel.username) > -1} />
           <ListItemText 
