@@ -129,8 +129,17 @@ function TicketsCreated() {
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
+  
     const workTypes = ticket.workType.split(',');
-    setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
+    
+    if (workTypes.includes('Others')) {
+      // If "Others" is selected, include all personnel
+      setFilteredPersonnel(personnelList);
+    } else {
+      // Filter based on matching subroles
+      setFilteredPersonnel(personnelList.filter(personnel => workTypes.includes(personnel.subrole)));
+    }
+    
     setSelectedPersonnel([]);
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
