@@ -129,20 +129,20 @@ function TicketsCreated() {
   const handleAssignTicket = (ticket) => {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
-    
+  
     // Modified logic to handle "Others" work type
     const workTypes = ticket.workType.split(',');
-    
-    // If work type includes "Others" or a custom "Others" specification, show all personnel
+  
+    // Check if "Others" work type is present
     const isOthersWorkType = workTypes.some(type => 
       type.trim() === "Others" || type.trim().startsWith("Others -")
     );
   
     if (isOthersWorkType) {
-      // If it's an "Others" work type, show all personnel
+      // If "Others" is present, show all personnel
       setFilteredPersonnel(personnelList);
     } else {
-      // For specific work types, filter personnel as before
+      // For specific work types, filter personnel
       setFilteredPersonnel(personnelList.filter(personnel => 
         workTypes.some(type => personnel.subrole.trim() === type.trim())
       ));
@@ -151,6 +151,7 @@ function TicketsCreated() {
     setSelectedPersonnel([]);
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
   };
+  
   const closeDetailsModal = () => {
     setDetailsModalOpen(false);
     setSelectedTicket(null);
