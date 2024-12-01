@@ -134,7 +134,7 @@ function TicketsCreated() {
     const workTypes = ticket.workType.split(',');
   
     // Check if "Others" work type is present
-    const isOthersWorkType = workTypes.some(type => 
+    const isOthersWorkType = workTypes.some(type =>
       type.trim() === "Others" || type.trim().startsWith("Others -")
     );
   
@@ -146,8 +146,8 @@ function TicketsCreated() {
       filteredPersonnel = personnelList;
     } else {
       // For specific work types, filter personnel
-      filteredPersonnel = personnelList.filter(personnel => 
-        workTypes.some(type => personnel.subrole.trim() === type.trim())
+      filteredPersonnel = personnelList.filter(personnel =>
+        workTypes.every(type => personnel.subrole.trim() === type.trim())
       );
     }
   
