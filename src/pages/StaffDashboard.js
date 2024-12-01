@@ -374,22 +374,38 @@ function TicketsCreated() {
                     </Select>
                   </FormControl>
 
-                  <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%', overflowX: 'auto' }}>
+                  <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%' }}>
   {/* Table Header */}
-  <Table sx={{ display: 'flex', flexDirection: 'column' }}>
+  <Table>
   <TableHead>
-    <TableRow sx={{ display: 'flex', width: '100%' }}>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Reported By</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Date Created</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Personnel Assigned</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Scheduled Repair Date</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Actions</TableCell>
-    </TableRow>
-  </TableHead>
-</Table>
+      <TableRow>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Ticket Number
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Status
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Priority
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Reported By
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Date Created
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Personnel Assigned
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Scheduled Repair Date
+        </TableCell>
+        <TableCell sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+          Actions
+        </TableCell>
+      </TableRow>
+    </TableHead>
+    </Table>
 
     <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
     <Table>
