@@ -376,23 +376,23 @@ function TicketsCreated() {
 
                   <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%', overflowX: 'auto' }}>
   {/* Table Header */}
-  <Table sx={{ display: 'flex', flexDirection: 'column' }}>
+  <Table sx={{ width: '100%', tableLayout: 'fixed' }}>
   <TableHead>
     <TableRow sx={{ display: 'flex', width: '100%' }}>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Reported By</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Date Created</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Personnel Assigned</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Scheduled Repair Date</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Actions</TableCell>
+    <TableCell sx={{ width: '150px', textAlign: 'center' }}>Ticket Number</TableCell>
+        <TableCell sx={{ width: '150px', textAlign: 'center' }}>Status</TableCell>
+        <TableCell sx={{ width: '150px', textAlign: 'center' }}>Priority</TableCell>
+        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Reported By</TableCell>
+        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Date Created</TableCell>
+        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Personnel Assigned</TableCell>
+        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Scheduled Repair Date</TableCell>
+        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Actions</TableCell>
     </TableRow>
   </TableHead>
 </Table>
 
     <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
-    <Table>
+    <Table sx={{ width: '100%', tableLayout: 'fixed' }}>
                       <TableBody>
                         {sortedTickets.map((ticket, index) => (
                           <TableRow key={index}>
