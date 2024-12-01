@@ -376,43 +376,43 @@ function TicketsCreated() {
 
                   <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%', overflowX: 'auto' }}>
   {/* Table Header */}
-  <Table>
+  <Table sx={{ display: 'flex', flexDirection: 'column' }}>
   <TableHead>
-    <TableRow>
-      <TableCell sx={{ width: '10%', textAlign: 'center' }}>Ticket Number</TableCell>
-      <TableCell sx={{ width: '10%', textAlign: 'center' }}>Status</TableCell>
-      <TableCell sx={{ width: '10%', textAlign: 'center' }}>Priority</TableCell>
-      <TableCell sx={{ width: '15%', textAlign: 'center' }}>Reported By</TableCell>
-      <TableCell sx={{ width: '15%', textAlign: 'center' }}>Date Created</TableCell>
-      <TableCell sx={{ width: '15%', textAlign: 'center' }}>Personnel Assigned</TableCell>
-      <TableCell sx={{ width: '15%', textAlign: 'center' }}>Scheduled Repair Date</TableCell>
-      <TableCell sx={{ width: '10%', textAlign: 'center' }}>Actions</TableCell>
+    <TableRow sx={{ display: 'flex', width: '100%' }}>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Reported By</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Date Created</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Personnel Assigned</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Scheduled Repair Date</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Actions</TableCell>
     </TableRow>
   </TableHead>
-  </Table>
+</Table>
 
     <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
     <Table>
                       <TableBody>
                         {sortedTickets.map((ticket, index) => (
                           <TableRow key={index}>
-                            <TableCell sx={{ width: '10%', textAlign: 'center' }}>{ticket.id}</TableCell>
-                            <TableCell sx={{ width: '10%', textAlign: 'center', color: getStatusColor(ticket.status) }}>
+                            <TableCell>{ticket.id}</TableCell>
+                            <TableCell style={{ color: getStatusColor(ticket.status) }}>
                               {ticket.status}
                             </TableCell>
-                            <TableCell sx={{ width: '10%', textAlign: 'center' }}>{ticket.priority}</TableCell>
-                            <TableCell sx={{ width: '15%', textAlign: 'center' }}>{ticket.username}</TableCell>
-                            <TableCell sx={{ width: '15%', textAlign: 'center' }}>{ticket.datetime}</TableCell>
-                            <TableCell sx={{ width: '15%', textAlign: 'center' }}>{ticket.assignedPersonnel || 'None'}</TableCell>
-                            <TableCell sx={{ width: '15%', textAlign: 'center' }}>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
-                            <TableCell sx={{ width: '10%', textAlign: 'center' }}>
-                              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <TableCell>{ticket.priority}</TableCell>
+                            <TableCell>{ticket.username}</TableCell>
+                            <TableCell>{ticket.datetime}</TableCell>
+                            <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
+                            <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
                                   <Button
                                     onClick={() => handleAssignTicket(ticket)}
                                     variant="outlined"
                                     color="secondary"
-                                    sx={{ marginRight: 1, width: '100px', height: '40px' }}
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
                                   >
                                     Assign
                                   </Button>
@@ -422,7 +422,7 @@ function TicketsCreated() {
                                     onClick={() => handleAssessTicket(ticket)}
                                     variant="outlined"
                                     color="success"
-                                    sx={{ marginRight: 1, width: '100px', height: '40px' }}
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
                                   >
                                     Resolve
                                   </Button>
@@ -431,7 +431,7 @@ function TicketsCreated() {
                                   onClick={() => handleViewFeedback(ticket)} 
                                   variant="outlined" 
                                   color="info" 
-                                  sx={{ marginRight: 1, width: '100px', height: '40px' }}
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
                                 >
                                   View Feedback
                                 </Button>
@@ -439,7 +439,7 @@ function TicketsCreated() {
                                   onClick={() => handleViewTicket(ticket)}
                                   variant="outlined"
                                   color="warning"
-                                  sx={{ marginRight: 1, width: '100px', height: '40px' }}
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
                                 >
                                   View Details
                                 </Button>
@@ -447,7 +447,7 @@ function TicketsCreated() {
                                   onClick={() => setTicketToDelete(ticket)}
                                   variant="contained"
                                   color="error"
-                                  sx={{ width: '100px', height: '40px' }}
+                                  sx={{ width: '120px', height: '60px' }}
                                 >
                                   Terminate
                                 </Button>
