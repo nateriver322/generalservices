@@ -38,6 +38,7 @@ function TicketForm() {
     setDescription("");
     setSelectedWorkTypes([]);
     setFileLabel("No file chosen");
+    setOtherWorkType("");
     if (formRef.current) {
       formRef.current.reset();
     }
@@ -51,21 +52,21 @@ function TicketForm() {
       return;
     }
 
+    
     const selectedWorkTypesWithCustom =
-    selectedWorkTypes.includes("Others") && otherWorkType
-      ? [...selectedWorkTypes.filter((type) => type !== "Others"), otherWorkType]
-      : selectedWorkTypes;
+      selectedWorkTypes.includes("Others") && otherWorkType
+        ? [...selectedWorkTypes.filter((type) => type !== "Others"), otherWorkType]
+        : selectedWorkTypes;
 
-    const formData = new FormData(event.target);
-    const now = new Date();
-const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-formData.append("datetime", currentDateTime);
-    formData.append("username", sessionStorage.getItem("username"));
-
-    formData.append("workType", selectedWorkTypesWithCustom.join(","));
-    formData.append("latestDateNeeded", latestDateNeeded);
-
+        const formData = new FormData(event.target);
+        const now = new Date();
+        const currentDateTime = `${now.toLocaleString("default", { month: "short" })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    
+        formData.append("datetime", currentDateTime);
+        formData.append("username", sessionStorage.getItem("username"));
+        formData.append("workType", selectedWorkTypesWithCustom.join(","));
+        formData.append("latestDateNeeded", latestDateNeeded);
+    
    
     
 
@@ -132,14 +133,11 @@ formData.append("datetime", currentDateTime);
         setShowWorkTypeDropdown(false);
       }
     }
-    // Attach event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      // Cleanup event listener on component unmount
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
-
   
 
   return (
