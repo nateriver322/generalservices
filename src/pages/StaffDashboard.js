@@ -148,17 +148,18 @@ function TicketsCreated() {
                 ? personnel.subrole.split(',').map(subrole => subrole.trim())
                 : []; // Default to an empty array if subrole is null/undefined
             console.log("Checking Personnel:", personnel.name, "Subroles:", subroles);
-            return workTypes.some(type => subroles.includes(type));
+
+            // Check if subrole matches the workTypes or if subrole is null/empty
+            return subroles.some(type => workTypes.includes(type)) || !personnel.subrole;
         });
 
     console.log("Filtered Personnel:", filteredPersonnel);
 
     // Update state
     setFilteredPersonnel(filteredPersonnel);
-    setSelectedPersonnel([]);
+    setSelectedPersonnel([]); 
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
 };
-
 
 
 
