@@ -140,26 +140,32 @@ function TicketsCreated() {
     const isOthersWorkType = workTypes.includes("Others") || workTypes.some(type => type.startsWith("Others -"));
     console.log("Is 'Others' Work Type:", isOthersWorkType);
 
-    // Filter personnel based on work types
-    const filteredPersonnel = isOthersWorkType
-        ? personnelList
-        : personnelList.filter(personnel => {
-            const subroles = personnel.subrole
-                ? personnel.subrole.split(',').map(subrole => subrole.trim())
-                : []; // Default to an empty array if subrole is null/undefined
-            console.log("Checking Personnel:", personnel.name, "Subroles:", subroles);
+    // Filter personnel based on work types and "Others"
+    const filteredPersonnel = personnelList.filter(personnel => {
+        // If 'Others' is selected, include personnel with no subrole (null or empty)
+        if (isOthersWorkType) {
+            // Include personnel with no subrole (null or empty) or matching the work types
+            return !personnel.subrole || personnel.subrole.trim() === '';
+        }
 
-            // Check if subrole matches the workTypes or if subrole is null/empty
-            return subroles.some(type => workTypes.includes(type)) || !personnel.subrole;
-        });
+        // If 'Others' is not selected, filter by specific work type(s)
+        const subroles = personnel.subrole
+            ? personnel.subrole.split(',').map(subrole => subrole.trim())
+            : []; // Default to an empty array if subrole is null/undefined
+        console.log("Checking Personnel:", personnel.name, "Subroles:", subroles);
+
+        // Check if the personnel's subrole matches any of the selected work types
+        return workTypes.some(type => subroles.includes(type));
+    });
 
     console.log("Filtered Personnel:", filteredPersonnel);
 
     // Update state
     setFilteredPersonnel(filteredPersonnel);
-    setSelectedPersonnel([]); 
-    fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
+    setSelectedPersonnel([]);  // Reset selected personnel
+    fetchPersonnelWorkload();  // Fetch updated workload when opening the modal
 };
+
 
 
 
