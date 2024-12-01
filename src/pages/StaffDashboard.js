@@ -376,58 +376,87 @@ function TicketsCreated() {
 
                   <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%', overflowX: 'auto' }}>
   {/* Table Header */}
-  <Table sx={{ width: '100%', tableLayout: 'fixed' }}>
-    <TableHead>
-      <TableRow sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
-        <TableCell sx={{ width: '150px', textAlign: 'center' }}>Ticket Number</TableCell>
-        <TableCell sx={{ width: '150px', textAlign: 'center' }}>Status</TableCell>
-        <TableCell sx={{ width: '150px', textAlign: 'center' }}>Priority</TableCell>
-        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Reported By</TableCell>
-        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Date Created</TableCell>
-        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Personnel Assigned</TableCell>
-        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Scheduled Repair Date</TableCell>
-        <TableCell sx={{ width: '200px', textAlign: 'center' }}>Actions</TableCell>
-      </TableRow>
-    </TableHead>
-  </Table>
+  <Table sx={{ display: 'flex', flexDirection: 'column' }}>
+  <TableHead>
+    <TableRow sx={{ display: 'flex', width: '100%' }}>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Reported By</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Date Created</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Personnel Assigned</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Scheduled Repair Date</TableCell>
+      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Actions</TableCell>
+    </TableRow>
+  </TableHead>
+</Table>
 
-  <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
-    <Table sx={{ width: '100%' }}>
-      <TableBody>
-        {sortedTickets.map((ticket, index) => (
-          <TableRow key={index}>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.id}</TableCell>
-            <TableCell sx={{ color: getStatusColor(ticket.status), textAlign: 'center' }}>
-              {ticket.status}
-            </TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.priority}</TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.username}</TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.datetime}</TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.assignedPersonnel || 'None'}</TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
-            <TableCell sx={{ textAlign: 'center' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                <Button sx={{ minWidth: '120px' }} onClick={() => handleAssignTicket(ticket)}>
-                  Assign
-                </Button>
-                <Button sx={{ minWidth: '120px' }} onClick={() => handleAssessTicket(ticket)}>
-                  Resolve
-                </Button>
-                <Button sx={{ minWidth: '120px' }} onClick={() => handleViewFeedback(ticket)}>
-                  View Feedback
-                </Button>
-                <Button sx={{ minWidth: '120px' }} onClick={() => handleViewTicket(ticket)}>
-                  View Details
-                </Button>
-                <Button sx={{ minWidth: '120px' }} onClick={() => setTicketToDelete(ticket)}>
-                  Terminate
-                </Button>
-              </Box>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
+    <Table>
+                      <TableBody>
+                        {sortedTickets.map((ticket, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{ticket.id}</TableCell>
+                            <TableCell style={{ color: getStatusColor(ticket.status) }}>
+                              {ticket.status}
+                            </TableCell>
+                            <TableCell>{ticket.priority}</TableCell>
+                            <TableCell>{ticket.username}</TableCell>
+                            <TableCell>{ticket.datetime}</TableCell>
+                            <TableCell>{ticket.assignedPersonnel || 'None'}</TableCell>
+                            <TableCell>{ticket.scheduledRepairDate || 'Not scheduled'}</TableCell>
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                {ticket.status !== 'Ongoing' && ticket.status !== 'Resolved' && (
+                                  <Button
+                                    onClick={() => handleAssignTicket(ticket)}
+                                    variant="outlined"
+                                    color="secondary"
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                  >
+                                    Assign
+                                  </Button>
+                                )}
+                                {ticket.status !== 'Resolved' && (
+                                  <Button
+                                    onClick={() => handleAssessTicket(ticket)}
+                                    variant="outlined"
+                                    color="success"
+                                    sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                  >
+                                    Resolve
+                                  </Button>
+                                )}
+                                <Button 
+                                  onClick={() => handleViewFeedback(ticket)} 
+                                  variant="outlined" 
+                                  color="info" 
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                >
+                                  View Feedback
+                                </Button>
+                                <Button
+                                  onClick={() => handleViewTicket(ticket)}
+                                  variant="outlined"
+                                  color="warning"
+                                  sx={{ marginRight: 1, width: '120px', height: '60px' }}
+                                >
+                                  View Details
+                                </Button>
+                                <Button
+                                  onClick={() => setTicketToDelete(ticket)}
+                                  variant="contained"
+                                  color="error"
+                                  sx={{ width: '120px', height: '60px' }}
+                                >
+                                  Terminate
+                                </Button>
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </Box>
                   </Box>
                 </>
