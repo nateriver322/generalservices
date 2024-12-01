@@ -261,6 +261,7 @@ function UserManagement() {
                     <MenuItem value="Carpentry/Masonry/Steel Works" sx={{ width: '300px' }}>Carpentry/Masonry/Steel Works</MenuItem>
                     <MenuItem value="Electrical" sx={{ width: '300px' }}>Electrical</MenuItem>
                     <MenuItem value="Electro-Mechanical" sx={{ width: '300px' }}>Electro-Mechanical</MenuItem>
+                    <MenuItem value="Others" sx={{ width: '300px' }}>Others</MenuItem>
                 </Select>
 
                 <Button type="submit" variant="contained" color="primary" disabled={!selectedUser || !subrole || loading}>
