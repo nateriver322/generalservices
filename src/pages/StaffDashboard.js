@@ -363,8 +363,23 @@ function TicketsCreated() {
                     </Select>
                   </FormControl>
 
-                  <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
-                    <Table sx={{ margin: 0, padding: 0 }}>
+                  <Box  sx={{ 
+    maxHeight: '520px', 
+    overflowY: 'auto', 
+    border: '1.5px solid #800000', 
+    borderRadius: '4px',
+    '& .MuiTable-root': {
+      borderCollapse: 'separate',
+      borderSpacing: 0
+    } }}>
+                    <Table sx={{ margin: 0, padding: 0, '& .MuiTableHead-root': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 10,
+      backgroundColor: 'background.default', // Use background color of your theme
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)' // Optional: adds a subtle shadow
+    }
+     }}>
                       <TableHead>
                         <TableRow>
                           <TableCell>Ticket Number</TableCell>
