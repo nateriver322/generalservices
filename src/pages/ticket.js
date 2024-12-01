@@ -45,28 +45,32 @@ function TicketForm() {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (selectedWorkTypes.length === 0) {
       alert("Please select at least one work type.");
       return;
     }
+  
+  
 
-    const selectedWorkTypesWithCustom =
-    selectedWorkTypes.includes("Others") && otherWorkType
-      ? [...selectedWorkTypes.filter((type) => type !== "Others"), otherWorkType]
-      : selectedWorkTypes;
+      // Improved work type handling
+  const selectedWorkTypesWithCustom = selectedWorkTypes.map(type => 
+    type === "Others" && otherWorkType 
+      ? `Others - ${otherWorkType}` 
+      : type
+  );
 
-    const formData = new FormData(event.target);
-    const now = new Date();
-const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-formData.append("datetime", currentDateTime);
-    formData.append("username", sessionStorage.getItem("username"));
+  const formData = new FormData(event.target);
+  const now = new Date();
+  const currentDateTime = `${now.toLocaleString('default', { month: 'short' })} ${now.getDate()}, ${now.getFullYear()} at ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-    formData.append("workType", selectedWorkTypesWithCustom.join(","));
-    formData.append("latestDateNeeded", latestDateNeeded);
+  formData.append("datetime", currentDateTime);
+  formData.append("username", sessionStorage.getItem("username"));
 
-   
+  // Store the full work type string, including custom specification
+  formData.append("workType", selectedWorkTypesWithCustom.join(","));
+  formData.append("latestDateNeeded", latestDateNeeded);
     
 
 
