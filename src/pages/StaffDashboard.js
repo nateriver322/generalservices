@@ -130,8 +130,10 @@ function TicketsCreated() {
     setSelectedTicket(ticket);
     setAssignModalOpen(true);
 
-    // Extract and clean work types from the ticket
-    const workTypes = ticket.workType.split(',').map(type => type.trim());
+    // Ensure workType is valid before splitting
+    const workTypes = ticket.workType
+        ? ticket.workType.split(',').map(type => type.trim())
+        : []; // Default to an empty array if workType is null/undefined
     console.log("Work Types:", workTypes);
 
     // Determine if the work type includes "Others"
@@ -142,7 +144,9 @@ function TicketsCreated() {
     const filteredPersonnel = isOthersWorkType
         ? personnelList
         : personnelList.filter(personnel => {
-            const subroles = personnel.subrole.split(',').map(subrole => subrole.trim());
+            const subroles = personnel.subrole
+                ? personnel.subrole.split(',').map(subrole => subrole.trim())
+                : []; // Default to an empty array if subrole is null/undefined
             console.log("Checking Personnel:", personnel.name, "Subroles:", subroles);
             return workTypes.some(type => subroles.includes(type));
         });
@@ -154,6 +158,7 @@ function TicketsCreated() {
     setSelectedPersonnel([]);
     fetchPersonnelWorkload(); // Fetch updated workload when opening the modal
 };
+
 
 
 
