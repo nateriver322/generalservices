@@ -145,7 +145,11 @@ function TicketsCreated() {
         // If 'Others' is selected, include personnel with no subrole (null or empty)
         if (isOthersWorkType) {
             // Include personnel with no subrole (null or empty) or matching the work types
-            return !personnel.subrole || personnel.subrole.trim() === '';
+            return !personnel.subrole || personnel.subrole.trim() === '' || workTypes.some(type => {
+                // Match the subrole with the work types
+                const subroles = personnel.subrole.split(',').map(subrole => subrole.trim());
+                return subroles.includes(type);
+            });
         }
 
         // If 'Others' is not selected, filter by specific work type(s)
