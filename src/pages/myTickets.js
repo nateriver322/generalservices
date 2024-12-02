@@ -205,14 +205,7 @@ const MyTickets = () => {
             ) : (
               <Box sx={{ height: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
                 <Table stickyHeader>
-  <TableHead
-    sx={{
-      position: 'sticky',
-      top: 0,
-      zIndex: 2, // Ensures it stays on top of body rows
-      backgroundColor: '#f1f1f1', // Set background to avoid transparency
-    }}
-  >
+                  <TableHead>
                     <TableRow>
                       <TableCell>Ticket Number</TableCell>
                       <TableCell>Status</TableCell>
