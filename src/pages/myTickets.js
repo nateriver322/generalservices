@@ -203,7 +203,7 @@ const MyTickets = () => {
                 No Tickets submitted.
               </Typography>
             ) : (
-              <Box sx={{ height: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+              <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow>
