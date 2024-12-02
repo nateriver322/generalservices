@@ -389,7 +389,7 @@ function TicketsCreated() {
   {/* Table Header */}
   <Table sx={{ display: 'flex', flexDirection: 'column' }}>
   <TableHead>
-  <TableRow sx={{ display: 'flex', width: '100%', backgroundColor: '#f5f5f5' }}>
+    <TableRow sx={{ display: 'flex', width: '100%' }}>
       <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
       <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
       <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
