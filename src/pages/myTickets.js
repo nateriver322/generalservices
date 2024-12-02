@@ -199,48 +199,36 @@ const MyTickets = () => {
 
           <Paper sx={{ width: '100%', maxWidth: 1450, p: 2 }}>
             {tickets.length === 0 ? (
-  <Typography variant="h6" align="center">
-    No Tickets submitted.
-  </Typography>
-) : (
-  <TableContainer 
-    component={Paper} 
-    sx={{ 
-      maxHeight: '600px', 
-      overflow: 'auto',
-      '& thead': {
-        position: 'sticky',
-        top: 0,
-        zIndex: 2,
-        backgroundColor: 'white'
-      }
-    }}
-  >
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Ticket Number</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Priority</TableCell>
-          <TableCell>Location</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell>Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tickets.map((ticket) => (
-          <TicketRow
-            key={ticket.id}
-            ticket={ticket}
-            onViewDetails={setSelectedTicket}
-            onViewFeedback={setFeedbackModalTicket}
-            onDelete={setTicketToDelete}
-          />
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-)}
+              <Typography variant="h6" align="center">
+                No Tickets submitted.
+              </Typography>
+            ) : (
+              <Box sx={{ maxHeight: '600px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Ticket Number</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Priority</TableCell>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tickets.map((ticket) => (
+                      <TicketRow
+                        key={ticket.id}
+                        ticket={ticket}
+                        onViewDetails={setSelectedTicket}
+                        onViewFeedback={setFeedbackModalTicket}
+                        onDelete={setTicketToDelete}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            )}
           </Paper>
            )}
         </Box>
