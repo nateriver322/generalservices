@@ -237,27 +237,99 @@ const MyTickets = () => {
         <Dialog open={Boolean(selectedTicket)} onClose={() => setSelectedTicket(null)} maxWidth="md" fullWidth>
           <DialogTitle>Ticket Details</DialogTitle>
           <DialogContent>
-            {selectedTicket && (
-              <Box sx={{ mt: 2 }}>
-                <Typography><strong>Description:</strong> {selectedTicket.description}</Typography>
-                <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
-                <Typography><strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded}</Typography>
-                <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
-                <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
-                <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
-                <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
-                <Typography><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
-                <Typography><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'None'}</Typography>
-                {selectedTicket.imageBase64 && (
-                  <img
-                    src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
-                    alt="Ticket"
-                    style={{ width: '100%', marginTop: '16px' }}
-                  />
-                )}
-              </Box>
-            )}
-          </DialogContent>
+  {selectedTicket && (
+    <Box sx={{ 
+      border: '2px solid #333', 
+      p: 4, 
+      fontFamily: 'Arial, sans-serif', 
+      maxWidth: '800px', 
+      margin: 'auto',
+      position: 'relative'
+    }}>
+      {/* Letterhead */}
+      <Box sx={{ 
+        textAlign: 'center', 
+        borderBottom: '2px solid #333', 
+        pb: 2, 
+        mb: 3 
+      }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          JobTrack Service Request
+        </Typography>
+        <Typography variant="subtitle1">
+          Ticket Number: {selectedTicket.id}
+        </Typography>
+      </Box>
+
+      {/* Ticket Details as Letter Body */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        mb: 3 
+      }}>
+        <Box>
+          <Typography><strong>Location:</strong> {selectedTicket.location}</Typography>
+          <Typography><strong>Date:</strong> {selectedTicket.datetime}</Typography>
+        </Box>
+        <Box sx={{ textAlign: 'right' }}>
+          <Typography><strong>Priority:</strong> {selectedTicket.priority}</Typography>
+          <Typography><strong>Latest Date Needed:</strong> {selectedTicket.latestDateNeeded}</Typography>
+        </Box>
+      </Box>
+
+      {/* Description as Letter Body */}
+      <Box sx={{ 
+        minHeight: '200px', 
+        border: '1px solid #999', 
+        p: 2, 
+        mb: 3,
+        backgroundColor: '#f9f9f9'
+      }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Description of Service Request</Typography>
+        <Typography>{selectedTicket.description}</Typography>
+      </Box>
+
+      {/* Additional Details */}
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: '1fr 1fr', 
+        gap: 2 
+      }}>
+        <Box>
+          <Typography><strong>Request Type:</strong> {selectedTicket.requestType}</Typography>
+          <Typography><strong>Work Type:</strong> {selectedTicket.workType}</Typography>
+        </Box>
+        <Box>
+          <Typography><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
+          <Typography><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'None'}</Typography>
+        </Box>
+      </Box>
+
+      {/* Attached Image */}
+      {selectedTicket.imageBase64 && (
+        <Box sx={{ 
+          mt: 3, 
+          textAlign: 'center',
+          border: '1px solid #999',
+          p: 2
+        }}>
+          <Typography variant="subtitle1" sx={{ mb: 2 }}>
+            <strong>Attached Image</strong>
+          </Typography>
+          <img
+            src={`data:image/jpeg;base64,${selectedTicket.imageBase64}`}
+            alt="Ticket Attachment"
+            style={{ 
+              maxWidth: '100%', 
+              maxHeight: '400px', 
+              objectFit: 'contain' 
+            }}
+          />
+        </Box>
+      )}
+    </Box>
+  )}
+</DialogContent>
           <DialogActions>
             <Button onClick={() => setSelectedTicket(null)}>Close</Button>
           </DialogActions>
