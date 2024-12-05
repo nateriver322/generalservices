@@ -302,6 +302,7 @@ const MyTickets = () => {
         <Box>
           <Typography><strong>Scheduled Repair Date:</strong> {selectedTicket.scheduledRepairDate || 'Not scheduled'}</Typography>
           <Typography><strong>Assigned Personnel:</strong> {selectedTicket.assignedPersonnel || 'None'}</Typography>
+          <Typography><strong>Resolved Date:</strong> {selectedTicket.resolvedDatetime || 'Not available'}</Typography>
         </Box>
       </Box>
 
