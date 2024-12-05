@@ -394,7 +394,7 @@ const MyTickets = () => {
           open={successSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSuccessSnackbarOpen(false)}
-          message="Ticket Cancelled"
+          message="Ticket Deleted"
         />
         <Snackbar
           open={feedbackSuccessSnackbarOpen}
