@@ -122,6 +122,9 @@ const ViewDetailsModal = ({ open, onClose, ticket }) => {
               <Typography>
                 <strong>Status:</strong> {ticket.status}
               </Typography>
+              <Typography>
+                <strong>Resolved Date:</strong> {ticket.resolvedDatetime || 'Not available'}
+              </Typography>
             </Box>
           </Box>
 
