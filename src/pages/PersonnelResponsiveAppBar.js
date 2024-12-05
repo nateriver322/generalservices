@@ -17,7 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const pages = ['Home', 'ASSIGNED', 'HISTORY'];
+const pages = ['Home'];
 const settings = ['Logout'];
 
 function PersonnelResponsiveAppBar() {
@@ -63,17 +63,11 @@ function PersonnelResponsiveAppBar() {
     
     if (page === 'Home') {
       navigate('/dashboard');
-    } else if (page === 'ASSIGNED') {
-      navigate('/personneltickets');
-    } else if (page === 'HISTORY') {
-      navigate('/ticketsHistory');
-    }
+    } 
   };
 
   const isActive = (path) => {
     if (path === 'Home' && location.pathname === '/dashboard') return true;
-    if (path === 'ASSIGNED' && location.pathname === '/personneltickets') return true;
-    if (path === 'HISTORY' && location.pathname === '/ticketsHistory') return true;
     return false;
   };
 
