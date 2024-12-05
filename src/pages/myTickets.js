@@ -160,47 +160,19 @@ const MyTickets = () => {
   const confirmDeleteTicket = async () => {
     if (ticketToDelete) {
       try {
-        if (ticketToDelete.status === 'Resolved') {
-          // Update status to 'Ticket Deleted' for resolved tickets
-          const updateResponse = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ status: 'Ticket Deleted' }),
-          });
-  
-          if (updateResponse.ok) {
-            setTickets((prev) =>
-              prev.map((ticket) =>
-                ticket.id === ticketToDelete.id ? { ...ticket, status: 'Ticket Deleted' } : ticket
-              )
-            );
-            setSuccessSnackbarOpen(true);
-          } else {
-            console.error('Error updating ticket status:', updateResponse.statusText);
-          }
-        } else {
-          // Delete ticket if not resolved
-          const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
-            method: 'DELETE',
-          });
-  
-          if (response.ok) {
-            setTickets((prev) => prev.filter((ticket) => ticket.id !== ticketToDelete.id));
-            setSuccessSnackbarOpen(true);
-          } else {
-            console.error('Error deleting ticket:', response.statusText);
-          }
+        const response = await fetch(`https://generalservicescontroller-sq7n.onrender.com/api/tickets/${ticketToDelete.id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          setTickets(prev => prev.filter(ticket => ticket.id !== ticketToDelete.id));
+          setSuccessSnackbarOpen(true);
         }
       } catch (error) {
-        console.error('Error processing ticket:', error);
-      } finally {
-        setTicketToDelete(null);
+        console.error('Error deleting ticket:', error);
       }
+      setTicketToDelete(null);
     }
   };
-  
 
   return (
     <>
