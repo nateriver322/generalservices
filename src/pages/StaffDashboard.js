@@ -385,25 +385,20 @@ function TicketsCreated() {
                     </Select>
                   </FormControl>
 
-                  <Box sx={{ border: '1.5px solid #800000', borderRadius: '4px', maxWidth: '100%', overflowX: 'auto' }}>
-  {/* Table Header */}
-  <Table sx={{ display: 'flex', flexDirection: 'column' }}>
-  <TableHead>
-    <TableRow sx={{ display: 'flex', width: '100%' }}>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Ticket Number</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Status</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Priority</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Reported By</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Date Created</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Personnel Assigned</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Scheduled Repair Date</TableCell>
-      <TableCell sx={{ flex: 1, textAlign: 'center' }}>Actions</TableCell>
-    </TableRow>
-  </TableHead>
-</Table>
-
-    <Box sx={{ maxHeight: '520px', overflowY: 'auto' }}>
-    <Table>
+                  <Box sx={{ maxHeight: '520px', overflowY: 'auto', border: '1.5px solid #800000', borderRadius: '4px' }}>
+                    <Table sx={{ margin: 0, padding: 0 }}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Ticket Number</TableCell>
+                          <TableCell>Status</TableCell>
+                          <TableCell>Priority</TableCell>
+                          <TableCell>Reported By</TableCell>
+                          <TableCell>Date Created</TableCell>
+                          <TableCell>Personnel Assigned</TableCell>
+                          <TableCell>Scheduled Repair Date</TableCell>
+                          <TableCell>Actions</TableCell>
+                        </TableRow>
+                      </TableHead>
                       <TableBody>
                         {sortedTickets.map((ticket, index) => (
                           <TableRow key={index}>
@@ -468,7 +463,6 @@ function TicketsCreated() {
                         ))}
                       </TableBody>
                     </Table>
-                  </Box>
                   </Box>
                 </>
               )}
