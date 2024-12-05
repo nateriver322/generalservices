@@ -131,6 +131,7 @@ const PersonnelLogin = () => {
                         sx={{
                             borderColor: '#800000',
                             color: '#800000',
+                            mb: 1
                         }}
                     >
                         Register
